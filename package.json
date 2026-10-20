@@ -1,0 +1,20 @@
+{
+  "name": "blockwork-library",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate:local": "wrangler d1 migrations apply blockwork-library --local",
+    "migrate:remote": "wrangler d1 migrations apply blockwork-library --remote",
+    "seed:local": "node scripts/seed.js --local",
+    "seed:remote": "node scripts/seed.js --remote",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261019.1",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.151.3"
+  }
+}

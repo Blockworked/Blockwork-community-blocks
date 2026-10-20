@@ -1,0 +1,22 @@
+name = "blockwork-library"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+[vars]
+# The address the site is served at; OAuth callbacks go to <SITE_URL>/auth/<provider>/callback.
+SITE_URL = "https://blockwork-library.treetrain17625.workers.dev"
+LIBRARY_NAME = "Blockwork community blocks"
+# Account ids allowed to review, like "github:123", comma-separated.
+ADMINS = "github:39657565"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "blockwork-library"
+database_id = "d99e2800-5159-4d2f-949a-a92508b6f2ec"
+
+[[r2_buckets]]
+binding = "PACKS"
+bucket_name = "blockwork-library"
+
+# Secrets (wrangler secret put, or .dev.vars locally):
+# GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
