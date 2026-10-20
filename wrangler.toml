@@ -1,10 +1,13 @@
 name = "blockwork-library"
 main = "src/index.ts"
 compatibility_date = "2026-10-01"
+# Only the custom domain, so sign-in cookies and OAuth callbacks share one host.
+workers_dev = false
+routes = [{ pattern = "community.blockworked.com", custom_domain = true }]
 
 [vars]
 # The address the site is served at; OAuth callbacks go to <SITE_URL>/auth/<provider>/callback.
-SITE_URL = "https://blockwork-library.treetrain17625.workers.dev"
+SITE_URL = "https://community.blockworked.com"
 LIBRARY_NAME = "Blockwork community blocks"
 # Account ids allowed to review, like "github:123", comma-separated.
 ADMINS = "github:39657565"
