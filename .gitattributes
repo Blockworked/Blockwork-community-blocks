@@ -1,0 +1,4 @@
+# Packs are hash-pinned in index.json, so their bytes must not change with
+# the checkout platform.
+packs/** -text
+index.json -text
