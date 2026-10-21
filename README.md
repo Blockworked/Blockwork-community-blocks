@@ -5,7 +5,9 @@ by a Cloudflare Worker. People sign in with GitHub or Google to submit
 packs; every upload is reviewed before it's listed.
 
 - `GET /index.json` lists each listed pack's newest approved version, in
-  the format Blockwork reads. Each entry pins the file's SHA-256.
+  the format Blockwork reads. Each entry pins the file's SHA-256, and
+  `official` marks the team account's packs (Blockwork shows a verified
+  badge for them, from this library only).
 - `GET /packs/<sha256>.json` serves an approved pack file.
 - `/submit` takes uploads, `/me` shows their status, `/admin` is the review
   queue (approve, reject with a reason, take a pack down, ban an account).

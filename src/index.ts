@@ -135,6 +135,8 @@ async function indexJson(env: Env): Promise<Response> {
     url: `packs/${v.sha256}.json`,
     sha256: v.sha256,
     blocks: JSON.parse(v.blocks),
+    // Blockwork shows a verified badge for these.
+    official: v.owner_id === OFFICIAL_OWNER,
   }));
   const body = JSON.stringify({ blockwork_block_index: 1, name: env.LIBRARY_NAME, packs }, null, 2) + "\n";
   return new Response(body, {
