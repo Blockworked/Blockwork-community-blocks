@@ -24,7 +24,7 @@ test("seed packs are accepted and match index.json", () => {
     assert.deepEqual((meta as any).blocks, entry.blocks);
     assert.equal(createHash("sha256").update(bytes).digest("hex"), entry.sha256);
     for (const def of JSON.parse(bytes.toString()).blocks.block_defs) {
-      assert.ok(def.identifier.trim(), `${file}: missing Details ID`);
+      assert.match(def.identifier, /^Blockworked_[A-Za-z0-9]+$/, `${file}: invalid Details ID`);
       assert.ok(def.description.trim(), `${file}: missing description`);
     }
   }
