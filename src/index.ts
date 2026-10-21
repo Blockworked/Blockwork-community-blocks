@@ -2,8 +2,8 @@
 // Blockwork downloads, and takes reviewed submissions from signed-in accounts.
 
 import { callback, currentUser, isAdmin, login, logout, PROVIDERS, type Provider, type User } from "./auth.ts";
-import { blockTags, capabilityList, esc, loginPage, message, page } from "./pages.ts";
-import { readPack, sha256Hex } from "./packs.ts";
+import { blockTags, capabilityList, esc, loginPage, message, page, verifiedBadge } from "./pages.ts";
+import { OFFICIAL_OWNER, readPack, sha256Hex } from "./packs.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 import { setMainSite, SITE_JS } from "./site-nav.ts";
 
@@ -39,6 +39,8 @@ interface VersionRow {
   submitted_by: string;
   submitted_at: number;
   author: string;
+  /** Only set by queries that join the pack's owner. */
+  owner_id?: string;
 }
 
 const SECURITY_HEADERS: Record<string, string> = {
@@ -114,7 +116,7 @@ async function route(req: Request, env: Env): Promise<Response> {
 /** Each listed pack's newest approved version. */
 async function published(env: Env): Promise<VersionRow[]> {
   const { results } = await env.DB.prepare(
-    `SELECT v.*, u.name AS author FROM versions v
+    `SELECT v.*, u.name AS author, p.owner_id AS owner_id FROM versions v
      JOIN packs p ON p.id = v.pack_id JOIN users u ON u.id = p.owner_id
      WHERE p.listed = 1 AND u.banned = 0
        AND v.id = (SELECT MAX(id) FROM versions WHERE pack_id = p.id AND status = 'approved')
@@ -159,7 +161,7 @@ function png(base64: string): Response {
 
 function packCard(v: VersionRow, extra = ""): string {
   return `<div class="card"><h3>${esc(v.name)} <span class="version">${esc(v.version)}</span></h3>
-    <p class="muted by">by ${esc(v.author)}</p><p>${esc(v.description)}</p>
+    <p class="muted by">by ${esc(v.author)}${v.owner_id === OFFICIAL_OWNER ? verifiedBadge() : ""}</p><p>${esc(v.description)}</p>
     <p>${blockTags(JSON.parse(v.blocks))}</p>${capabilityList(JSON.parse(v.capabilities))}${extra}</div>`;
 }
 

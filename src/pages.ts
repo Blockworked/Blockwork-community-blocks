@@ -120,6 +120,7 @@ p.risky { padding: 10px 12px; border-radius: var(--radius-lg); border: 1px solid
 pre { overflow: auto; max-height: 480px; background: var(--bg2); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 14px 16px; font-size: 12px; line-height: 1.5; }
 .mono { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
 img.avatar { width: 22px; height: 22px; border-radius: 50%; }
+.verified { display: inline-flex; vertical-align: -2px; margin-left: 4px; color: var(--accent); }
 
 @media (max-width: 560px) {
   .container { padding: 0 16px; }
@@ -154,6 +155,11 @@ export function capabilityList(kinds: string[]): string {
     ([, label, risky]) => `<li${risky ? ` class="risky"` : ""}>${esc(label)}</li>`,
   );
   return `<ul class="caps">${items.join("")}</ul>`;
+}
+
+/** The checkmark next to the author of a pack published by the Blockworked team. */
+export function verifiedBadge(): string {
+  return `<span class="verified" title="Verified official pack" role="img" aria-label="Verified official pack"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="currentColor"/><path d="M4.6 8.3l2.2 2.2 4.6-4.8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
 }
 
 export function blockTags(blocks: string[]): string {

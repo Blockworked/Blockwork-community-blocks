@@ -3,6 +3,9 @@
 
 export const MAX_PACK_BYTES = 2 * 1024 * 1024;
 
+/** The account that owns the starter packs. Sign-in ids are "<provider>:<id>", so no one can sign in as it. */
+export const OFFICIAL_OWNER = "blockwork:team";
+
 export interface PackMeta {
   id: string;
   name: string;

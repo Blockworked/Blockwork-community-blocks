@@ -1,11 +1,11 @@
-// Loads the packs in packs/ into the library as approved, owned by a "Blockwork" account.
+// Loads the packs in packs/ into the library as approved, owned by the "Blockworked" account.
 // Usage: node scripts/seed.js --local | --remote
 
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync, writeFileSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { readPack, sha256Hex } from "../src/packs.ts";
+import { OFFICIAL_OWNER, readPack, sha256Hex } from "../src/packs.ts";
 
 const where = process.argv[2];
 if (where !== "--local" && where !== "--remote") {
@@ -14,8 +14,10 @@ if (where !== "--local" && where !== "--remote") {
 }
 const q = (s) => `'${String(s).replace(/'/g, "''")}'`;
 const now = Date.now();
-const owner = "blockwork:team";
-const sql = [`INSERT OR IGNORE INTO users (id, name, created_at) VALUES (${q(owner)}, 'Blockwork', ${now});`];
+const owner = OFFICIAL_OWNER;
+const sql = [
+  `INSERT INTO users (id, name, created_at) VALUES (${q(owner)}, 'Blockworked', ${now}) ON CONFLICT (id) DO UPDATE SET name = excluded.name;`,
+];
 for (const file of readdirSync("packs").filter((f) => f.endsWith(".json"))) {
   const path = join("packs", file);
   const bytes = readFileSync(path);
