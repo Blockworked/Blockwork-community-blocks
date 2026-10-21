@@ -86,6 +86,38 @@ test("broken uploads say why", () => {
   assert.match(readPack(new Uint8Array(3 * 1024 * 1024)) as string, /over 2 MB/);
 });
 
+test("input defaults accept typed literals and reject expressions or mismatched types", () => {
+  const withDefault = (default_value: unknown, value_type = "Any") => enc(pack({
+    blocks: { block_defs: [{ id: "a", pieces: [
+      { kind: "Label", text: "example" },
+      { kind: "Input", name: "input", value_type, default_value },
+    ] }], strands: [] },
+  }));
+  for (const value of [{ kind: "Number", value: 1 }, { kind: "Number", value: 0 },
+    { kind: "Text", value: "" }, { kind: "Text", value: "example" }, null]) {
+    assert.equal(typeof readPack(withDefault(value)), "object");
+  }
+  for (const value of [true, false]) {
+    assert.equal(typeof readPack(withDefault({ kind: "Bool", value }, "Bool")), "object");
+  }
+  for (const value of ["example", {}, { kind: "Number", value: "1" },
+    { kind: "Bool", value: true }, { kind: "Op", op: "ClipboardText", args: [] }]) {
+    assert.match(readPack(withDefault(value)) as string, /literal default/);
+  }
+  assert.match(readPack(withDefault({ kind: "Number", value: 1 }, "Bool")) as string, /literal default/);
+});
+
+test("official packs supply defaults for every input", () => {
+  for (const file of readdirSync("packs")) {
+    const content = JSON.parse(readFileSync(`packs/${file}`, "utf8")).blocks;
+    for (const def of content.block_defs) {
+      for (const piece of def.pieces.filter((p: any) => p.kind === "Input")) {
+        assert.ok(piece.default_value, `${def.identifier}: missing default for ${piece.name}`);
+      }
+    }
+  }
+});
+
 test("slug keeps letters from any script", () => {
   assert.equal(slug("  Hello, World! "), "hello-world");
   assert.equal(slug("Größe 2"), "größe-2");

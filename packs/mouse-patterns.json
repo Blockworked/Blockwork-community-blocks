@@ -4,7 +4,7 @@
   "name": "Mouse patterns",
   "description": "Click grids, drag through a path of points and click relative to a window.",
   "author": "Blockworked",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "blocks": {
     "block_defs": [
       {
@@ -23,7 +23,11 @@
             "kind": "Input",
             "name": "x",
             "value_type": "Any",
-            "id": "97d9073d2555594099fa2bdbda75d0f0"
+            "id": "97d9073d2555594099fa2bdbda75d0f0",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "kind": "Label",
@@ -34,7 +38,11 @@
             "kind": "Input",
             "name": "y",
             "value_type": "Any",
-            "id": "ae44a13d7ce654e7a6340569433b6d66"
+            "id": "ae44a13d7ce654e7a6340569433b6d66",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "kind": "Label",
@@ -45,7 +53,11 @@
             "kind": "Input",
             "name": "rows",
             "value_type": "Any",
-            "id": "d02f06e208575545833aac3fa1d29afe"
+            "id": "d02f06e208575545833aac3fa1d29afe",
+            "default_value": {
+              "kind": "Number",
+              "value": 2
+            }
           },
           {
             "kind": "Label",
@@ -56,7 +68,11 @@
             "kind": "Input",
             "name": "columns",
             "value_type": "Any",
-            "id": "3023f2e7e5ed5f53af2f23c06e52f7d0"
+            "id": "3023f2e7e5ed5f53af2f23c06e52f7d0",
+            "default_value": {
+              "kind": "Number",
+              "value": 3
+            }
           },
           {
             "kind": "Label",
@@ -67,7 +83,11 @@
             "kind": "Input",
             "name": "dx",
             "value_type": "Any",
-            "id": "3fccc0c87dd8536da3caf67f2b870f56"
+            "id": "3fccc0c87dd8536da3caf67f2b870f56",
+            "default_value": {
+              "kind": "Number",
+              "value": 80
+            }
           },
           {
             "kind": "Label",
@@ -78,7 +98,11 @@
             "kind": "Input",
             "name": "dy",
             "value_type": "Any",
-            "id": "5a676bd1d1615414971158dfcafee045"
+            "id": "5a676bd1d1615414971158dfcafee045",
+            "default_value": {
+              "kind": "Number",
+              "value": 60
+            }
           },
           {
             "kind": "Label",
@@ -89,7 +113,11 @@
             "kind": "Input",
             "name": "ms",
             "value_type": "Any",
-            "id": "642292f98c19593d8427cd04abf9f87b"
+            "id": "642292f98c19593d8427cd04abf9f87b",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "kind": "Label",
@@ -115,7 +143,11 @@
             "kind": "Input",
             "name": "points",
             "value_type": "Any",
-            "id": "8d526ac38e185192b8f8eaf89601a8d8"
+            "id": "8d526ac38e185192b8f8eaf89601a8d8",
+            "default_value": {
+              "kind": "Text",
+              "value": "100,100\n200,100\n200,200"
+            }
           },
           {
             "kind": "Label",
@@ -126,7 +158,11 @@
             "kind": "Input",
             "name": "ms",
             "value_type": "Any",
-            "id": "6ee9590d99d75d9d8ef24defa3b26b25"
+            "id": "6ee9590d99d75d9d8ef24defa3b26b25",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "kind": "Label",
@@ -152,7 +188,11 @@
             "kind": "Input",
             "name": "window",
             "value_type": "Any",
-            "id": "32429149c27358db8a0a9b544de7eafb"
+            "id": "32429149c27358db8a0a9b544de7eafb",
+            "default_value": {
+              "kind": "Text",
+              "value": ""
+            }
           },
           {
             "kind": "Label",
@@ -163,7 +203,11 @@
             "kind": "Input",
             "name": "x",
             "value_type": "Any",
-            "id": "0df08f3b63b65f32a33b8975f9e6158e"
+            "id": "0df08f3b63b65f32a33b8975f9e6158e",
+            "default_value": {
+              "kind": "Number",
+              "value": 50
+            }
           },
           {
             "kind": "Label",
@@ -174,7 +218,11 @@
             "kind": "Input",
             "name": "y",
             "value_type": "Any",
-            "id": "ad0024d897485f6fbca5462c21d1b500"
+            "id": "ad0024d897485f6fbca5462c21d1b500",
+            "default_value": {
+              "kind": "Number",
+              "value": 50
+            }
           }
         ],
         "shape": "Normal"

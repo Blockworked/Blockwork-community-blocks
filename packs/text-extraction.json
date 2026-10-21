@@ -4,7 +4,7 @@
   "name": "Text extraction",
   "description": "Extract text between literal markers, collect matching lines and look up key=value entries.",
   "author": "Blockworked",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "blocks": {
     "block_defs": [
       {
@@ -23,7 +23,11 @@
             "kind": "Input",
             "name": "start",
             "value_type": "Any",
-            "id": "0710ade60e905317a49bfa9808450af1"
+            "id": "0710ade60e905317a49bfa9808450af1",
+            "default_value": {
+              "kind": "Text",
+              "value": "["
+            }
           },
           {
             "kind": "Label",
@@ -34,7 +38,11 @@
             "kind": "Input",
             "name": "end",
             "value_type": "Any",
-            "id": "1fabcf2717315d379726639877792a6b"
+            "id": "1fabcf2717315d379726639877792a6b",
+            "default_value": {
+              "kind": "Text",
+              "value": "]"
+            }
           },
           {
             "kind": "Label",
@@ -45,7 +53,11 @@
             "kind": "Input",
             "name": "text",
             "value_type": "Any",
-            "id": "507858e5989159ddb4784ab0d6434f12"
+            "id": "507858e5989159ddb4784ab0d6434f12",
+            "default_value": {
+              "kind": "Text",
+              "value": "before [example] after"
+            }
           }
         ],
         "shape": "ReturnsValue"
@@ -66,7 +78,11 @@
             "kind": "Input",
             "name": "needle",
             "value_type": "Any",
-            "id": "9b23e926cba95b5496643f802175814f"
+            "id": "9b23e926cba95b5496643f802175814f",
+            "default_value": {
+              "kind": "Text",
+              "value": "error"
+            }
           },
           {
             "kind": "Label",
@@ -77,7 +93,11 @@
             "kind": "Input",
             "name": "text",
             "value_type": "Any",
-            "id": "41b7b443b75152c1b3a9f7a9e30f7369"
+            "id": "41b7b443b75152c1b3a9f7a9e30f7369",
+            "default_value": {
+              "kind": "Text",
+              "value": "info: ready\nerror: example"
+            }
           }
         ],
         "shape": "ReturnsValue"
@@ -98,7 +118,11 @@
             "kind": "Input",
             "name": "key",
             "value_type": "Any",
-            "id": "71644f275e1c5a8eb2af65a2eafecb9c"
+            "id": "71644f275e1c5a8eb2af65a2eafecb9c",
+            "default_value": {
+              "kind": "Text",
+              "value": "name"
+            }
           },
           {
             "kind": "Label",
@@ -109,7 +133,11 @@
             "kind": "Input",
             "name": "text",
             "value_type": "Any",
-            "id": "ce1678652bd550baaad18779cc812802"
+            "id": "ce1678652bd550baaad18779cc812802",
+            "default_value": {
+              "kind": "Text",
+              "value": "name=Blockwork\nversion=1.0"
+            }
           }
         ],
         "shape": "ReturnsValue"

@@ -36,6 +36,22 @@ block to explain its inputs and behavior. Older packs without these fields still
 Run `python3 scripts/build-block-index.py` after editing starter packs to
 refresh their checksums.
 
+Inputs can include an optional `default_value` literal. Blockwork uses it in
+the sidebar and for new calls; updating a pack preserves existing call values.
+For example, an active-window input can start empty and a monitor input at 1:
+
+```json
+[
+  {"kind":"Input","id":"window-input","name":"window","value_type":"Any","default_value":{"kind":"Text","value":""}},
+  {"kind":"Input","id":"monitor-input","name":"monitor","value_type":"Any","default_value":{"kind":"Number","value":1}}
+]
+```
+
+`Any` inputs accept `Text` or finite `Number` defaults. `Bool` inputs accept
+`{"kind":"Bool","value":true}` or `false` in the same shape. Defaults cannot
+contain expressions or custom block calls. Without a default, inputs keep the
+legacy zero or empty Boolean slot. Older app versions ignore the new field.
+
 ## Official packs
 
 These packs combine multiple built-in blocks into reusable workflows. Their

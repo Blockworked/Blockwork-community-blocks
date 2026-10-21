@@ -4,7 +4,7 @@
   "name": "Window layouts",
   "description": "Center windows on a monitor, tile two windows side by side, and capture or restore window geometry.",
   "author": "Blockworked",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "blocks": {
     "block_defs": [
       {
@@ -23,7 +23,11 @@
             "kind": "Input",
             "name": "window",
             "value_type": "Any",
-            "id": "65049e70cb5a51a4bd9095a0abd4a010"
+            "id": "65049e70cb5a51a4bd9095a0abd4a010",
+            "default_value": {
+              "kind": "Text",
+              "value": ""
+            }
           },
           {
             "kind": "Label",
@@ -34,7 +38,11 @@
             "kind": "Input",
             "name": "monitor",
             "value_type": "Any",
-            "id": "e7b0fe84fac85168ab675ea12ea19a3f"
+            "id": "e7b0fe84fac85168ab675ea12ea19a3f",
+            "default_value": {
+              "kind": "Number",
+              "value": 1
+            }
           }
         ],
         "shape": "Normal"
@@ -55,7 +63,11 @@
             "kind": "Input",
             "name": "left",
             "value_type": "Any",
-            "id": "03d28f4f4542539e8ad0f2188eb9e178"
+            "id": "03d28f4f4542539e8ad0f2188eb9e178",
+            "default_value": {
+              "kind": "Text",
+              "value": "Firefox"
+            }
           },
           {
             "kind": "Label",
@@ -66,7 +78,11 @@
             "kind": "Input",
             "name": "right",
             "value_type": "Any",
-            "id": "e5c858e3a1d95f8e88dfee08e839cf6d"
+            "id": "e5c858e3a1d95f8e88dfee08e839cf6d",
+            "default_value": {
+              "kind": "Text",
+              "value": "Terminal"
+            }
           },
           {
             "kind": "Label",
@@ -77,7 +93,11 @@
             "kind": "Input",
             "name": "monitor",
             "value_type": "Any",
-            "id": "96d7e036d32f5d37b48a74680c5a5b6b"
+            "id": "96d7e036d32f5d37b48a74680c5a5b6b",
+            "default_value": {
+              "kind": "Number",
+              "value": 1
+            }
           },
           {
             "kind": "Label",
@@ -88,7 +108,11 @@
             "kind": "Input",
             "name": "gap",
             "value_type": "Any",
-            "id": "128e2eadd0fa577ba73d442bb4fa660d"
+            "id": "128e2eadd0fa577ba73d442bb4fa660d",
+            "default_value": {
+              "kind": "Number",
+              "value": 16
+            }
           }
         ],
         "shape": "Normal"
@@ -109,7 +133,11 @@
             "kind": "Input",
             "name": "window",
             "value_type": "Any",
-            "id": "35e722c15b2d57d19d5837e23ddbcb45"
+            "id": "35e722c15b2d57d19d5837e23ddbcb45",
+            "default_value": {
+              "kind": "Text",
+              "value": ""
+            }
           }
         ],
         "shape": "ReturnsValue"
@@ -130,7 +158,11 @@
             "kind": "Input",
             "name": "window",
             "value_type": "Any",
-            "id": "ced3d9a63a345391ae245a19afab41c3"
+            "id": "ced3d9a63a345391ae245a19afab41c3",
+            "default_value": {
+              "kind": "Text",
+              "value": ""
+            }
           },
           {
             "kind": "Label",
@@ -141,7 +173,11 @@
             "kind": "Input",
             "name": "snapshot",
             "value_type": "Any",
-            "id": "fc79dd4e529a536ab80d4b3ceaded720"
+            "id": "fc79dd4e529a536ab80d4b3ceaded720",
+            "default_value": {
+              "kind": "Text",
+              "value": "{\"x\":100,\"y\":100,\"width\":800,\"height\":600}"
+            }
           }
         ],
         "shape": "Normal"

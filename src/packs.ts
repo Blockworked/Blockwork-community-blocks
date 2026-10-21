@@ -167,6 +167,17 @@ export function readPack(bytes: Uint8Array): PackMeta | string {
   if (!Array.isArray(defs) || defs.length === 0) return "The pack has no blocks.";
   if (defs.length > 200) return "The pack has over 200 blocks.";
   if (defs.some((d: any) => typeof d?.id !== "string" || !Array.isArray(d?.pieces))) return "The pack's blocks are broken.";
+  for (const def of defs) {
+    for (const piece of def.pieces) {
+      if (piece?.kind !== "Input" || piece.default_value == null) continue;
+      const value = piece.default_value;
+      const valid = piece.value_type === "Bool"
+        ? value.kind === "Bool" && typeof value.value === "boolean"
+        : (value.kind === "Text" && typeof value.value === "string")
+          || (value.kind === "Number" && typeof value.value === "number" && Number.isFinite(value.value));
+      if (!valid) return `Input "${piece.name}" needs a literal default matching its type.`;
+    }
+  }
   return { id, name, description, version, blocks: defs.map(blockName), capabilities: capabilities(value.blocks) };
 }
 

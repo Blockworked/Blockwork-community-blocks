@@ -18,7 +18,11 @@
             "id": "4f181de7192d4c19857ea7e237519f80",
             "kind": "Input",
             "name": "x",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "id": "356dfe7bb0f042f6bd398f8eea281ba7",
@@ -29,7 +33,11 @@
             "id": "8f6e87580ba1406f975e2f27474783d2",
             "kind": "Input",
             "name": "y",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           }
         ],
         "shape": "Normal"
@@ -50,7 +58,11 @@
             "id": "efe2ae1dadd8454e961ccd944eba7a7f",
             "kind": "Input",
             "name": "x",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "id": "56cac27982af439499e5a021b243d1b8",
@@ -61,7 +73,11 @@
             "id": "053255da7da44310a37b6d8a0e5350d1",
             "kind": "Input",
             "name": "y",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           }
         ],
         "shape": "Normal"
@@ -82,7 +98,11 @@
             "id": "2a3cd2d338f84863864b682dc7bf975a",
             "kind": "Input",
             "name": "x",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "id": "12fd02b2f2624a34be9de0185e2904eb",
@@ -93,7 +113,11 @@
             "id": "a4f6e46c7f8145368e7e88329047052b",
             "kind": "Input",
             "name": "y",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           }
         ],
         "shape": "Normal"
@@ -114,7 +138,11 @@
             "id": "ef17db65cfbf42038d514fd601131c2a",
             "kind": "Input",
             "name": "from x",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "id": "38fb721222694a128f46b862f18bea88",
@@ -125,7 +153,11 @@
             "id": "4fb43a58574f40daaf4fb4f2057c4125",
             "kind": "Input",
             "name": "from y",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 100
+            }
           },
           {
             "id": "74023daff43543109d2e824376046b03",
@@ -136,7 +168,11 @@
             "id": "90b867e185d14a1fb4be41bf5017c9e5",
             "kind": "Input",
             "name": "to x",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 300
+            }
           },
           {
             "id": "f285604482594b86a3382a6feb6b8623",
@@ -147,7 +183,11 @@
             "id": "ec2f1d5fa96a40adb3896dad1d33a67e",
             "kind": "Input",
             "name": "to y",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Number",
+              "value": 200
+            }
           }
         ],
         "shape": "Normal"
@@ -416,5 +456,5 @@
   "description": "Click, double click, right click and drag at a screen position.",
   "id": "mouse-helpers",
   "name": "Mouse helpers",
-  "version": "1.0.2"
+  "version": "1.0.3"
 }

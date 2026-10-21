@@ -13,7 +13,11 @@
             "id": "61b9aa3101e04fa8b468d75995c21301",
             "kind": "Input",
             "name": "text",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Text",
+              "value": "example"
+            }
           },
           {
             "id": "7b80465153fb4aa29dac5284521451ea",
@@ -39,7 +43,11 @@
             "id": "71eacb45a5264f9e843f5bee43ff4ea9",
             "kind": "Input",
             "name": "text",
-            "value_type": "Any"
+            "value_type": "Any",
+            "default_value": {
+              "kind": "Text",
+              "value": "example"
+            }
           }
         ],
         "shape": "ReturnsValue"
@@ -175,5 +183,5 @@
   "description": "Check for empty text and get the last letter.",
   "id": "text-helpers",
   "name": "Text helpers",
-  "version": "1.0.3"
+  "version": "1.0.4"
 }

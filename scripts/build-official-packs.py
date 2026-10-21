@@ -11,6 +11,18 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 NAMESPACE = uuid.UUID('3df98d0e-8bdf-47ef-b481-654a519c9d2c')
+INPUT_DEFAULTS = {
+    'TextBetweenMarkers': {'start': '[', 'end': ']', 'text': 'before [example] after'},
+    'TextMatchingLines': {'needle': 'error', 'text': 'info: ready\nerror: example'},
+    'TextKeyValue': {'key': 'name', 'text': 'name=Blockwork\nversion=1.0'},
+    'CenterWindowOnMonitor': {'window': '', 'monitor': 1},
+    'TileWindowsSideBySide': {'left': 'Firefox', 'right': 'Terminal', 'monitor': 1, 'gap': 16},
+    'CaptureWindowGeometry': {'window': ''},
+    'RestoreWindowGeometry': {'window': '', 'snapshot': '{"x":100,"y":100,"width":800,"height":600}'},
+    'ClickGrid': {'x': 100, 'y': 100, 'rows': 2, 'columns': 3, 'dx': 80, 'dy': 60, 'ms': 100},
+    'DragThroughPoints': {'points': '100,100\n200,100\n200,200', 'ms': 100},
+    'ClickInWindow': {'window': '', 'x': 50, 'y': 50},
+}
 
 
 def uid(key):
@@ -106,6 +118,8 @@ class Pack:
                 continue
             piece = {'kind': 'Input', 'name': part[1:-1], 'value_type': 'Any'} if part.startswith('{') else {'kind': 'Label', 'text': part.strip()}
             piece['id'] = uid(f'{self.id}/{key}/piece/{len(pieces)}')
+            if piece['kind'] == 'Input':
+                piece['default_value'] = val(INPUT_DEFAULTS[key][piece['name']])
             pieces.append(piece)
         self.defs.append({'id': block_id, 'identifier': 'Blockworked_' + key, 'description': description,
                           'color': self.color, 'icon': self.icon, 'pieces': pieces,
@@ -135,8 +149,9 @@ class Pack:
         content = {**template, 'name': self.name, 'description': self.description,
                    'block_defs': self.defs, 'strands': strands, 'lists': [], 'dicts': [],
                    'variables': [{'name': self.name_for(n), 'value': {'kind': 'Number', 'value': 0}} for n in sorted(self.vars)]}
+        version = '1.0.1' if any(p['kind'] == 'Input' for d in self.defs for p in d['pieces']) else '1.0.0'
         data = {'blockwork_block_pack': 1, 'id': self.id, 'name': self.name, 'description': self.description,
-                'author': 'Blockworked', 'version': '1.0.0', 'blocks': content}
+                'author': 'Blockworked', 'version': version, 'blocks': content}
         (ROOT / f'packs/{self.id}.json').write_text(json.dumps(data, indent=2) + '\n')
 
 
