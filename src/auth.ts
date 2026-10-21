@@ -39,6 +39,22 @@ export function isAdmin(env: Env, user: User | null): boolean {
   return !!user && env.ADMINS.split(",").map((s) => s.trim()).includes(user.id);
 }
 
+/**
+ * Names only the Blockworked team account may use. Compared after folding case, accents,
+ * spaces and punctuation, and 0/1 lookalikes, so "Block-Work" and "BL0CKWORKED" count too.
+ */
+const RESERVED_NAMES = ["blockwork", "blockworked"];
+
+export function isReservedName(name: string): boolean {
+  const folded = name
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/0/g, "o")
+    .replace(/1/g, "l")
+    .replace(/[^a-z]/g, "");
+  return RESERVED_NAMES.includes(folded);
+}
+
 export async function currentUser(req: Request, env: Env): Promise<User | null> {
   const token = cookie(req, "session");
   if (!token) return null;
@@ -46,7 +62,9 @@ export async function currentUser(req: Request, env: Env): Promise<User | null> 
     "SELECT u.id, u.name, u.avatar, u.banned FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ?",
   )
     .bind(await hash(token), Date.now())
-    .first<User>();
+    .first<User>()
+    // Sessions from before the name was reserved stop working.
+    .then((user) => (user && isReservedName(user.name) && !isAdmin(env, user) ? null : user));
 }
 
 /** Only same-site paths, so a login link can't bounce someone to another site. */
@@ -128,6 +146,14 @@ export async function callback(req: Request, env: Env, provider: Provider): Prom
     return new Response("Sign-in expired. Go back and try again.", { status: 400 });
   }
   const profile = await fetchProfile(env, provider, code);
+  // Admins are exempt so a reviewer can't lock themselves out.
+  if (isReservedName(profile.name) && !isAdmin(env, { id: profile.id, name: profile.name, avatar: "", banned: 0 })) {
+    const where = provider === "github" ? "GitHub profile" : "Google account";
+    return new Response(
+      `"${profile.name}" is reserved for the Blockworked team. Change the name on your ${where} and sign in again.`,
+      { status: 403, headers: { "Content-Type": "text/plain; charset=utf-8" } },
+    );
+  }
   const now = Date.now();
   // Name and avatar follow the provider; banned stays as it was.
   await env.DB.prepare(
