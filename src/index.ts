@@ -5,11 +5,14 @@ import { callback, currentUser, isAdmin, login, logout, PROVIDERS, type Provider
 import { blockTags, capabilityList, esc, loginPage, message, page } from "./pages.ts";
 import { readPack, sha256Hex } from "./packs.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
+import { setMainSite, SITE_JS } from "./site-nav.ts";
 
 export interface Env {
   DB: D1Database;
   PACKS: R2Bucket;
   SITE_URL: string;
+  /** blockworked.com, which the shared top nav links to. */
+  MAIN_SITE_URL?: string;
   LIBRARY_NAME: string;
   /** Comma-separated account ids, like "github:123". */
   ADMINS: string;
@@ -40,13 +43,14 @@ interface VersionRow {
 
 const SECURITY_HEADERS: Record<string, string> = {
   "Content-Security-Policy":
-    "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' https:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
+    "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' https:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "same-origin",
 };
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
+    setMainSite(env.MAIN_SITE_URL);
     let res: Response;
     try {
       res = await route(req, env);
@@ -73,6 +77,11 @@ async function route(req: Request, env: Env): Promise<Response> {
   if (method === "GET" && (m = path.match(/^\/packs\/([0-9a-f]{64})\.json$/))) return packFile(env, m[1]);
   if (method === "GET" && path === "/logo.png") return png(LOGO_PNG);
   if (method === "GET" && path === "/favicon.png") return png(FAVICON_PNG);
+  if (method === "GET" && path === "/site.js") {
+    return new Response(SITE_JS, {
+      headers: { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=3600" },
+    });
+  }
 
   const user = await currentUser(req, env);
   const admin = isAdmin(env, user);

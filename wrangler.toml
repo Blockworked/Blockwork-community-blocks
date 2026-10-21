@@ -8,6 +8,8 @@ routes = [{ pattern = "community.blockworked.com", custom_domain = true }]
 [vars]
 # The address the site is served at; OAuth callbacks go to <SITE_URL>/auth/<provider>/callback.
 SITE_URL = "https://community.blockworked.com"
+# The main site, which the top nav shared with it links to (src/site-nav.ts).
+MAIN_SITE_URL = "https://blockworked.com"
 LIBRARY_NAME = "Blockwork community blocks"
 # Account ids allowed to review, like "github:123", comma-separated.
 ADMINS = "github:39657565"

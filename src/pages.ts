@@ -3,6 +3,7 @@
 import type { User } from "./auth.ts";
 import { PROVIDERS } from "./auth.ts";
 import { CAPABILITIES } from "./packs.ts";
+import { SITE_NAV_CSS, siteFooter, siteHeader } from "./site-nav.ts";
 
 export function esc(value: unknown): string {
   return String(value ?? "").replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -11,7 +12,18 @@ export function esc(value: unknown): string {
 // Blockwork's look: the color, radius and control tokens of the app's Qt theme
 // (blockstitch qml/Blockstitch/Theme.qml) as blockworked.com uses them
 // (src/styles/theme.css and global.css there), dark first with the same light
-// variant. There's no script to toggle it, so the light one follows the OS.
+// variant. /site.js sets data-theme from the theme cookie the two sites share
+// (or the OS); without it, the light one follows the OS.
+const LIGHT = `
+    color-scheme: light;
+    --bg: #f2f2f5; --bg2: #ffffff; --bg3: #e7e7ec; --border: #d4d4da;
+    --fg: #1c1c1e; --muted: #6e6e73;
+    --warn: #6b5300; --warn-bg: #fff6d8; --warn-border: #e6c200;
+    --block: #e7e7ec; --block-top: #f4f4f7;
+    --glass: rgba(255, 255, 255, 0.6); --glass-strong: rgba(230, 230, 236, 0.75); --glass-border: rgba(0, 0, 0, 0.12);
+    --hover: rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);`;
+
 const STYLE = `
 :root {
   color-scheme: dark;
@@ -28,18 +40,10 @@ const STYLE = `
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, monospace;
 }
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --bg: #f2f2f5; --bg2: #ffffff; --bg3: #e7e7ec; --border: #d4d4da;
-    --fg: #1c1c1e; --muted: #6e6e73;
-    --warn: #6b5300; --warn-bg: #fff6d8; --warn-border: #e6c200;
-    --block: #e7e7ec; --block-top: #f4f4f7;
-    --glass: rgba(255, 255, 255, 0.6); --glass-strong: rgba(230, 230, 236, 0.75); --glass-border: rgba(0, 0, 0, 0.12);
-    --hover: rgba(0, 0, 0, 0.04);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
-  }
+:root[data-theme="light"] {${LIGHT}
 }
+@media (prefers-color-scheme: light) { :root:not([data-theme]) {${LIGHT}
+} }
 * { box-sizing: border-box; }
 html { scrollbar-width: thin; }
 body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
@@ -56,18 +60,17 @@ code, pre { font-family: var(--mono); }
 .muted { color: var(--muted); }
 .risky { color: var(--warn); font-weight: 600; }
 
-/* Header: blockworked.com's sticky glass toolbar with the logo and wordmark. */
-.site-header { position: sticky; top: 0; z-index: 10; background: var(--glass); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); box-shadow: var(--shadow-sm); }
-.site-header .container { display: flex; align-items: center; gap: 4px 12px; flex-wrap: wrap; min-height: 56px; padding-top: 8px; padding-bottom: 8px; }
-.brand { display: flex; align-items: center; gap: 8px; margin-right: auto; color: var(--fg); font-weight: 800; font-size: 16px; line-height: 1; letter-spacing: -0.045em; }
-.brand:hover { text-decoration: none; }
-.brand img { width: 28px; height: 28px; }
-.brand-sub { font-weight: 600; letter-spacing: -0.01em; color: var(--muted); }
-nav { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
-nav a { padding: 6px 10px; border-radius: var(--radius); font-size: 13px; color: var(--muted); transition: background 120ms var(--ease), color 120ms var(--ease); }
-nav a:hover { background: var(--hover); color: var(--fg); text-decoration: none; }
+/* The library's own bar under the shared header (site-nav.ts): its name and
+   the account links. */
+.subbar { border-bottom: 1px solid var(--glass-border); }
+.subbar .container { display: flex; align-items: center; gap: 4px 12px; flex-wrap: wrap; min-height: 48px; padding-top: 6px; padding-bottom: 6px; }
+.subbar-title { margin-right: auto; color: var(--fg); font-weight: 700; font-size: 15px; letter-spacing: -0.015em; }
+.subbar-title:hover { text-decoration: none; }
+.subbar nav { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+.subbar nav a { padding: 6px 10px; border-radius: var(--radius); font-size: 13px; color: var(--muted); transition: background 120ms var(--ease), color 120ms var(--ease); }
+.subbar nav a:hover { background: var(--hover); color: var(--fg); text-decoration: none; }
 .who { display: inline-flex; align-items: center; gap: 6px; padding: 0 6px 0 10px; font-size: 13px; font-weight: 600; }
-
+${SITE_NAV_CSS}
 /* Home page intro: the app canvas's dot grid behind the title. */
 .hero { margin: -40px 0 28px; padding: 56px 0 44px; border-bottom: 1px solid var(--glass-border);
   background-image: radial-gradient(circle, var(--glass-border) 1.2px, transparent 1.2px); background-size: 22px 22px; }
@@ -118,23 +121,15 @@ pre { overflow: auto; max-height: 480px; background: var(--bg2); border: 1px sol
 .mono { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
 img.avatar { width: 22px; height: 22px; border-radius: 50%; }
 
-.site-footer { border-top: 1px solid var(--glass-border); background: var(--glass); padding: 24px 0; font-size: 13px; }
-.site-footer .container { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
-.site-footer .brand { margin-right: 0; font-size: 14px; }
-.site-footer .brand img { width: 22px; height: 22px; }
-.site-footer a:not(.brand) { color: var(--muted); }
-.site-footer a:not(.brand):hover { color: var(--fg); text-decoration: none; }
-.site-footer .copyright { margin-left: auto; color: var(--muted); }
 @media (max-width: 560px) {
   .container { padding: 0 16px; }
-  .brand-sub, .who { display: none; }
-  nav a { padding: 6px 8px; }
+  .site-header .container, .site-footer .container { padding: 0 16px; }
+  .who { display: none; }
+  .subbar nav a { padding: 6px 8px; }
   .site-footer .copyright { margin-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 `;
-
-const BRAND = `<img src="/logo.png" alt="" width="28" height="28"><span>Blockwork</span>`;
 
 export function page(title: string, user: User | null, admin: boolean, body: string, status = 200): Response {
   const nav = user
@@ -145,12 +140,11 @@ export function page(title: string, user: User | null, admin: boolean, body: str
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)} · Blockwork community blocks</title><link rel="icon" type="image/png" href="/favicon.png">
 <meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)"><meta name="theme-color" content="#f2f2f5" media="(prefers-color-scheme: light)">
-<style>${STYLE}</style></head>
-<body><header class="site-header"><div class="container"><a class="brand" href="/">${BRAND}<span class="brand-sub">Community blocks</span></a><nav aria-label="Main">${nav}</nav></div></header>
+<script src="/site.js"></script><style>${STYLE}</style></head>
+<body>${siteHeader()}
+<div class="subbar"><div class="container"><a class="subbar-title" href="/">Community blocks</a><nav aria-label="Library">${nav}</nav></div></div>
 <main><div class="container">${body}</div></main>
-<footer class="site-footer"><div class="container"><a class="brand" href="https://blockworked.com">${BRAND}</a>
-<a href="https://blockworked.com/download">Download Blockwork</a><a href="https://github.com/Blockworked/Blockwork">Source</a>
-<a href="https://github.com/Blockworked/Blockwork-community-blocks">Library source</a><span class="copyright">© Blockworked</span></div></footer></body></html>`;
+${siteFooter()}</body></html>`;
   return new Response(html, { status, headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 
