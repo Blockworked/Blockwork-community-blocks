@@ -62,6 +62,12 @@ GOOGLE_CLIENT_SECRET=...
    then `npx wrangler secret put` each of the four client values.
 4. `npm run migrate:remote && npm run seed:remote && npm run deploy`.
 
+After that, every push to master deploys on its own
+(`.github/workflows/deploy.yml`): it typechecks, runs the tests, applies any
+new migrations and deploys the Worker. It needs two repository secrets:
+`CLOUDFLARE_API_TOKEN` (a token from the "Edit Cloudflare Workers" template,
+plus D1 Edit) and `CLOUDFLARE_ACCOUNT_ID`.
+
 ## Other libraries
 
 Anyone can host a library: an `index.json` in this format plus the pack
