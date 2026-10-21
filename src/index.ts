@@ -4,6 +4,7 @@
 import { callback, currentUser, isAdmin, login, logout, PROVIDERS, type Provider, type User } from "./auth.ts";
 import { blockTags, capabilityList, esc, loginPage, message, page } from "./pages.ts";
 import { readPack, sha256Hex } from "./packs.ts";
+import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 
 export interface Env {
   DB: D1Database;
@@ -39,7 +40,7 @@ interface VersionRow {
 
 const SECURITY_HEADERS: Record<string, string> = {
   "Content-Security-Policy":
-    "default-src 'none'; style-src 'unsafe-inline'; img-src https:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
+    "default-src 'none'; style-src 'unsafe-inline'; img-src 'self' https:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "same-origin",
 };
@@ -70,6 +71,8 @@ async function route(req: Request, env: Env): Promise<Response> {
   if (method === "GET" && path === "/index.json") return indexJson(env);
   let m: RegExpMatchArray | null;
   if (method === "GET" && (m = path.match(/^\/packs\/([0-9a-f]{64})\.json$/))) return packFile(env, m[1]);
+  if (method === "GET" && path === "/logo.png") return png(LOGO_PNG);
+  if (method === "GET" && path === "/favicon.png") return png(FAVICON_PNG);
 
   const user = await currentUser(req, env);
   const admin = isAdmin(env, user);
@@ -140,9 +143,14 @@ async function packFile(env: Env, sha: string): Promise<Response> {
   return new Response(object.body, { headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=3600" } });
 }
 
+function png(base64: string): Response {
+  const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+  return new Response(bytes, { headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=86400" } });
+}
+
 function packCard(v: VersionRow, extra = ""): string {
-  return `<div class="card"><h3>${esc(v.name)} <span class="muted">${esc(v.version)}</span></h3>
-    <p class="muted">by ${esc(v.author)}</p><p>${esc(v.description)}</p>
+  return `<div class="card"><h3>${esc(v.name)} <span class="version">${esc(v.version)}</span></h3>
+    <p class="muted by">by ${esc(v.author)}</p><p>${esc(v.description)}</p>
     <p>${blockTags(JSON.parse(v.blocks))}</p>${capabilityList(JSON.parse(v.capabilities))}${extra}</div>`;
 }
 
@@ -153,10 +161,10 @@ async function home(env: Env, user: User | null, admin: boolean): Promise<Respon
     "Packs",
     user,
     admin,
-    `<h1>${esc(env.LIBRARY_NAME)}</h1>
+    `<section class="hero"><h1>${esc(env.LIBRARY_NAME)}</h1>
      <p>Shared custom blocks for Blockwork. Add them from My Blocks &gt; Browse library in the editor.
      Blockwork shows what a pack's blocks can do before you add it.</p>
-     <p><a class="button primary" href="/submit">Submit a pack</a></p>${list}`,
+     <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a></p></section>${list}`,
   );
 }
 
@@ -235,7 +243,7 @@ async function myPacks(env: Env, user: User, admin: boolean): Promise<Response> 
     .map((v) =>
       packCard(
         v,
-        `<p><strong>${esc(label[v.status])}</strong>${v.reason ? ` - ${esc(v.reason)}` : ""}
+        `<p class="status"><strong>${esc(label[v.status])}</strong>${v.reason ? ` - ${esc(v.reason)}` : ""}
          <span class="muted">· submitted ${esc(new Date(v.submitted_at).toISOString().slice(0, 10))}</span></p>`,
       ),
     )
@@ -279,8 +287,8 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number): Pro
     `Review ${v.name}`,
     user,
     admin,
-    `<h1>${esc(v.name)} <span class="muted">${esc(v.version)}</span></h1>
-     <p class="muted">id ${esc(v.pack_id)} · by ${esc(v.author)} (${esc(v.submitted_by)}) · sha256 ${esc(v.sha256)}</p>
+    `<h1>${esc(v.name)} <span class="version">${esc(v.version)}</span></h1>
+     <p class="muted">id ${esc(v.pack_id)} · by ${esc(v.author)} (${esc(v.submitted_by)}) · sha256 <span class="mono">${esc(v.sha256)}</span></p>
      <p>${previous ? `Updates the listed version ${esc(previous.version || previous.sha256.slice(0, 12))}.` : "A new pack."}</p>
      <p>${esc(v.description)}</p><p>${blockTags(JSON.parse(v.blocks))}</p>
      <h2>What it can do</h2>${capabilityList(JSON.parse(v.capabilities))}

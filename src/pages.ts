@@ -8,36 +8,149 @@ export function esc(value: unknown): string {
   return String(value ?? "").replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
+// Blockwork's look: the color, radius and control tokens of the app's Qt theme
+// (blockstitch qml/Blockstitch/Theme.qml) as blockworked.com uses them
+// (src/styles/theme.css and global.css there), dark first with the same light
+// variant. There's no script to toggle it, so the light one follows the OS.
 const STYLE = `
-:root { color-scheme: light dark; --bg: #fafafa; --fg: #1d1d1f; --muted: #6e6e73; --card: #fff; --line: #e3e3e8; --accent: #4c6ef5; --warn: #c2410c; }
-@media (prefers-color-scheme: dark) { :root { --bg: #161618; --fg: #ececf0; --muted: #9a9aa2; --card: #1f1f23; --line: #2e2e34; --accent: #7c93ff; --warn: #fb923c; } }
+:root {
+  color-scheme: dark;
+  --bg: #1c1c1e; --bg2: #2c2c2e; --bg3: #3a3a3c; --border: #48484a;
+  --fg: #e0e0e0; --muted: #8e8e93;
+  --accent: #0a84ff; --accent-light: #3aa0ff; --accent-rgb: 10, 132, 255;
+  --warn: #ffd60a; --warn-bg: #2d2200; --warn-border: #7d6200;
+  --block: #3b3c40; --block-top: #44454a;
+  --glass: rgba(44, 44, 46, 0.55); --glass-strong: rgba(58, 58, 60, 0.6); --glass-border: rgba(255, 255, 255, 0.08);
+  --hover: rgba(255, 255, 255, 0.05);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --radius: 6px; --radius-lg: 14px;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --bg: #f2f2f5; --bg2: #ffffff; --bg3: #e7e7ec; --border: #d4d4da;
+    --fg: #1c1c1e; --muted: #6e6e73;
+    --warn: #6b5300; --warn-bg: #fff6d8; --warn-border: #e6c200;
+    --block: #e7e7ec; --block-top: #f4f4f7;
+    --glass: rgba(255, 255, 255, 0.6); --glass-strong: rgba(230, 230, 236, 0.75); --glass-border: rgba(0, 0, 0, 0.12);
+    --hover: rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+}
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; }
-header, main { max-width: 860px; margin: 0 auto; padding: 16px; }
-header { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
-header a.home { font-weight: 600; color: var(--fg); text-decoration: none; margin-right: auto; }
-a { color: var(--accent); }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin: 12px 0; }
+html { scrollbar-width: thin; }
+body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
+::selection { background: rgba(var(--accent-rgb), 0.35); }
+.container { width: 100%; max-width: 920px; margin: 0 auto; padding: 0 24px; }
+main { flex: 1; padding: 40px 0 72px; }
+h1, h2, h3 { line-height: 1.2; text-wrap: balance; }
+h1 { font-size: clamp(28px, 4vw, 38px); font-weight: 800; letter-spacing: -0.03em; margin: 0 0 12px; }
+h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; margin: 36px 0 12px; }
+h3 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, pre { font-family: var(--mono); }
 .muted { color: var(--muted); }
 .risky { color: var(--warn); font-weight: 600; }
-.tag { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 0 8px; font-size: 13px; margin: 2px 4px 2px 0; }
-button, .button { font: inherit; padding: 6px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; text-decoration: none; display: inline-block; }
-button.primary, .button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Header: blockworked.com's sticky glass toolbar with the logo and wordmark. */
+.site-header { position: sticky; top: 0; z-index: 10; background: var(--glass); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-bottom: 1px solid var(--glass-border); box-shadow: var(--shadow-sm); }
+.site-header .container { display: flex; align-items: center; gap: 4px 12px; flex-wrap: wrap; min-height: 56px; padding-top: 8px; padding-bottom: 8px; }
+.brand { display: flex; align-items: center; gap: 8px; margin-right: auto; color: var(--fg); font-weight: 800; font-size: 16px; line-height: 1; letter-spacing: -0.045em; }
+.brand:hover { text-decoration: none; }
+.brand img { width: 28px; height: 28px; }
+.brand-sub { font-weight: 600; letter-spacing: -0.01em; color: var(--muted); }
+nav { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+nav a { padding: 6px 10px; border-radius: var(--radius); font-size: 13px; color: var(--muted); transition: background 120ms var(--ease), color 120ms var(--ease); }
+nav a:hover { background: var(--hover); color: var(--fg); text-decoration: none; }
+.who { display: inline-flex; align-items: center; gap: 6px; padding: 0 6px 0 10px; font-size: 13px; font-weight: 600; }
+
+/* Home page intro: the app canvas's dot grid behind the title. */
+.hero { margin: -40px 0 28px; padding: 56px 0 44px; border-bottom: 1px solid var(--glass-border);
+  background-image: radial-gradient(circle, var(--glass-border) 1.2px, transparent 1.2px); background-size: 22px 22px; }
+.hero h1 { font-size: clamp(34px, 6vw, 52px); letter-spacing: -0.045em; }
+.hero p { max-width: 60ch; font-size: 17px; line-height: 1.65; color: color-mix(in srgb, var(--fg) 78%, var(--muted)); }
+.hero .actions { margin-top: 24px; }
+
+/* Panels: the app's settings sections, as blockworked.com draws them. */
+.card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 18px 20px; margin: 14px 0; }
+.card > :first-child { margin-top: 0; }
+.card > :last-child { margin-bottom: 0; }
+.card p { margin: 8px 0; }
+.card .by { margin-top: 2px; font-size: 13px; }
+.version { display: inline-block; vertical-align: 2px; margin-left: 4px; padding: 1px 8px; border-radius: 999px; background: var(--bg3); color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: 0; }
+h1 .version { font-size: 14px; vertical-align: 6px; }
+ul.caps { margin: 10px 0 0; padding: 0; list-style: none; font-size: 13px; }
+ul.caps li { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+ul.caps li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+li.risky::before { background: var(--warn); }
+.card .status { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--glass-border); font-size: 13px; }
+ol { padding-left: 22px; }
+ol li { margin: 4px 0; }
+
+/* Block names, drawn like the app's blocks. */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { display: inline-block; padding: 3px 9px; border-radius: var(--radius); border: 1px solid var(--border); background: linear-gradient(var(--block-top), var(--block)); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--shadow-sm); font-size: 12px; font-weight: 600; color: var(--fg); }
+
+/* Controls: blockworked.com's .btn and .btn-primary. */
+button, .button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg3); color: var(--fg); font: inherit; font-size: 13px; line-height: 1; white-space: nowrap; cursor: pointer; text-decoration: none; transition: background 120ms var(--ease), border-color 120ms var(--ease); }
+button:hover, .button:hover { background: var(--hover); text-decoration: none; }
+button:active, .button:active { opacity: 0.85; }
+button:focus-visible, .button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary, .button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+button.primary:hover, .button.primary:hover { background: var(--accent-light); }
+button.ghost { background: transparent; border-color: transparent; color: var(--muted); }
+button.ghost:hover { background: var(--hover); color: var(--fg); }
+.button.large { min-height: 44px; padding: 0 20px; font-size: 15px; border-radius: 8px; }
+.signin { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 20px; }
+.signin .button { min-width: 240px; }
 form.inline { display: inline; }
-input[type=text] { font: inherit; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); width: min(100%, 360px); }
-pre { overflow: auto; max-height: 480px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: 13px; }
-img.avatar { width: 24px; height: 24px; border-radius: 50%; vertical-align: middle; }
+input[type=text], input[type=file] { font: inherit; font-size: 13px; padding: 7px 10px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg2); color: var(--fg); width: min(100%, 420px); transition: box-shadow 120ms var(--ease), border-color 120ms var(--ease); }
+input[type=text]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.28); }
+input[type=file]::file-selector-button { font: inherit; margin-right: 10px; padding: 5px 10px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg3); color: var(--fg); cursor: pointer; }
+
+/* blockworked.com's warning banner, for form errors. */
+p.risky { padding: 10px 12px; border-radius: var(--radius-lg); border: 1px solid var(--warn-border); background: var(--warn-bg); font-size: 13px; box-shadow: var(--shadow-sm); }
+pre { overflow: auto; max-height: 480px; background: var(--bg2); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 14px 16px; font-size: 12px; line-height: 1.5; }
+.mono { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+img.avatar { width: 22px; height: 22px; border-radius: 50%; }
+
+.site-footer { border-top: 1px solid var(--glass-border); background: var(--glass); padding: 24px 0; font-size: 13px; }
+.site-footer .container { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; }
+.site-footer .brand { margin-right: 0; font-size: 14px; }
+.site-footer .brand img { width: 22px; height: 22px; }
+.site-footer a:not(.brand) { color: var(--muted); }
+.site-footer a:not(.brand):hover { color: var(--fg); text-decoration: none; }
+.site-footer .copyright { margin-left: auto; color: var(--muted); }
+@media (max-width: 560px) {
+  .container { padding: 0 16px; }
+  .brand-sub, .who { display: none; }
+  nav a { padding: 6px 8px; }
+  .site-footer .copyright { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 `;
+
+const BRAND = `<img src="/logo.png" alt="" width="28" height="28"><span>Blockwork</span>`;
 
 export function page(title: string, user: User | null, admin: boolean, body: string, status = 200): Response {
   const nav = user
     ? `<a href="/submit">Submit a pack</a><a href="/me">My packs</a>${admin ? `<a href="/admin">Review</a>` : ""}
-       <span>${user.avatar ? `<img class="avatar" src="${esc(user.avatar)}" alt="">` : ""} ${esc(user.name)}</span>
-       <form class="inline" method="post" action="/auth/logout"><button>Sign out</button></form>`
+       <span class="who">${user.avatar ? `<img class="avatar" src="${esc(user.avatar)}" alt="">` : ""}${esc(user.name)}</span>
+       <form class="inline" method="post" action="/auth/logout"><button class="ghost">Sign out</button></form>`
     : `<a href="/login">Sign in</a>`;
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)} - Blockwork blocks</title><style>${STYLE}</style></head>
-<body><header><a class="home" href="/">Blockwork community blocks</a>${nav}</header><main>${body}</main></body></html>`;
+<title>${esc(title)} · Blockwork community blocks</title><link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)"><meta name="theme-color" content="#f2f2f5" media="(prefers-color-scheme: light)">
+<style>${STYLE}</style></head>
+<body><header class="site-header"><div class="container"><a class="brand" href="/">${BRAND}<span class="brand-sub">Community blocks</span></a><nav aria-label="Main">${nav}</nav></div></header>
+<main><div class="container">${body}</div></main>
+<footer class="site-footer"><div class="container"><a class="brand" href="https://blockworked.com">${BRAND}</a>
+<a href="https://blockworked.com/download">Download Blockwork</a><a href="https://github.com/Blockworked/Blockwork">Source</a>
+<a href="https://github.com/Blockworked/Blockwork-community-blocks">Library source</a><span class="copyright">© Blockworked</span></div></footer></body></html>`;
   return new Response(html, { status, headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 
@@ -46,19 +159,24 @@ export function capabilityList(kinds: string[]): string {
   const items = CAPABILITIES.filter(([k]) => kinds.includes(k)).map(
     ([, label, risky]) => `<li${risky ? ` class="risky"` : ""}>${esc(label)}</li>`,
   );
-  return `<ul>${items.join("")}</ul>`;
+  return `<ul class="caps">${items.join("")}</ul>`;
 }
 
 export function blockTags(blocks: string[]): string {
-  return blocks.map((b) => `<span class="tag">${esc(b)}</span>`).join("");
+  return `<span class="tags">${blocks.map((b) => `<span class="tag">${esc(b)}</span>`).join("")}</span>`;
 }
 
 export function loginPage(user: User | null, next: string): Response {
   const q = next ? `?next=${encodeURIComponent(next)}` : "";
   const buttons = Object.entries(PROVIDERS)
-    .map(([id, name]) => `<p><a class="button" href="/auth/${id}/login${q}">Sign in with ${esc(name)}</a></p>`)
+    .map(([id, name]) => `<a class="button large" href="/auth/${id}/login${q}">Sign in with ${esc(name)}</a>`)
     .join("");
-  return page("Sign in", user, false, `<h1>Sign in</h1><p>An account is needed to submit packs. Browsing doesn't need one.</p>${buttons}`);
+  return page(
+    "Sign in",
+    user,
+    false,
+    `<h1>Sign in</h1><p class="muted">An account is needed to submit packs. Browsing doesn't need one.</p><div class="signin">${buttons}</div>`,
+  );
 }
 
 export function message(user: User | null, admin: boolean, title: string, text: string, status = 200): Response {
