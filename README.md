@@ -28,13 +28,62 @@ loads the same packs into the Worker.
    Keep the same id for later versions so they replace the old blocks.
 
 Each entry in `blocks.block_defs` can include `identifier` (for example,
-`Blockworked_WaitSeconds`) and `description` for Blockwork's Details screen. These can
+`Blockworked_ClickGrid`) and `description` for Blockwork's Details screen. These can
 also be set in the app's Make/Edit Block dialog. Keep the internal `id`
 stable across versions so installed calls continue to match; `identifier`
 uses `AUTHOR_BLOCKNAME` for the Details screen. Set `description` on each
 block to explain its inputs and behavior. Older packs without these fields still load.
 Run `python3 scripts/build-block-index.py` after editing starter packs to
 refresh their checksums.
+
+## Official packs
+
+These packs combine multiple built-in blocks into reusable workflows. Their
+definitions were checked against Blockwork's instruction and operator palettes.
+
+| Pack | Blocks |
+| --- | --- |
+| Clipboard tools | Remove duplicate lines, remove blank lines, clean whitespace |
+| Text extraction | Text between literal markers, all lines containing text, value for a `key=value` key |
+| Window layouts | Center on a monitor, tile two windows side by side, capture geometry, restore geometry |
+| Mouse patterns | Click a grid, drag through points, click relative to a window |
+
+Clipboard tools replace clipboard text after processing it. Line-based blocks
+accept LF, CRLF and CR, and produce LF. Duplicate lines and text markers match
+exactly, including case. Key lookup trims keys and values, uses the first
+matching entry and preserves additional `=` signs in its value.
+
+Window patterns match the first window whose title or app contains the text.
+Use patterns that identify different windows for tiling. Monitor numbers start
+at 1; layouts use the full monitor rectangle, including panels. Window control
+depends on the desktop, and window managers may enforce minimum sizes. Save
+the geometry reporter's JSON in a variable, then pass it to the restore block;
+it records position and size, not maximized or minimized state.
+
+Mouse grids use absolute screen coordinates and visit columns within each row.
+Rows and columns are nonnegative whole numbers; spacing may be negative.
+Drag paths are text with one `x,y` pair per line and at least two points. Pauses
+are in milliseconds. Window-relative clicks use offsets from the client area's
+top-left and focus the window before clicking.
+
+The four packs are generated with stable IDs:
+
+```bash
+python3 scripts/build-official-packs.py
+python3 scripts/build-block-index.py
+```
+
+For behavior tests using Blockwork's actual Rust parser and interpreter, first
+build `blockwork-core` in a Blockwork checkout with the current Rust toolchain,
+then run:
+
+```bash
+npm run test:runtime -- /path/to/Blockwork/target/debug/deps
+```
+
+These tests simulate clipboard/window I/O and record mouse events without
+controlling the desktop. They cover all 13 new blocks, Unicode and literal
+matching, line endings, invalid inputs, monitor offsets and action order.
 
 Reviewers: read the whole pack. The review page lists what its blocks can
 do, but a pack in this library should not run commands, go online, write

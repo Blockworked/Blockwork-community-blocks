@@ -1,0 +1,3077 @@
+{
+  "blockwork_block_pack": 1,
+  "id": "mouse-patterns",
+  "name": "Mouse patterns",
+  "description": "Click grids, drag through a path of points and click relative to a window.",
+  "author": "Blockworked",
+  "version": "1.0.0",
+  "blocks": {
+    "block_defs": [
+      {
+        "id": "0d56b88c2ab55a378c9deda2deafa31c",
+        "identifier": "Blockworked_ClickGrid",
+        "description": "Left-clicks a grid in row-major order, starting at absolute screen x,y. Spacing is in pixels and may be negative or zero. Rows and columns must be nonnegative whole numbers. Pauses the given nonnegative milliseconds after each click; zero-sized grids do nothing.",
+        "color": "#4C97FF",
+        "icon": "mouse-pointer-click",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "click grid at x",
+            "id": "7efe8da554425f7d8d763c8b30333028"
+          },
+          {
+            "kind": "Input",
+            "name": "x",
+            "value_type": "Any",
+            "id": "97d9073d2555594099fa2bdbda75d0f0"
+          },
+          {
+            "kind": "Label",
+            "text": "y",
+            "id": "e5abbc0b69b55a7889a557656d05bc97"
+          },
+          {
+            "kind": "Input",
+            "name": "y",
+            "value_type": "Any",
+            "id": "ae44a13d7ce654e7a6340569433b6d66"
+          },
+          {
+            "kind": "Label",
+            "text": "rows",
+            "id": "9831d648409851af9f213f01f2419a5c"
+          },
+          {
+            "kind": "Input",
+            "name": "rows",
+            "value_type": "Any",
+            "id": "d02f06e208575545833aac3fa1d29afe"
+          },
+          {
+            "kind": "Label",
+            "text": "columns",
+            "id": "9145370440805468b33508073e9e6232"
+          },
+          {
+            "kind": "Input",
+            "name": "columns",
+            "value_type": "Any",
+            "id": "3023f2e7e5ed5f53af2f23c06e52f7d0"
+          },
+          {
+            "kind": "Label",
+            "text": "spacing x",
+            "id": "ec51279e0ab255e49aa70810b9e344e0"
+          },
+          {
+            "kind": "Input",
+            "name": "dx",
+            "value_type": "Any",
+            "id": "3fccc0c87dd8536da3caf67f2b870f56"
+          },
+          {
+            "kind": "Label",
+            "text": "y",
+            "id": "3055454b3b3c5716992644e88d2d35b8"
+          },
+          {
+            "kind": "Input",
+            "name": "dy",
+            "value_type": "Any",
+            "id": "5a676bd1d1615414971158dfcafee045"
+          },
+          {
+            "kind": "Label",
+            "text": "pause",
+            "id": "2226df8852855cf0bbd2239612ab589e"
+          },
+          {
+            "kind": "Input",
+            "name": "ms",
+            "value_type": "Any",
+            "id": "642292f98c19593d8427cd04abf9f87b"
+          },
+          {
+            "kind": "Label",
+            "text": "ms",
+            "id": "bf434bb5ded75e2389300f07262432bd"
+          }
+        ],
+        "shape": "Normal"
+      },
+      {
+        "id": "4c97e908001d525a879d638bc3b7ddc5",
+        "identifier": "Blockworked_DragThroughPoints",
+        "description": "Left-drags through newline-separated absolute x,y pairs, pausing at each point. Needs at least two pairs and a nonnegative pause in milliseconds. Validates the entire path before pressing; releases the button if an action fails. Supports CRLF/CR lines and surrounding whitespace.",
+        "color": "#4C97FF",
+        "icon": "mouse-pointer-click",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "drag through points",
+            "id": "37b38ed4d72157ab90d4a24355b32441"
+          },
+          {
+            "kind": "Input",
+            "name": "points",
+            "value_type": "Any",
+            "id": "8d526ac38e185192b8f8eaf89601a8d8"
+          },
+          {
+            "kind": "Label",
+            "text": "pause",
+            "id": "5c3feb4b482d537ebd4e2434fadd6b6a"
+          },
+          {
+            "kind": "Input",
+            "name": "ms",
+            "value_type": "Any",
+            "id": "6ee9590d99d75d9d8ef24defa3b26b25"
+          },
+          {
+            "kind": "Label",
+            "text": "ms",
+            "id": "f59de8d2afe85df19c0b6af962ed4622"
+          }
+        ],
+        "shape": "Normal"
+      },
+      {
+        "id": "6d052b596ea954e188e73485b2efa271",
+        "identifier": "Blockworked_ClickInWindow",
+        "description": "Focuses the first matching window and left-clicks a pixel offset from its client-area top-left. Empty pattern means active window. Rechecks bounds after focusing; rejects offsets outside the client area. Window control must be supported by the desktop.",
+        "color": "#4C97FF",
+        "icon": "mouse-pointer-click",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "click in window",
+            "id": "a5e24f9c670c5349990276ba9f1ac016"
+          },
+          {
+            "kind": "Input",
+            "name": "window",
+            "value_type": "Any",
+            "id": "32429149c27358db8a0a9b544de7eafb"
+          },
+          {
+            "kind": "Label",
+            "text": "at offset x",
+            "id": "b09e4bb2526c5aeb9ff7a9bf0b2f322e"
+          },
+          {
+            "kind": "Input",
+            "name": "x",
+            "value_type": "Any",
+            "id": "0df08f3b63b65f32a33b8975f9e6158e"
+          },
+          {
+            "kind": "Label",
+            "text": "y",
+            "id": "2783aecd2a05516bb292567015828a3e"
+          },
+          {
+            "kind": "Input",
+            "name": "y",
+            "value_type": "Any",
+            "id": "ad0024d897485f6fbca5462c21d1b500"
+          }
+        ],
+        "shape": "Normal"
+      }
+    ],
+    "comments": [],
+    "description": "Click grids, drag through a path of points and click relative to a window.",
+    "dicts": [],
+    "floating_values": [],
+    "format_version": 1,
+    "id": "",
+    "lists": [],
+    "name": "Mouse patterns",
+    "recording_target": null,
+    "settings": {
+      "active_days": 0,
+      "active_hours": null,
+      "always_listen": false,
+      "catch_up_missed": false,
+      "max_loop_iterations": 0,
+      "max_run_secs": 0,
+      "only_in_window": "",
+      "power": "Any"
+    },
+    "speed_multiplier": 1.0,
+    "strands": [
+      {
+        "id": "b0cc3956984e5293800f4524d87ddb81",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "0d56b88c2ab55a378c9deda2deafa31c"
+            },
+            "id": "b9490afc2dc35010974f04864510d510"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/mouse-patterns"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: x",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "x"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "757b21d6d84d525a86d1ca3cb0a684a0"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: x"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: x"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "x must be a finite number."
+                                      }
+                                    },
+                                    "id": "9981ce12ddae5a6b8fa61217b6147dd2"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "de3b1727d8f451f9a541f31d26d264ff"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: y",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "y"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "f9cc4ee062d55f57bd085c11ff138352"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: y"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: y"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "y must be a finite number."
+                                      }
+                                    },
+                                    "id": "08c409b519c555ea909709c9b3022eb0"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "f55c0084623751cd8c0bd3bb2869e555"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: rows",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "rows"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "2feaa01fd12555ae9c421fcc4cacdbc0"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: rows"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: rows"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "rows must be a finite number."
+                                      }
+                                    },
+                                    "id": "6f5ae565a2c85335a35b9d7aacfa63ff"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "d6100b1bdef5523e8adadecae765a814"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: columns",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "columns"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "78b2edb862945880aa97777e5b7b4dae"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: columns"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: columns"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "columns must be a finite number."
+                                      }
+                                    },
+                                    "id": "20d873d21018562f928e48be82268a77"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "1baed0f985f454f7a08dda19d08868fe"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: dx",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "dx"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "3de6ffce2a305418a233d17088e287ab"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: dx"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: dx"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "dx must be a finite number."
+                                      }
+                                    },
+                                    "id": "55c407567f5a5b74a994f668db672888"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "a5097add6fce53f482f28462c8c8711f"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: dy",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "dy"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "9fe675df537357c199c0176c09023060"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: dy"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: dy"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "dy must be a finite number."
+                                      }
+                                    },
+                                    "id": "9c051e6fd1b25787bd549cd29cfed014"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "335a675799175094ad44c175cf26af35"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: ms",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "ms"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "6c2126343f715543af8b85e826fbd3af"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: ms"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: ms"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "ms must be a finite number."
+                                      }
+                                    },
+                                    "id": "4841b053b25d509b8bb3f0187c1506c4"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "4276db6886b756c4a8e2b7ffa88e5a00"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Gte",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: rows"
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Eq",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: rows"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Round",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: rows"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Rows must be a nonnegative whole number."
+                                      }
+                                    },
+                                    "id": "94c64cf7768157cfac59cfa7ccb5203f"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "9989fac7da045e53b5da6636375399cd"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Gte",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: columns"
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Eq",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: columns"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Round",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: columns"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Columns must be a nonnegative whole number."
+                                      }
+                                    },
+                                    "id": "9498caea1a13515b9a9e03dcc240d753"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "c54f7a6bf9c957428eb8faa0fed2335e"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Gte",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked mouse-patterns: ms"
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Pause must be nonnegative."
+                                      }
+                                    },
+                                    "id": "5966df442d3653ef8bc3445c104749b9"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "71c28fdb6ea65e07b5505dd2c10c6e2a"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Or",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked mouse-patterns: rows"
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked mouse-patterns: columns"
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Return": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    "id": "a8e53a57b9595b658c3645020b34816a"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "decd00284b365d4a9d9071dfd025537c"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: row",
+                                {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              ]
+                            },
+                            "id": "ca96007e772350099a09ef98848d1c1f"
+                          },
+                          {
+                            "kind": {
+                              "Repeat": {
+                                "count": {
+                                  "kind": "Var",
+                                  "name": "Blockworked mouse-patterns: rows"
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked mouse-patterns: column",
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ]
+                                    },
+                                    "id": "451f31a40ceb5d76af30389560830bbb"
+                                  },
+                                  {
+                                    "kind": {
+                                      "Repeat": {
+                                        "count": {
+                                          "kind": "Var",
+                                          "name": "Blockworked mouse-patterns: columns"
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "Token": {
+                                                "MoveMouse": [
+                                                  {
+                                                    "kind": "Op",
+                                                    "op": "Add",
+                                                    "args": [
+                                                      {
+                                                        "kind": "Var",
+                                                        "name": "Blockworked mouse-patterns: x"
+                                                      },
+                                                      {
+                                                        "kind": "Op",
+                                                        "op": "Mul",
+                                                        "args": [
+                                                          {
+                                                            "kind": "Var",
+                                                            "name": "Blockworked mouse-patterns: column"
+                                                          },
+                                                          {
+                                                            "kind": "Var",
+                                                            "name": "Blockworked mouse-patterns: dx"
+                                                          }
+                                                        ],
+                                                        "saved": {
+                                                          "kind": "Number",
+                                                          "value": 0
+                                                        }
+                                                      }
+                                                    ],
+                                                    "saved": {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  },
+                                                  {
+                                                    "kind": "Op",
+                                                    "op": "Add",
+                                                    "args": [
+                                                      {
+                                                        "kind": "Var",
+                                                        "name": "Blockworked mouse-patterns: y"
+                                                      },
+                                                      {
+                                                        "kind": "Op",
+                                                        "op": "Mul",
+                                                        "args": [
+                                                          {
+                                                            "kind": "Var",
+                                                            "name": "Blockworked mouse-patterns: row"
+                                                          },
+                                                          {
+                                                            "kind": "Var",
+                                                            "name": "Blockworked mouse-patterns: dy"
+                                                          }
+                                                        ],
+                                                        "saved": {
+                                                          "kind": "Number",
+                                                          "value": 0
+                                                        }
+                                                      }
+                                                    ],
+                                                    "saved": {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  },
+                                                  "Abs"
+                                                ]
+                                              }
+                                            },
+                                            "id": "6b0e22cc330a5cc88f2d5de2e44db913"
+                                          },
+                                          {
+                                            "kind": {
+                                              "Token": {
+                                                "Button": [
+                                                  "Left",
+                                                  "Click"
+                                                ]
+                                              }
+                                            },
+                                            "id": "ee39c852f8655200a7ed6425e1bf5d11"
+                                          },
+                                          {
+                                            "kind": {
+                                              "Wait": {
+                                                "kind": "Var",
+                                                "name": "Blockworked mouse-patterns: ms"
+                                              }
+                                            },
+                                            "id": "b551b98223b354f5a1f52af4fcef84a7"
+                                          },
+                                          {
+                                            "kind": {
+                                              "ChangeVariable": [
+                                                "Blockworked mouse-patterns: column",
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ]
+                                            },
+                                            "id": "bfc7820b1cfe5a96b2c7fd9a87bdcf59"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "ae85aa4d780356bc9f53e09536d25258"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ChangeVariable": [
+                                        "Blockworked mouse-patterns: row",
+                                        {
+                                          "kind": "Number",
+                                          "value": 1
+                                        }
+                                      ]
+                                    },
+                                    "id": "3838a146576b535cbda5f8110800c673"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "3f98694829e455e5b49a6d884fa11a3a"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "d7b24d5a864b5c64b5e8ee376f9538d5"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "10e3caa976cf5b51acd67e866cd23911"
+                  }
+                ]
+              }
+            },
+            "id": "9339ffe370ae5b2c95f44adf6895cf86"
+          }
+        ]
+      },
+      {
+        "id": "0067508d730a5c759115791309e52839",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "4c97e908001d525a879d638bc3b7ddc5"
+            },
+            "id": "dd8f6bc9ab9751c5a64c79a17981b31f"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/mouse-patterns"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: ms",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "ms"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "110fae3aba735ca5a7b86dae9377e2b7"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: ms"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: ms"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "ms must be a finite number."
+                                      }
+                                    },
+                                    "id": "5dc25ed78f0556668cfcf53a38b6b236"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "6162d4001675529683b9c63ef7682116"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Gte",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked mouse-patterns: ms"
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Pause must be nonnegative."
+                                      }
+                                    },
+                                    "id": "87cc3d12b008532db5ca43a1e38e676d"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "b5dd43fa72815685beb0c0c5e3af3204"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: path",
+                                {
+                                  "kind": "Op",
+                                  "op": "Trim",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "TextReplace",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "\r"
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "TextReplace",
+                                          "args": [
+                                            {
+                                              "kind": "Text",
+                                              "value": "\r\n"
+                                            },
+                                            {
+                                              "kind": "Param",
+                                              "name": "points"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "\n"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Text",
+                                          "value": "\n"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "b94db62686905e27b115132c3363f879"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: point count",
+                                {
+                                  "kind": "Op",
+                                  "op": "SplitCount",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked mouse-patterns: path"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "2a77790fdced579d9361f8e8fc97880a"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Gte",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked mouse-patterns: point count"
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 2
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "A drag path needs at least two x,y pairs."
+                                      }
+                                    },
+                                    "id": "c8ba16ac40fc5704986cc92df3f1964c"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "e84473a090f65431975004cb1de73f8e"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: point number",
+                                {
+                                  "kind": "Number",
+                                  "value": 1
+                                }
+                              ]
+                            },
+                            "id": "440acb8b2983507a9731f6009de52935"
+                          },
+                          {
+                            "kind": {
+                              "Repeat": {
+                                "count": {
+                                  "kind": "Var",
+                                  "name": "Blockworked mouse-patterns: point count"
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked mouse-patterns: point",
+                                        {
+                                          "kind": "Op",
+                                          "op": "SplitPart",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: point number"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: path"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "\n"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "9c1fd1061b6259e2bee2587404fecd30"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "Not",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Eq",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "SplitCount",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked mouse-patterns: point"
+                                                    },
+                                                    {
+                                                      "kind": "Text",
+                                                      "value": ","
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 2
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "ThrowError": {
+                                                "kind": "Text",
+                                                "value": "Each path line must contain exactly one x,y pair."
+                                              }
+                                            },
+                                            "id": "58fdcc9a3e065794af1f61042e1f34cb"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "bc0c6a2947dc596583f0cd30eab7bc7b"
+                                  },
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked mouse-patterns: point x",
+                                        {
+                                          "kind": "Op",
+                                          "op": "Add",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "SplitPart",
+                                              "args": [
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                },
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: point"
+                                                },
+                                                {
+                                                  "kind": "Text",
+                                                  "value": ","
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "0d744ef0ecf55bf482d1cfd96b67d679"
+                                  },
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked mouse-patterns: point y",
+                                        {
+                                          "kind": "Op",
+                                          "op": "Add",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "SplitPart",
+                                              "args": [
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 2
+                                                },
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: point"
+                                                },
+                                                {
+                                                  "kind": "Text",
+                                                  "value": ","
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "4997740b383758c199e1185d9d2d0b34"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "Not",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Eq",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Sub",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked mouse-patterns: point x"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked mouse-patterns: point x"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 0
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "ThrowError": {
+                                                "kind": "Text",
+                                                "value": "Path coordinates must be finite numbers."
+                                              }
+                                            },
+                                            "id": "09753b68ef9758b188522a4f763d2d12"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "7554ea831c8253f9be9bb0d3fb8305f3"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "Not",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Eq",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Sub",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked mouse-patterns: point y"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked mouse-patterns: point y"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 0
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "ThrowError": {
+                                                "kind": "Text",
+                                                "value": "Path coordinates must be finite numbers."
+                                              }
+                                            },
+                                            "id": "75024b90c1305410966b4b120b4b364c"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "ffb72ce0c0a35097b324e818e8ff939d"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ChangeVariable": [
+                                        "Blockworked mouse-patterns: point number",
+                                        {
+                                          "kind": "Number",
+                                          "value": 1
+                                        }
+                                      ]
+                                    },
+                                    "id": "786e1409982e5683b0702bc1e548f7dd"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "6af18a9f5c325f948868415f60437311"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: point number",
+                                {
+                                  "kind": "Number",
+                                  "value": 1
+                                }
+                              ]
+                            },
+                            "id": "1efd256c9369576fb5e8d9363b66e9a9"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: point",
+                                {
+                                  "kind": "Op",
+                                  "op": "SplitPart",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked mouse-patterns: point number"
+                                    },
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked mouse-patterns: path"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "8797e67401bd55d1a3ce6797ef983a7f"
+                          },
+                          {
+                            "kind": {
+                              "Token": {
+                                "MoveMouse": [
+                                  {
+                                    "kind": "Op",
+                                    "op": "SplitPart",
+                                    "args": [
+                                      {
+                                        "kind": "Number",
+                                        "value": 1
+                                      },
+                                      {
+                                        "kind": "Var",
+                                        "name": "Blockworked mouse-patterns: point"
+                                      },
+                                      {
+                                        "kind": "Text",
+                                        "value": ","
+                                      }
+                                    ],
+                                    "saved": {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "Op",
+                                    "op": "SplitPart",
+                                    "args": [
+                                      {
+                                        "kind": "Number",
+                                        "value": 2
+                                      },
+                                      {
+                                        "kind": "Var",
+                                        "name": "Blockworked mouse-patterns: point"
+                                      },
+                                      {
+                                        "kind": "Text",
+                                        "value": ","
+                                      }
+                                    ],
+                                    "saved": {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  },
+                                  "Abs"
+                                ]
+                              }
+                            },
+                            "id": "38c11036163a59b59d4728ddac831f96"
+                          },
+                          {
+                            "kind": {
+                              "TryCatch": {
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Token": {
+                                        "Button": [
+                                          "Left",
+                                          "Press"
+                                        ]
+                                      }
+                                    },
+                                    "id": "dcb591881f065fa18fe26af102c72db2"
+                                  },
+                                  {
+                                    "kind": {
+                                      "Wait": {
+                                        "kind": "Var",
+                                        "name": "Blockworked mouse-patterns: ms"
+                                      }
+                                    },
+                                    "id": "b0d3dcab6db25151a5176c7e68eabcd4"
+                                  },
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked mouse-patterns: point number",
+                                        {
+                                          "kind": "Number",
+                                          "value": 2
+                                        }
+                                      ]
+                                    },
+                                    "id": "828c000e909b5e50a24590def174ae59"
+                                  },
+                                  {
+                                    "kind": {
+                                      "Repeat": {
+                                        "count": {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: point count"
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 1
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "SetVariable": [
+                                                "Blockworked mouse-patterns: point",
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "SplitPart",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked mouse-patterns: point number"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked mouse-patterns: path"
+                                                    },
+                                                    {
+                                                      "kind": "Text",
+                                                      "value": "\n"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "id": "ebb6a80a567a5540b5b3887201cfbd87"
+                                          },
+                                          {
+                                            "kind": {
+                                              "Token": {
+                                                "MoveMouse": [
+                                                  {
+                                                    "kind": "Op",
+                                                    "op": "SplitPart",
+                                                    "args": [
+                                                      {
+                                                        "kind": "Number",
+                                                        "value": 1
+                                                      },
+                                                      {
+                                                        "kind": "Var",
+                                                        "name": "Blockworked mouse-patterns: point"
+                                                      },
+                                                      {
+                                                        "kind": "Text",
+                                                        "value": ","
+                                                      }
+                                                    ],
+                                                    "saved": {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  },
+                                                  {
+                                                    "kind": "Op",
+                                                    "op": "SplitPart",
+                                                    "args": [
+                                                      {
+                                                        "kind": "Number",
+                                                        "value": 2
+                                                      },
+                                                      {
+                                                        "kind": "Var",
+                                                        "name": "Blockworked mouse-patterns: point"
+                                                      },
+                                                      {
+                                                        "kind": "Text",
+                                                        "value": ","
+                                                      }
+                                                    ],
+                                                    "saved": {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  },
+                                                  "Abs"
+                                                ]
+                                              }
+                                            },
+                                            "id": "6339419ac9285d138baf9902991684ba"
+                                          },
+                                          {
+                                            "kind": {
+                                              "Wait": {
+                                                "kind": "Var",
+                                                "name": "Blockworked mouse-patterns: ms"
+                                              }
+                                            },
+                                            "id": "0ec0064c3b8d525db287f1b3765040c7"
+                                          },
+                                          {
+                                            "kind": {
+                                              "ChangeVariable": [
+                                                "Blockworked mouse-patterns: point number",
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ]
+                                            },
+                                            "id": "bc8dc3c1f213525eb60ee6022f2e432e"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "4a45c0abec3c587387a6b74eae384052"
+                                  },
+                                  {
+                                    "kind": {
+                                      "Token": {
+                                        "Button": [
+                                          "Left",
+                                          "Release"
+                                        ]
+                                      }
+                                    },
+                                    "id": "903ff01e9ab55145a0500154dbfbe84f"
+                                  }
+                                ],
+                                "catch_body": [
+                                  {
+                                    "kind": {
+                                      "Token": {
+                                        "Button": [
+                                          "Left",
+                                          "Release"
+                                        ]
+                                      }
+                                    },
+                                    "id": "1abbcbc2ce0258278334fe53d19f1c70"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Op",
+                                        "op": "LastError",
+                                        "args": [],
+                                        "saved": {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      }
+                                    },
+                                    "id": "e415c40822d25f599912eb4b13a2822b"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "e5780582c478590a9a0016b7723bca9c"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "63ecda74336b58019aacf0fdc6fdee6d"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "812183eb261758a882c59e801d7c721d"
+                  }
+                ]
+              }
+            },
+            "id": "3c7a87d4fa06533b8f012f618d45e38d"
+          }
+        ]
+      },
+      {
+        "id": "187942a9fb4c580c9e3744114f20b522",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "6d052b596ea954e188e73485b2efa271"
+            },
+            "id": "ff80f837790a568a9d7d1cefa3844fa8"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/mouse-patterns"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: x",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "x"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "94e3943e6d7a522c9a6225b142b7c7b3"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: x"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: x"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "x must be a finite number."
+                                      }
+                                    },
+                                    "id": "bc4216627f5656ab88acce7a04cec3d3"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "57d373b262aa5d3180e2a1ec38eb329a"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: y",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "y"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "b765abaab02c5b2d86f3021109e55d73"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: y"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: y"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "y must be a finite number."
+                                      }
+                                    },
+                                    "id": "6d54781b18795581b0bd5cb1eef356df"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "33fa56c136915bbcb0f80ad77b0ee8cc"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: x",
+                                {
+                                  "kind": "Op",
+                                  "op": "Round",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked mouse-patterns: x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "4694b04eb01c5073be73f4720c38649c"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: y",
+                                {
+                                  "kind": "Op",
+                                  "op": "Round",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked mouse-patterns: y"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "6a2ed66087755b6894396de45016761e"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: window width",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "width"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "8cdf67252aba56258c6e6f96a535c1de"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: window height",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "height"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "74137ada569e5763a09d3dbdd13f3235"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "And",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Gte",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: x"
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 0
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Lt",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: x"
+                                                },
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: window width"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "And",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Gte",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: y"
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 0
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Lt",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: y"
+                                                },
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked mouse-patterns: window height"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Click offset must be inside the window."
+                                      }
+                                    },
+                                    "id": "d2bde8a5a3c85a3ea890b5db35713e00"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "326bc81ac3f650229c8abe6cddb9bedb"
+                          },
+                          {
+                            "kind": {
+                              "WindowAction": {
+                                "action": "Focus",
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "window"
+                                },
+                                "by": "Any"
+                              }
+                            },
+                            "id": "8beb240693605fb1bd94a1010a038402"
+                          },
+                          {
+                            "kind": {
+                              "Wait": {
+                                "kind": "Number",
+                                "value": 100
+                              }
+                            },
+                            "id": "b0ad55ffec7b598d96eadfa69c8564e5"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: window x",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "5a5231bea9d4551195a8a17da5edd89b"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked mouse-patterns: window y",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "y"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "ec65b079da55519f98aeaa364498c1c8"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Lt",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: x"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "WindowInfo",
+                                              "args": [
+                                                {
+                                                  "kind": "Param",
+                                                  "name": "window"
+                                                },
+                                                {
+                                                  "kind": "Text",
+                                                  "value": "width"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Lt",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked mouse-patterns: y"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "WindowInfo",
+                                              "args": [
+                                                {
+                                                  "kind": "Param",
+                                                  "name": "window"
+                                                },
+                                                {
+                                                  "kind": "Text",
+                                                  "value": "height"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Window became smaller than the click offset."
+                                      }
+                                    },
+                                    "id": "b27bac40745b528188b315f837cec676"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "e20fb901306c5dc9ae8ad50b26a680be"
+                          },
+                          {
+                            "kind": {
+                              "Token": {
+                                "MoveMouse": [
+                                  {
+                                    "kind": "Op",
+                                    "op": "Add",
+                                    "args": [
+                                      {
+                                        "kind": "Var",
+                                        "name": "Blockworked mouse-patterns: window x"
+                                      },
+                                      {
+                                        "kind": "Var",
+                                        "name": "Blockworked mouse-patterns: x"
+                                      }
+                                    ],
+                                    "saved": {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "Op",
+                                    "op": "Add",
+                                    "args": [
+                                      {
+                                        "kind": "Var",
+                                        "name": "Blockworked mouse-patterns: window y"
+                                      },
+                                      {
+                                        "kind": "Var",
+                                        "name": "Blockworked mouse-patterns: y"
+                                      }
+                                    ],
+                                    "saved": {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  },
+                                  "Abs"
+                                ]
+                              }
+                            },
+                            "id": "dc3361afa9a05241b06a6e1a59d459ad"
+                          },
+                          {
+                            "kind": {
+                              "Token": {
+                                "Button": [
+                                  "Left",
+                                  "Click"
+                                ]
+                              }
+                            },
+                            "id": "a2979b49bba95074abce5110714e4ddb"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "342e4bd97488503d940d347173383d51"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "5e6dfe438c71554bbc5ada85b56c5ef6"
+                  }
+                ]
+              }
+            },
+            "id": "b93f6cfebb03575ba1e4bfd6c520f90e"
+          }
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "name": "Blockworked mouse-patterns: column",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: columns",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: dx",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: dy",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: ms",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: path",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: point",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: point count",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: point number",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: point x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: point y",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: row",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: rows",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: window height",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: window width",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: window x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: window y",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked mouse-patterns: y",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,2607 @@
+{
+  "blockwork_block_pack": 1,
+  "id": "window-layouts",
+  "name": "Window layouts",
+  "description": "Center windows on a monitor, tile two windows side by side, and capture or restore window geometry.",
+  "author": "Blockworked",
+  "version": "1.0.0",
+  "blocks": {
+    "block_defs": [
+      {
+        "id": "b7120ff773175205a3f48b37c8979b30",
+        "identifier": "Blockworked_CenterWindowOnMonitor",
+        "description": "Restores a matching window, then centers it on the selected monitor without changing its restored size. Monitor numbers start at 1. Matches the first title or app containing the pattern; empty means active window. Uses full monitor bounds, including panels.",
+        "color": "#9966FF",
+        "icon": "panels-top-left",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "center window",
+            "id": "d62449a73404507380f6d0ca0fe827bd"
+          },
+          {
+            "kind": "Input",
+            "name": "window",
+            "value_type": "Any",
+            "id": "65049e70cb5a51a4bd9095a0abd4a010"
+          },
+          {
+            "kind": "Label",
+            "text": "on monitor",
+            "id": "3b6c6fb2be935b398ec65184f87bcfa6"
+          },
+          {
+            "kind": "Input",
+            "name": "monitor",
+            "value_type": "Any",
+            "id": "e7b0fe84fac85168ab675ea12ea19a3f"
+          }
+        ],
+        "shape": "Normal"
+      },
+      {
+        "id": "6b1420ddfbca516991cf896da870e9b3",
+        "identifier": "Blockworked_TileWindowsSideBySide",
+        "description": "Restores, resizes and positions two windows in equal columns with the requested pixel gap. Give distinct, nonempty title/app patterns. Checks both matches before moving either. Uses full monitor bounds, including panels; window managers may enforce minimum sizes.",
+        "color": "#9966FF",
+        "icon": "panels-top-left",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "tile windows",
+            "id": "749e3ae7a3c25d2eb72af178ebdde4b6"
+          },
+          {
+            "kind": "Input",
+            "name": "left",
+            "value_type": "Any",
+            "id": "03d28f4f4542539e8ad0f2188eb9e178"
+          },
+          {
+            "kind": "Label",
+            "text": "and",
+            "id": "86bfdbc0f0245798862782e5926e493d"
+          },
+          {
+            "kind": "Input",
+            "name": "right",
+            "value_type": "Any",
+            "id": "e5c858e3a1d95f8e88dfee08e839cf6d"
+          },
+          {
+            "kind": "Label",
+            "text": "on monitor",
+            "id": "82115e7ae8815ff4bcb73c10386aa04a"
+          },
+          {
+            "kind": "Input",
+            "name": "monitor",
+            "value_type": "Any",
+            "id": "96d7e036d32f5d37b48a74680c5a5b6b"
+          },
+          {
+            "kind": "Label",
+            "text": "gap",
+            "id": "b0db329679845d4e92e28d7e8f29814e"
+          },
+          {
+            "kind": "Input",
+            "name": "gap",
+            "value_type": "Any",
+            "id": "128e2eadd0fa577ba73d442bb4fa660d"
+          }
+        ],
+        "shape": "Normal"
+      },
+      {
+        "id": "a20101a75d8b5a56a48fb52ef024d635",
+        "identifier": "Blockworked_CaptureWindowGeometry",
+        "description": "Returns JSON containing x, y, width and height of the first matching window (empty pattern means active). Save this value in your own variable and pass it to restore window geometry. Captures geometry only, not maximized/minimized state.",
+        "color": "#9966FF",
+        "icon": "panels-top-left",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "geometry snapshot of window",
+            "id": "2d470cfc6a4a53529df23d726340c02f"
+          },
+          {
+            "kind": "Input",
+            "name": "window",
+            "value_type": "Any",
+            "id": "35e722c15b2d57d19d5837e23ddbcb45"
+          }
+        ],
+        "shape": "ReturnsValue"
+      },
+      {
+        "id": "4e7d7c4c4cd35215b9289a8e68224094",
+        "identifier": "Blockworked_RestoreWindowGeometry",
+        "description": "Restores a matching window, then resizes and moves it using a geometry snapshot. Validates all four numeric fields and positive dimensions before changing the window. Does not restore maximized/minimized state.",
+        "color": "#9966FF",
+        "icon": "panels-top-left",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "restore window",
+            "id": "7c24139b3f5051faab9cf0a045f88214"
+          },
+          {
+            "kind": "Input",
+            "name": "window",
+            "value_type": "Any",
+            "id": "ced3d9a63a345391ae245a19afab41c3"
+          },
+          {
+            "kind": "Label",
+            "text": "from geometry",
+            "id": "170aea1099f75751addc2e50d55c8193"
+          },
+          {
+            "kind": "Input",
+            "name": "snapshot",
+            "value_type": "Any",
+            "id": "fc79dd4e529a536ab80d4b3ceaded720"
+          }
+        ],
+        "shape": "Normal"
+      }
+    ],
+    "comments": [],
+    "description": "Center windows on a monitor, tile two windows side by side, and capture or restore window geometry.",
+    "dicts": [],
+    "floating_values": [],
+    "format_version": 1,
+    "id": "",
+    "lists": [],
+    "name": "Window layouts",
+    "recording_target": null,
+    "settings": {
+      "active_days": 0,
+      "active_hours": null,
+      "always_listen": false,
+      "catch_up_missed": false,
+      "max_loop_iterations": 0,
+      "max_run_secs": 0,
+      "only_in_window": "",
+      "power": "Any"
+    },
+    "speed_multiplier": 1.0,
+    "strands": [
+      {
+        "id": "dc338f1fece355c59148e5f71281f4af",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "b7120ff773175205a3f48b37c8979b30"
+            },
+            "id": "95bbdfdaa2e7539bb420c8a369f96f17"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/window-layouts"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "monitor"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "fe67e28ae1bc562eb8b881ba77aed707"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Eq",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: monitor"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Round",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked window-layouts: monitor"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "And",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Gte",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked window-layouts: monitor"
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Lte",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked window-layouts: monitor"
+                                                },
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "MonitorCount",
+                                                  "args": [],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Choose an existing monitor number (starting at 1)."
+                                      }
+                                    },
+                                    "id": "a9f6b11a4bd851608a780bb798ea740f"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "809b18d162a751b1bfef641638cd8890"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor x",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "5b476b59abc85975ad5885254195fb1a"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor y",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "y"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "83c01cf2d3c55b7d8c92507f3aebd4aa"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor width",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "width"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "3be4b2b06eca53e196e655d420019ffb"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor height",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "height"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "97e328d1bcd35496bd6c235a3c54b9f0"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: window x",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "2022fc23825158f1948fce9560ac54b4"
+                          },
+                          {
+                            "kind": {
+                              "WindowAction": {
+                                "action": "Restore",
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "window"
+                                },
+                                "by": "Any"
+                              }
+                            },
+                            "id": "4a664ee9be5f5d62a7a88ce79900e678"
+                          },
+                          {
+                            "kind": {
+                              "Wait": {
+                                "kind": "Number",
+                                "value": 100
+                              }
+                            },
+                            "id": "62f7bbf2e3905b0b83f66b852fd2b5e1"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: width",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "width"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "0b0ded8a47975d5c9cf1ddbb8cce511d"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: height",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "height"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "92d75df5294651098a6f1a117477eed0"
+                          },
+                          {
+                            "kind": {
+                              "MoveWindow": {
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "window"
+                                },
+                                "by": "Any",
+                                "resize": false,
+                                "x": {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor x"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "Div",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: monitor width"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: width"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 2
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "y": {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor y"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "Div",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: monitor height"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: height"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 2
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              }
+                            },
+                            "id": "9edaf2399ad451fb81b39a6ae6cf7f5d"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "d9ecf970c4a251e2abb117936039a571"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "f1b3bb2d08575be28b229b48a35af431"
+                  }
+                ]
+              }
+            },
+            "id": "02c25855ed635c338f15803a1937ffa0"
+          }
+        ]
+      },
+      {
+        "id": "da92de5cc4ad5a3b83e49ee1c69f7461",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "6b1420ddfbca516991cf896da870e9b3"
+            },
+            "id": "3fca96e1420059cdbb0e05f9774af005"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/window-layouts"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "monitor"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "64396eb43eb256c7ae582ab3a08704f1"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Eq",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: monitor"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Round",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked window-layouts: monitor"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "And",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Gte",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked window-layouts: monitor"
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Lte",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked window-layouts: monitor"
+                                                },
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "MonitorCount",
+                                                  "args": [],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Choose an existing monitor number (starting at 1)."
+                                      }
+                                    },
+                                    "id": "28155c15c0c5599fbad185ba2cd42c9c"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "f360308d5cf65fdd873ce892f3d08dcc"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor x",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "9408243b96e85b1486ec07880fb741b4"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor y",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "y"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "40f6d0443dd45bd991a1f81cd35cb551"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor width",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "width"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "4346810bed6451e8aae819cd902418f6"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: monitor height",
+                                {
+                                  "kind": "Op",
+                                  "op": "MonitorInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "height"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "7994abf05abc5380a82ab2f0069a737a"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: gap",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "gap"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "10887fa8d8ef5628a10de5fc45a05a96"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Gt",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Length",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Trim",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Param",
+                                                      "name": "left"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Gt",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Length",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Trim",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Param",
+                                                      "name": "right"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Give two nonempty window patterns."
+                                      }
+                                    },
+                                    "id": "cacc61f9b5df514baff6df6d5974f814"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "64c49959c1b85274adcd5a6123a90f44"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Neq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Case",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Trim",
+                                              "args": [
+                                                {
+                                                  "kind": "Param",
+                                                  "name": "left"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "Lower"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Case",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Trim",
+                                              "args": [
+                                                {
+                                                  "kind": "Param",
+                                                  "name": "right"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "Lower"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Choose two different windows."
+                                      }
+                                    },
+                                    "id": "c7d68d825ea25022bd4d05e69f34d781"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "4aaf5fc634fd5977882a8ea9b88faf65"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Gte",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: gap"
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Lt",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: gap"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Sub",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked window-layouts: monitor width"
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Gap must fit between two positive-width windows."
+                                      }
+                                    },
+                                    "id": "72d4ca2a01415bce81050a4006e0b523"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "17b14ef8fbe35250bc71872fad65939f"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: gap",
+                                {
+                                  "kind": "Op",
+                                  "op": "Round",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: gap"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "b122c5b4e76f58f1b23735b3f5d53fc1"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: left x",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "left"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "cb147c87348f5655a621fe140ba894d2"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: right x",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "right"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "aa1991aca3185ac099852ec5c1736a01"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: column width",
+                                {
+                                  "kind": "Op",
+                                  "op": "Math",
+                                  "args": [
+                                    {
+                                      "kind": "Text",
+                                      "value": "Floor"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "Div",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: monitor width"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: gap"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 2
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "43f7dc3bb4ed55a9895b3950c081b611"
+                          },
+                          {
+                            "kind": {
+                              "WindowAction": {
+                                "action": "Restore",
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "left"
+                                },
+                                "by": "Any"
+                              }
+                            },
+                            "id": "ba663237ed3e519195bce52045b6ef46"
+                          },
+                          {
+                            "kind": {
+                              "WindowAction": {
+                                "action": "Restore",
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "right"
+                                },
+                                "by": "Any"
+                              }
+                            },
+                            "id": "1f7e1d40e3735dccab38481f092ae732"
+                          },
+                          {
+                            "kind": {
+                              "Wait": {
+                                "kind": "Number",
+                                "value": 100
+                              }
+                            },
+                            "id": "52e1494b50ab5a84aafc397564f7a79a"
+                          },
+                          {
+                            "kind": {
+                              "MoveWindow": {
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "left"
+                                },
+                                "by": "Any",
+                                "resize": true,
+                                "x": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: column width"
+                                },
+                                "y": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: monitor height"
+                                }
+                              }
+                            },
+                            "id": "6ea1567adc045ac09da9df598a33af79"
+                          },
+                          {
+                            "kind": {
+                              "MoveWindow": {
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "left"
+                                },
+                                "by": "Any",
+                                "resize": false,
+                                "x": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: monitor x"
+                                },
+                                "y": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: monitor y"
+                                }
+                              }
+                            },
+                            "id": "0d41c888ec975da096a421be2b4ddb61"
+                          },
+                          {
+                            "kind": {
+                              "MoveWindow": {
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "right"
+                                },
+                                "by": "Any",
+                                "resize": true,
+                                "x": {
+                                  "kind": "Op",
+                                  "op": "Sub",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Sub",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked window-layouts: monitor width"
+                                        },
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked window-layouts: gap"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: column width"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "y": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: monitor height"
+                                }
+                              }
+                            },
+                            "id": "cf4e53cb2760557eb8093e5882b612c3"
+                          },
+                          {
+                            "kind": {
+                              "MoveWindow": {
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "right"
+                                },
+                                "by": "Any",
+                                "resize": false,
+                                "x": {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: monitor x"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "Add",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked window-layouts: column width"
+                                        },
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked window-layouts: gap"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "y": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: monitor y"
+                                }
+                              }
+                            },
+                            "id": "d6f894f7283b54448894fac8b2b09757"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "2e523a04dd4159ac8cdf32b5f6265d25"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "ecf90b62c54953c79f135e4024a199d0"
+                  }
+                ]
+              }
+            },
+            "id": "ce1919c789605bcf9e9c133e85aa96ca"
+          }
+        ]
+      },
+      {
+        "id": "b2595b47bdf559af853f28693ce95354",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "a20101a75d8b5a56a48fb52ef024d635"
+            },
+            "id": "cc0bea44476e50ccaf5abc516118f2ae"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "Return": {
+                        "kind": "Op",
+                        "op": "Join",
+                        "args": [
+                          {
+                            "kind": "Text",
+                            "value": "{\"x\":"
+                          },
+                          {
+                            "kind": "Op",
+                            "op": "Join",
+                            "args": [
+                              {
+                                "kind": "Op",
+                                "op": "WindowInfo",
+                                "args": [
+                                  {
+                                    "kind": "Param",
+                                    "name": "window"
+                                  },
+                                  {
+                                    "kind": "Text",
+                                    "value": "x"
+                                  }
+                                ],
+                                "saved": {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              },
+                              {
+                                "kind": "Op",
+                                "op": "Join",
+                                "args": [
+                                  {
+                                    "kind": "Text",
+                                    "value": ",\"y\":"
+                                  },
+                                  {
+                                    "kind": "Op",
+                                    "op": "Join",
+                                    "args": [
+                                      {
+                                        "kind": "Op",
+                                        "op": "WindowInfo",
+                                        "args": [
+                                          {
+                                            "kind": "Param",
+                                            "name": "window"
+                                          },
+                                          {
+                                            "kind": "Text",
+                                            "value": "y"
+                                          }
+                                        ],
+                                        "saved": {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      },
+                                      {
+                                        "kind": "Op",
+                                        "op": "Join",
+                                        "args": [
+                                          {
+                                            "kind": "Text",
+                                            "value": ",\"width\":"
+                                          },
+                                          {
+                                            "kind": "Op",
+                                            "op": "Join",
+                                            "args": [
+                                              {
+                                                "kind": "Op",
+                                                "op": "WindowInfo",
+                                                "args": [
+                                                  {
+                                                    "kind": "Param",
+                                                    "name": "window"
+                                                  },
+                                                  {
+                                                    "kind": "Text",
+                                                    "value": "width"
+                                                  }
+                                                ],
+                                                "saved": {
+                                                  "kind": "Number",
+                                                  "value": 0
+                                                }
+                                              },
+                                              {
+                                                "kind": "Op",
+                                                "op": "Join",
+                                                "args": [
+                                                  {
+                                                    "kind": "Text",
+                                                    "value": ",\"height\":"
+                                                  },
+                                                  {
+                                                    "kind": "Op",
+                                                    "op": "WindowInfo",
+                                                    "args": [
+                                                      {
+                                                        "kind": "Param",
+                                                        "name": "window"
+                                                      },
+                                                      {
+                                                        "kind": "Text",
+                                                        "value": "height"
+                                                      }
+                                                    ],
+                                                    "saved": {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  },
+                                                  {
+                                                    "kind": "Text",
+                                                    "value": "}"
+                                                  }
+                                                ],
+                                                "saved": {
+                                                  "kind": "Number",
+                                                  "value": 0
+                                                }
+                                              }
+                                            ],
+                                            "saved": {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          }
+                                        ],
+                                        "saved": {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      }
+                                    ],
+                                    "saved": {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  }
+                                ],
+                                "saved": {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              }
+                            ],
+                            "saved": {
+                              "kind": "Number",
+                              "value": 0
+                            }
+                          }
+                        ],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "664e9eb437ba55918639ae24f193b5c7"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "f6088bdad7ec51d89bade5743a892bab"
+                  }
+                ]
+              }
+            },
+            "id": "99713e1e9e63560096cb560392f21f69"
+          }
+        ]
+      },
+      {
+        "id": "561218d8278b5a93aa8568d462628b2c",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "4e7d7c4c4cd35215b9289a8e68224094"
+            },
+            "id": "f39d899d2b655a51959368225c734768"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/window-layouts"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: x",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "JsonGet",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "x"
+                                        },
+                                        {
+                                          "kind": "Param",
+                                          "name": "snapshot"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "d1bbb379dd685299aa76d3c39407930e"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: y",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "JsonGet",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "y"
+                                        },
+                                        {
+                                          "kind": "Param",
+                                          "name": "snapshot"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "53a4c27ba89259aba22f2824054614ef"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: width",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "JsonGet",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "width"
+                                        },
+                                        {
+                                          "kind": "Param",
+                                          "name": "snapshot"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "26d2e48be602586c8e12c5e31ed482d1"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: height",
+                                {
+                                  "kind": "Op",
+                                  "op": "Add",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "JsonGet",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "height"
+                                        },
+                                        {
+                                          "kind": "Param",
+                                          "name": "snapshot"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "d3cb647ceb315bdc8319dd098a9a3fad"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: x"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: x"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Snapshot geometry must contain finite numbers."
+                                      }
+                                    },
+                                    "id": "b8d1613f95ab5612be47926c6837434c"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "b8e833e2c49952bca25a12a4a574f507"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: y"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: y"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Snapshot geometry must contain finite numbers."
+                                      }
+                                    },
+                                    "id": "4e173b4455e45a39acf583fb895324ec"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "91649c513d055523aca143189c243984"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: width"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: width"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Snapshot geometry must contain finite numbers."
+                                      }
+                                    },
+                                    "id": "c1ffdafdc45851abbb1b9846b534180f"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "ef620f60fcb3558eadf88402ef8eb2bc"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Sub",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: height"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: height"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Snapshot geometry must contain finite numbers."
+                                      }
+                                    },
+                                    "id": "93dac6c7d3ad5701981fef5fa93c0ac9"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "5b3aeb1e14b45662bec06fba34ddac0b"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: x",
+                                {
+                                  "kind": "Op",
+                                  "op": "Round",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "9d331904d4245f1ebdfb3f06a8145a43"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: y",
+                                {
+                                  "kind": "Op",
+                                  "op": "Round",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: y"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "d190781b90695dd29238cad766eb8851"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: width",
+                                {
+                                  "kind": "Op",
+                                  "op": "Round",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: width"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "3149291317de52d19a194ac77cd5903d"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: height",
+                                {
+                                  "kind": "Op",
+                                  "op": "Round",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked window-layouts: height"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "2007dc1d762858ca921b8af916955f3c"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Not",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "And",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Gt",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: width"
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Gt",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked window-layouts: height"
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "ThrowError": {
+                                        "kind": "Text",
+                                        "value": "Snapshot width and height must be positive."
+                                      }
+                                    },
+                                    "id": "57c7e99d36605f10860847c51c5663ab"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "5de860fcc19a568380aa6c140bd0f97a"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked window-layouts: window x",
+                                {
+                                  "kind": "Op",
+                                  "op": "WindowInfo",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "window"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "x"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "0952c0701e4f568e9a8a548dcf285ad5"
+                          },
+                          {
+                            "kind": {
+                              "WindowAction": {
+                                "action": "Restore",
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "window"
+                                },
+                                "by": "Any"
+                              }
+                            },
+                            "id": "8cd4a6d0d84656298b2d2dfc41e74d42"
+                          },
+                          {
+                            "kind": {
+                              "Wait": {
+                                "kind": "Number",
+                                "value": 100
+                              }
+                            },
+                            "id": "9f62c5e51dac546fb54d172b0d6a71b9"
+                          },
+                          {
+                            "kind": {
+                              "MoveWindow": {
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "window"
+                                },
+                                "by": "Any",
+                                "resize": true,
+                                "x": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: width"
+                                },
+                                "y": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: height"
+                                }
+                              }
+                            },
+                            "id": "914ac669c147550fa5753bc99b7fe99b"
+                          },
+                          {
+                            "kind": {
+                              "MoveWindow": {
+                                "pattern": {
+                                  "kind": "Param",
+                                  "name": "window"
+                                },
+                                "by": "Any",
+                                "resize": false,
+                                "x": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: x"
+                                },
+                                "y": {
+                                  "kind": "Var",
+                                  "name": "Blockworked window-layouts: y"
+                                }
+                              }
+                            },
+                            "id": "8b6cd4a91e7a5a0a925fec3094678ef4"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "b9db4c922c4b53e482f5d0bd9daf9d74"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "96b80401af7151f0b9b641639d60a4bc"
+                  }
+                ]
+              }
+            },
+            "id": "2f568b2ab8c85971b215c51319c56d55"
+          }
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "name": "Blockworked window-layouts: column width",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: gap",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: height",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: left x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: monitor",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: monitor height",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: monitor width",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: monitor x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: monitor y",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: right x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: width",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: window x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: x",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked window-layouts: y",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      }
+    ]
+  }
+}

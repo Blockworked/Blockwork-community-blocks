@@ -1,0 +1,1309 @@
+{
+  "blockwork_block_pack": 1,
+  "id": "clipboard-tools",
+  "name": "Clipboard tools",
+  "description": "Remove duplicate or blank clipboard lines and clean whitespace while preserving line breaks.",
+  "author": "Blockworked",
+  "version": "1.0.0",
+  "blocks": {
+    "block_defs": [
+      {
+        "id": "b3511e5a9efd5b37a2dc8dbf5e8849be",
+        "identifier": "Blockworked_ClipboardDeduplicateLines",
+        "description": "Removes repeated lines, keeping the first occurrence in order. Matching is exact and case-sensitive; blank lines count as a line. Normalizes CRLF and CR to LF.",
+        "color": "#59C059",
+        "icon": "clipboard",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "remove duplicate clipboard lines",
+            "id": "dfb64ce0227051819fce4cb859a7c3d0"
+          }
+        ],
+        "shape": "Normal"
+      },
+      {
+        "id": "efd149c2d5a557939524ff6cb302392e",
+        "identifier": "Blockworked_ClipboardRemoveBlankLines",
+        "description": "Removes empty and whitespace-only clipboard lines, preserving the content of other lines. Normalizes CRLF and CR to LF.",
+        "color": "#59C059",
+        "icon": "clipboard",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "remove blank clipboard lines",
+            "id": "9ee3b3455838580aadff182537143479"
+          }
+        ],
+        "shape": "Normal"
+      },
+      {
+        "id": "3af6e8dd25bc590d8bd00c0e57e53d88",
+        "identifier": "Blockworked_ClipboardCleanWhitespace",
+        "description": "Trims every line, collapses runs of spaces and tabs to one space, and removes blank lines. Keeps line breaks and normalizes CRLF and CR to LF.",
+        "color": "#59C059",
+        "icon": "clipboard",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "clean clipboard whitespace",
+            "id": "a978c37573b1551abbe0bab329aff667"
+          }
+        ],
+        "shape": "Normal"
+      }
+    ],
+    "comments": [],
+    "description": "Remove duplicate or blank clipboard lines and clean whitespace while preserving line breaks.",
+    "dicts": [],
+    "floating_values": [],
+    "format_version": 1,
+    "id": "",
+    "lists": [],
+    "name": "Clipboard tools",
+    "recording_target": null,
+    "settings": {
+      "active_days": 0,
+      "active_hours": null,
+      "always_listen": false,
+      "catch_up_missed": false,
+      "max_loop_iterations": 0,
+      "max_run_secs": 0,
+      "only_in_window": "",
+      "power": "Any"
+    },
+    "speed_multiplier": 1.0,
+    "strands": [
+      {
+        "id": "eefea45faa2e5e248d208a617479dec0",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "b3511e5a9efd5b37a2dc8dbf5e8849be"
+            },
+            "id": "81e201ed644c5748a77325d919f57afa"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/clipboard-tools"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: output",
+                                {
+                                  "kind": "Text",
+                                  "value": ""
+                                }
+                              ]
+                            },
+                            "id": "f4a1ab56f4445ca985436320f9ad1e56"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: kept",
+                                {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              ]
+                            },
+                            "id": "ecf3702938745656a5525a216ba24b48"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: seen",
+                                {
+                                  "kind": "Text",
+                                  "value": "\n"
+                                }
+                              ]
+                            },
+                            "id": "167cad25211456f194a3eb7083a55471"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: source",
+                                {
+                                  "kind": "Op",
+                                  "op": "TextReplace",
+                                  "args": [
+                                    {
+                                      "kind": "Text",
+                                      "value": "\r"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "TextReplace",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "\r\n"
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "ClipboardText",
+                                          "args": [],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Text",
+                                          "value": "\n"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "20a241de8fbb5371a846b74245bbb0d5"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: line number",
+                                {
+                                  "kind": "Number",
+                                  "value": 1
+                                }
+                              ]
+                            },
+                            "id": "2b806ae5bcb551a3a93d391f3beba758"
+                          },
+                          {
+                            "kind": {
+                              "Repeat": {
+                                "count": {
+                                  "kind": "Op",
+                                  "op": "SplitCount",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked clipboard-tools: source"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked clipboard-tools: line",
+                                        {
+                                          "kind": "Op",
+                                          "op": "SplitPart",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked clipboard-tools: line number"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked clipboard-tools: source"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "\n"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "5f5ea7c30c745d80af798431fe842db7"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "Not",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "TextCheck",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked clipboard-tools: seen"
+                                                },
+                                                {
+                                                  "kind": "Text",
+                                                  "value": "contains"
+                                                },
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Join",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Text",
+                                                      "value": "\n"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: line"
+                                                    },
+                                                    {
+                                                      "kind": "Text",
+                                                      "value": "\n"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "If": {
+                                                "condition": {
+                                                  "kind": "Op",
+                                                  "op": "Gt",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: kept"
+                                                    },
+                                                    {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                "body": [
+                                                  {
+                                                    "kind": {
+                                                      "SetVariable": [
+                                                        "Blockworked clipboard-tools: output",
+                                                        {
+                                                          "kind": "Op",
+                                                          "op": "Join",
+                                                          "args": [
+                                                            {
+                                                              "kind": "Var",
+                                                              "name": "Blockworked clipboard-tools: output"
+                                                            },
+                                                            {
+                                                              "kind": "Text",
+                                                              "value": "\n"
+                                                            }
+                                                          ],
+                                                          "saved": {
+                                                            "kind": "Number",
+                                                            "value": 0
+                                                          }
+                                                        }
+                                                      ]
+                                                    },
+                                                    "id": "91d58fc422af59c79d067e960da2ddc3"
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "id": "bf6ec5f96b995854823d3fedecf60a4a"
+                                          },
+                                          {
+                                            "kind": {
+                                              "SetVariable": [
+                                                "Blockworked clipboard-tools: output",
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Join",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: output"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: line"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "id": "1c2c22d39a225f77be06e93efc0c199b"
+                                          },
+                                          {
+                                            "kind": {
+                                              "ChangeVariable": [
+                                                "Blockworked clipboard-tools: kept",
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ]
+                                            },
+                                            "id": "96ab4905ee5a5c64ac032df4fdfa3760"
+                                          },
+                                          {
+                                            "kind": {
+                                              "SetVariable": [
+                                                "Blockworked clipboard-tools: seen",
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Join",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: seen"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: line"
+                                                    },
+                                                    {
+                                                      "kind": "Text",
+                                                      "value": "\n"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "id": "ed890315ec4e536d81be10dc8ae1495b"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "f74b77cb0a76509e84f32e9b1ca5e931"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ChangeVariable": [
+                                        "Blockworked clipboard-tools: line number",
+                                        {
+                                          "kind": "Number",
+                                          "value": 1
+                                        }
+                                      ]
+                                    },
+                                    "id": "00d7c50cffd55b969dceac1c3998c38d"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "7b7c30afc2ba54c094f2c4ffbe93e2e9"
+                          },
+                          {
+                            "kind": {
+                              "SetClipboard": {
+                                "kind": "Var",
+                                "name": "Blockworked clipboard-tools: output"
+                              }
+                            },
+                            "id": "7c7377f519185583ad420e09f993c97c"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "20904bf17a425d2c9ac2413eeef83972"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "98398d339bb05edf83df94bf4f0d103d"
+                  }
+                ]
+              }
+            },
+            "id": "0d59013212365b769568c674a8422006"
+          }
+        ]
+      },
+      {
+        "id": "8a64a2455fd2585e9461fae038f79588",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "efd149c2d5a557939524ff6cb302392e"
+            },
+            "id": "5830b091f7bc5cdcadba9be442347ebe"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/clipboard-tools"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: output",
+                                {
+                                  "kind": "Text",
+                                  "value": ""
+                                }
+                              ]
+                            },
+                            "id": "80b37aa83a76571cbcaec7059946345d"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: kept",
+                                {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              ]
+                            },
+                            "id": "3da1b634ffbc5e5f8053a45c4784393c"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: seen",
+                                {
+                                  "kind": "Text",
+                                  "value": "\n"
+                                }
+                              ]
+                            },
+                            "id": "5d60619495c8566bbfe34c2800da655f"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: source",
+                                {
+                                  "kind": "Op",
+                                  "op": "TextReplace",
+                                  "args": [
+                                    {
+                                      "kind": "Text",
+                                      "value": "\r"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "TextReplace",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "\r\n"
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "ClipboardText",
+                                          "args": [],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Text",
+                                          "value": "\n"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "ea1b2ff2d564582096b43f4e9858f9cb"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: line number",
+                                {
+                                  "kind": "Number",
+                                  "value": 1
+                                }
+                              ]
+                            },
+                            "id": "6073f33b6fc25fecaf469032de8552ac"
+                          },
+                          {
+                            "kind": {
+                              "Repeat": {
+                                "count": {
+                                  "kind": "Op",
+                                  "op": "SplitCount",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked clipboard-tools: source"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked clipboard-tools: line",
+                                        {
+                                          "kind": "Op",
+                                          "op": "SplitPart",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked clipboard-tools: line number"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked clipboard-tools: source"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "\n"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "ed96630fef5159bca790a27129a9a6a2"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "Gt",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Length",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Trim",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: line"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "If": {
+                                                "condition": {
+                                                  "kind": "Op",
+                                                  "op": "Gt",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: kept"
+                                                    },
+                                                    {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                "body": [
+                                                  {
+                                                    "kind": {
+                                                      "SetVariable": [
+                                                        "Blockworked clipboard-tools: output",
+                                                        {
+                                                          "kind": "Op",
+                                                          "op": "Join",
+                                                          "args": [
+                                                            {
+                                                              "kind": "Var",
+                                                              "name": "Blockworked clipboard-tools: output"
+                                                            },
+                                                            {
+                                                              "kind": "Text",
+                                                              "value": "\n"
+                                                            }
+                                                          ],
+                                                          "saved": {
+                                                            "kind": "Number",
+                                                            "value": 0
+                                                          }
+                                                        }
+                                                      ]
+                                                    },
+                                                    "id": "48390f7a1c9b5c2b85254b0da5b91b97"
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "id": "d056551b1157584bae636e09ee6d1e07"
+                                          },
+                                          {
+                                            "kind": {
+                                              "SetVariable": [
+                                                "Blockworked clipboard-tools: output",
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Join",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: output"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: line"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "id": "283bdcc83aa95d1892f585454c4f1141"
+                                          },
+                                          {
+                                            "kind": {
+                                              "ChangeVariable": [
+                                                "Blockworked clipboard-tools: kept",
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ]
+                                            },
+                                            "id": "5aed71d5a69150cd90edf3feaec8f906"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "3d23aee2a4e95570a3547bbdbc987fc7"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ChangeVariable": [
+                                        "Blockworked clipboard-tools: line number",
+                                        {
+                                          "kind": "Number",
+                                          "value": 1
+                                        }
+                                      ]
+                                    },
+                                    "id": "f000d26e08705c09bdd969e92e61d8d9"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "3d2224384aef56ea883813336d2a29b5"
+                          },
+                          {
+                            "kind": {
+                              "SetClipboard": {
+                                "kind": "Var",
+                                "name": "Blockworked clipboard-tools: output"
+                              }
+                            },
+                            "id": "a82b2a85dcbb50cbb7303142e12fb425"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "6da73f10476d5822bb07f4d21c07ce21"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "8fe8666cef265471bf4e496ed8d48323"
+                  }
+                ]
+              }
+            },
+            "id": "9da33868624759d9a1c4baa8e4f04651"
+          }
+        ]
+      },
+      {
+        "id": "e99bbd81250c5af2932d1064a3148f94",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "3af6e8dd25bc590d8bd00c0e57e53d88"
+            },
+            "id": "579a98d7ccf65f65bcffde35847d2625"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/clipboard-tools"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: output",
+                                {
+                                  "kind": "Text",
+                                  "value": ""
+                                }
+                              ]
+                            },
+                            "id": "87d6d1f4ffde528f92708834c45393ec"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: kept",
+                                {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              ]
+                            },
+                            "id": "176034ebb3305d41be8c23c424920b61"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: seen",
+                                {
+                                  "kind": "Text",
+                                  "value": "\n"
+                                }
+                              ]
+                            },
+                            "id": "ceead46aeeef5ab78bc1e48826747ac9"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: source",
+                                {
+                                  "kind": "Op",
+                                  "op": "TextReplace",
+                                  "args": [
+                                    {
+                                      "kind": "Text",
+                                      "value": "\r"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "TextReplace",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "\r\n"
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "ClipboardText",
+                                          "args": [],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Text",
+                                          "value": "\n"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "38018090b4f1552a8664f5a173cb2829"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked clipboard-tools: line number",
+                                {
+                                  "kind": "Number",
+                                  "value": 1
+                                }
+                              ]
+                            },
+                            "id": "fdcd643de8ff53acbda95af3f2314507"
+                          },
+                          {
+                            "kind": {
+                              "Repeat": {
+                                "count": {
+                                  "kind": "Op",
+                                  "op": "SplitCount",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked clipboard-tools: source"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked clipboard-tools: line",
+                                        {
+                                          "kind": "Op",
+                                          "op": "SplitPart",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked clipboard-tools: line number"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked clipboard-tools: source"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "\n"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "ecd99dba3bf452d0a297e8715d4be635"
+                                  },
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked clipboard-tools: line",
+                                        {
+                                          "kind": "Op",
+                                          "op": "RegexReplace",
+                                          "args": [
+                                            {
+                                              "kind": "Text",
+                                              "value": "[ \\t]+"
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Trim",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked clipboard-tools: line"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": " "
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "9ed6664d5bd65c7badb663e537e7bffb"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "Gt",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Length",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Trim",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: line"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Number",
+                                              "value": 0
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "If": {
+                                                "condition": {
+                                                  "kind": "Op",
+                                                  "op": "Gt",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: kept"
+                                                    },
+                                                    {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                "body": [
+                                                  {
+                                                    "kind": {
+                                                      "SetVariable": [
+                                                        "Blockworked clipboard-tools: output",
+                                                        {
+                                                          "kind": "Op",
+                                                          "op": "Join",
+                                                          "args": [
+                                                            {
+                                                              "kind": "Var",
+                                                              "name": "Blockworked clipboard-tools: output"
+                                                            },
+                                                            {
+                                                              "kind": "Text",
+                                                              "value": "\n"
+                                                            }
+                                                          ],
+                                                          "saved": {
+                                                            "kind": "Number",
+                                                            "value": 0
+                                                          }
+                                                        }
+                                                      ]
+                                                    },
+                                                    "id": "ef5fe605c59d5d1cb7ed71c5723f88f8"
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "id": "972aed1e3bac5292add6276d4d3bb592"
+                                          },
+                                          {
+                                            "kind": {
+                                              "SetVariable": [
+                                                "Blockworked clipboard-tools: output",
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Join",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: output"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked clipboard-tools: line"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "id": "a3efc1c6a1915a6d95f53a91947ef30d"
+                                          },
+                                          {
+                                            "kind": {
+                                              "ChangeVariable": [
+                                                "Blockworked clipboard-tools: kept",
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ]
+                                            },
+                                            "id": "4768199923695e9ab17a56a6b27aa0c5"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "f7dbf51a0df058b184f0346eb17d1e72"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ChangeVariable": [
+                                        "Blockworked clipboard-tools: line number",
+                                        {
+                                          "kind": "Number",
+                                          "value": 1
+                                        }
+                                      ]
+                                    },
+                                    "id": "60d6f89923a55a4e96e4ac960570eb81"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "4489f2460b4b54dda05ac87dce37bb67"
+                          },
+                          {
+                            "kind": {
+                              "SetClipboard": {
+                                "kind": "Var",
+                                "name": "Blockworked clipboard-tools: output"
+                              }
+                            },
+                            "id": "9fdbb6e196fe5b088f9d8977ac9979eb"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "611eedaf19f95be7a8362ed10d0c3a9c"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "24c2cadfb2595a7c94121e307425149c"
+                  }
+                ]
+              }
+            },
+            "id": "bbcbb9b51824513b9a481611d77a58d6"
+          }
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "name": "Blockworked clipboard-tools: kept",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked clipboard-tools: line",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked clipboard-tools: line number",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked clipboard-tools: output",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked clipboard-tools: seen",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked clipboard-tools: source",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      }
+    ]
+  }
+}

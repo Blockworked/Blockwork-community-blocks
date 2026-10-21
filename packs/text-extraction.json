@@ -1,0 +1,1442 @@
+{
+  "blockwork_block_pack": 1,
+  "id": "text-extraction",
+  "name": "Text extraction",
+  "description": "Extract text between literal markers, collect matching lines and look up key=value entries.",
+  "author": "Blockworked",
+  "version": "1.0.0",
+  "blocks": {
+    "block_defs": [
+      {
+        "id": "2ba4b588235650879e32d0067dc82481",
+        "identifier": "Blockworked_TextBetweenMarkers",
+        "description": "Returns text after the first literal start marker and before the next literal end marker. Case-sensitive and Unicode-aware. Empty or missing markers return empty text.",
+        "color": "#59C059",
+        "icon": "type",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "text between",
+            "id": "97ae07f03f3258808b9881dca1564d34"
+          },
+          {
+            "kind": "Input",
+            "name": "start",
+            "value_type": "Any",
+            "id": "0710ade60e905317a49bfa9808450af1"
+          },
+          {
+            "kind": "Label",
+            "text": "and",
+            "id": "eb6afa416d505cf3ac4589d977ebf866"
+          },
+          {
+            "kind": "Input",
+            "name": "end",
+            "value_type": "Any",
+            "id": "1fabcf2717315d379726639877792a6b"
+          },
+          {
+            "kind": "Label",
+            "text": "in",
+            "id": "b6f22148e08f5efaacb1c719697b0ab6"
+          },
+          {
+            "kind": "Input",
+            "name": "text",
+            "value_type": "Any",
+            "id": "507858e5989159ddb4784ab0d6434f12"
+          }
+        ],
+        "shape": "ReturnsValue"
+      },
+      {
+        "id": "fe3a775b21ba5f5b978060624034ba87",
+        "identifier": "Blockworked_TextMatchingLines",
+        "description": "Returns all lines containing the literal needle, in order, joined with LF. Matching is case-sensitive. An empty needle includes every line. Normalizes CRLF and CR to LF.",
+        "color": "#59C059",
+        "icon": "type",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "lines containing",
+            "id": "309f422593805c7787d56e3d743001e1"
+          },
+          {
+            "kind": "Input",
+            "name": "needle",
+            "value_type": "Any",
+            "id": "9b23e926cba95b5496643f802175814f"
+          },
+          {
+            "kind": "Label",
+            "text": "in",
+            "id": "dae09dd7c4e35c1496f999e32c82ef0c"
+          },
+          {
+            "kind": "Input",
+            "name": "text",
+            "value_type": "Any",
+            "id": "41b7b443b75152c1b3a9f7a9e30f7369"
+          }
+        ],
+        "shape": "ReturnsValue"
+      },
+      {
+        "id": "9a47ee6cd2cf5f31989637fd2e8c9b7f",
+        "identifier": "Blockworked_TextKeyValue",
+        "description": "Looks up the first matching key=value line. Trims keys and values; keys match exactly and case-sensitively. Preserves additional = signs in the value. Ignores blank keys, # comments and lines without =. Missing keys return empty text.",
+        "color": "#59C059",
+        "icon": "type",
+        "pieces": [
+          {
+            "kind": "Label",
+            "text": "value for key",
+            "id": "0d34c6f0bbe25be3a3a20078a56e3e22"
+          },
+          {
+            "kind": "Input",
+            "name": "key",
+            "value_type": "Any",
+            "id": "71644f275e1c5a8eb2af65a2eafecb9c"
+          },
+          {
+            "kind": "Label",
+            "text": "in",
+            "id": "ae092b26ab7d57879720a31f38f78c84"
+          },
+          {
+            "kind": "Input",
+            "name": "text",
+            "value_type": "Any",
+            "id": "ce1678652bd550baaad18779cc812802"
+          }
+        ],
+        "shape": "ReturnsValue"
+      }
+    ],
+    "comments": [],
+    "description": "Extract text between literal markers, collect matching lines and look up key=value entries.",
+    "dicts": [],
+    "floating_values": [],
+    "format_version": 1,
+    "id": "",
+    "lists": [],
+    "name": "Text extraction",
+    "recording_target": null,
+    "settings": {
+      "active_days": 0,
+      "active_hours": null,
+      "always_listen": false,
+      "catch_up_missed": false,
+      "max_loop_iterations": 0,
+      "max_run_secs": 0,
+      "only_in_window": "",
+      "power": "Any"
+    },
+    "speed_multiplier": 1.0,
+    "strands": [
+      {
+        "id": "fa8db50470355913b94b9990a88f094c",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "2ba4b588235650879e32d0067dc82481"
+            },
+            "id": "dddfe8610066556bb658ac2b16fc6729"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/text-extraction"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Or",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Length",
+                                          "args": [
+                                            {
+                                              "kind": "Param",
+                                              "name": "start"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "Eq",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Length",
+                                          "args": [
+                                            {
+                                              "kind": "Param",
+                                              "name": "end"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        {
+                                          "kind": "Number",
+                                          "value": 0
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Return": {
+                                        "kind": "Text",
+                                        "value": ""
+                                      }
+                                    },
+                                    "id": "2bda29c9773b58b2bc8c0c43ef28ec55"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "e186a106ea275f229bbbf264d9deef0b"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: start position",
+                                {
+                                  "kind": "Op",
+                                  "op": "IndexOf",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "start"
+                                    },
+                                    {
+                                      "kind": "Param",
+                                      "name": "text"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "bd428b9615a9505894168e4173cd9445"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Eq",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked text-extraction: start position"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Return": {
+                                        "kind": "Text",
+                                        "value": ""
+                                      }
+                                    },
+                                    "id": "e5ca25dd3d395da08955638cfcac8726"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "48fdd9af7ac558c1a74c1b81c66e803d"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: tail",
+                                {
+                                  "kind": "Op",
+                                  "op": "Substring",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Add",
+                                      "args": [
+                                        {
+                                          "kind": "Var",
+                                          "name": "Blockworked text-extraction: start position"
+                                        },
+                                        {
+                                          "kind": "Op",
+                                          "op": "Length",
+                                          "args": [
+                                            {
+                                              "kind": "Param",
+                                              "name": "start"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "Length",
+                                      "args": [
+                                        {
+                                          "kind": "Param",
+                                          "name": "text"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Param",
+                                      "name": "text"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "0d00c557c3b857f38e528c9b45f2e5f8"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: end position",
+                                {
+                                  "kind": "Op",
+                                  "op": "IndexOf",
+                                  "args": [
+                                    {
+                                      "kind": "Param",
+                                      "name": "end"
+                                    },
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked text-extraction: tail"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "f8169217c56b5c5f94664386df21b8a0"
+                          },
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Eq",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked text-extraction: end position"
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Return": {
+                                        "kind": "Text",
+                                        "value": ""
+                                      }
+                                    },
+                                    "id": "7d0a41a9544055e38403a5b5ff59d57f"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "5879c5a9368d5f41a65fae51ea27a27d"
+                          },
+                          {
+                            "kind": {
+                              "Return": {
+                                "kind": "Op",
+                                "op": "Substring",
+                                "args": [
+                                  {
+                                    "kind": "Number",
+                                    "value": 1
+                                  },
+                                  {
+                                    "kind": "Op",
+                                    "op": "Sub",
+                                    "args": [
+                                      {
+                                        "kind": "Var",
+                                        "name": "Blockworked text-extraction: end position"
+                                      },
+                                      {
+                                        "kind": "Number",
+                                        "value": 1
+                                      }
+                                    ],
+                                    "saved": {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  },
+                                  {
+                                    "kind": "Var",
+                                    "name": "Blockworked text-extraction: tail"
+                                  }
+                                ],
+                                "saved": {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              }
+                            },
+                            "id": "3491e301e0a152baaf062defd0813b9d"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "d511bd38bf5c5d25acd2626db73367ec"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "5be5276ef5db5346a1f2ee152afc96dd"
+                  }
+                ]
+              }
+            },
+            "id": "2f57b79e7bb55435ae6ee464b0649b58"
+          }
+        ]
+      },
+      {
+        "id": "6c5adc3c7e5c5629b3f870a7a25bad85",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "fe3a775b21ba5f5b978060624034ba87"
+            },
+            "id": "8401dc122abb5b1396e330406457d6ed"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/text-extraction"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: output",
+                                {
+                                  "kind": "Text",
+                                  "value": ""
+                                }
+                              ]
+                            },
+                            "id": "f75eb7371ef7582b934239b71ba4536b"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: kept",
+                                {
+                                  "kind": "Number",
+                                  "value": 0
+                                }
+                              ]
+                            },
+                            "id": "3091e4e6897c5383bcacc1251883677c"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: source",
+                                {
+                                  "kind": "Op",
+                                  "op": "TextReplace",
+                                  "args": [
+                                    {
+                                      "kind": "Text",
+                                      "value": "\r"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "TextReplace",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "\r\n"
+                                        },
+                                        {
+                                          "kind": "Param",
+                                          "name": "text"
+                                        },
+                                        {
+                                          "kind": "Text",
+                                          "value": "\n"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "b48cf4273c5d5beab2b686c5b0eb11f2"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: line number",
+                                {
+                                  "kind": "Number",
+                                  "value": 1
+                                }
+                              ]
+                            },
+                            "id": "b2dcaac703eb5e44bd6bee992f0f55b1"
+                          },
+                          {
+                            "kind": {
+                              "Repeat": {
+                                "count": {
+                                  "kind": "Op",
+                                  "op": "SplitCount",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked text-extraction: source"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked text-extraction: line",
+                                        {
+                                          "kind": "Op",
+                                          "op": "SplitPart",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked text-extraction: line number"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked text-extraction: source"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "\n"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "270fead8c02158b69110b0feabf03d05"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "TextCheck",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked text-extraction: line"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "contains"
+                                            },
+                                            {
+                                              "kind": "Param",
+                                              "name": "needle"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "If": {
+                                                "condition": {
+                                                  "kind": "Op",
+                                                  "op": "Gt",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked text-extraction: kept"
+                                                    },
+                                                    {
+                                                      "kind": "Number",
+                                                      "value": 0
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                "body": [
+                                                  {
+                                                    "kind": {
+                                                      "SetVariable": [
+                                                        "Blockworked text-extraction: output",
+                                                        {
+                                                          "kind": "Op",
+                                                          "op": "Join",
+                                                          "args": [
+                                                            {
+                                                              "kind": "Var",
+                                                              "name": "Blockworked text-extraction: output"
+                                                            },
+                                                            {
+                                                              "kind": "Text",
+                                                              "value": "\n"
+                                                            }
+                                                          ],
+                                                          "saved": {
+                                                            "kind": "Number",
+                                                            "value": 0
+                                                          }
+                                                        }
+                                                      ]
+                                                    },
+                                                    "id": "43c2aaecdbc655759f07366dd70efe4b"
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "id": "785cedddc8f15b6c987b034166551938"
+                                          },
+                                          {
+                                            "kind": {
+                                              "SetVariable": [
+                                                "Blockworked text-extraction: output",
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Join",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked text-extraction: output"
+                                                    },
+                                                    {
+                                                      "kind": "Var",
+                                                      "name": "Blockworked text-extraction: line"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "id": "33506c37964659508dbc4ed1e339b03d"
+                                          },
+                                          {
+                                            "kind": {
+                                              "ChangeVariable": [
+                                                "Blockworked text-extraction: kept",
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ]
+                                            },
+                                            "id": "cae60c67f0ac55f4bc208aadb8337a5c"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "1f25ec35bc67589bbf2bf4a410e6cd16"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ChangeVariable": [
+                                        "Blockworked text-extraction: line number",
+                                        {
+                                          "kind": "Number",
+                                          "value": 1
+                                        }
+                                      ]
+                                    },
+                                    "id": "778621fb41c3554d9afa61f8c2cea8c8"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "276a19a6e34150859019c886963a5c7f"
+                          },
+                          {
+                            "kind": {
+                              "Return": {
+                                "kind": "Var",
+                                "name": "Blockworked text-extraction: output"
+                              }
+                            },
+                            "id": "8f436f10424d5378b4d92796d4aacfd9"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "6c10803b3e4d53df8cf5d88183e835ca"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "7e493308b6f75f12831c1953c639c36c"
+                  }
+                ]
+              }
+            },
+            "id": "e8a3a6c164e65a18a908a85006e87db1"
+          }
+        ]
+      },
+      {
+        "id": "471a958bb6cc5c93a4732dc1c8db8cff",
+        "x": 0,
+        "y": 0,
+        "instructions": [
+          {
+            "kind": {
+              "BlockHeader": "9a47ee6cd2cf5f31989637fd2e8c9b7f"
+            },
+            "id": "d835cb7e05ee52e9bf1612885ef81cac"
+          },
+          {
+            "kind": {
+              "TryCatch": {
+                "body": [
+                  {
+                    "kind": {
+                      "WithLock": {
+                        "name": {
+                          "kind": "Text",
+                          "value": "Blockworked/text-extraction"
+                        },
+                        "body": [
+                          {
+                            "kind": {
+                              "If": {
+                                "condition": {
+                                  "kind": "Op",
+                                  "op": "Eq",
+                                  "args": [
+                                    {
+                                      "kind": "Op",
+                                      "op": "Length",
+                                      "args": [
+                                        {
+                                          "kind": "Op",
+                                          "op": "Trim",
+                                          "args": [
+                                            {
+                                              "kind": "Param",
+                                              "name": "key"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Number",
+                                      "value": 0
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "Return": {
+                                        "kind": "Text",
+                                        "value": ""
+                                      }
+                                    },
+                                    "id": "b8903fadc06e526cbc8ef2aec5951e33"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "28cc7f69cba25f15ba1ac624eb0a7d0f"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: source",
+                                {
+                                  "kind": "Op",
+                                  "op": "TextReplace",
+                                  "args": [
+                                    {
+                                      "kind": "Text",
+                                      "value": "\r"
+                                    },
+                                    {
+                                      "kind": "Op",
+                                      "op": "TextReplace",
+                                      "args": [
+                                        {
+                                          "kind": "Text",
+                                          "value": "\r\n"
+                                        },
+                                        {
+                                          "kind": "Param",
+                                          "name": "text"
+                                        },
+                                        {
+                                          "kind": "Text",
+                                          "value": "\n"
+                                        }
+                                      ],
+                                      "saved": {
+                                        "kind": "Number",
+                                        "value": 0
+                                      }
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "id": "3e400e28618254019a3611000b3b8d8d"
+                          },
+                          {
+                            "kind": {
+                              "SetVariable": [
+                                "Blockworked text-extraction: line number",
+                                {
+                                  "kind": "Number",
+                                  "value": 1
+                                }
+                              ]
+                            },
+                            "id": "5eb862a865385a5083bf5c923874733b"
+                          },
+                          {
+                            "kind": {
+                              "Repeat": {
+                                "count": {
+                                  "kind": "Op",
+                                  "op": "SplitCount",
+                                  "args": [
+                                    {
+                                      "kind": "Var",
+                                      "name": "Blockworked text-extraction: source"
+                                    },
+                                    {
+                                      "kind": "Text",
+                                      "value": "\n"
+                                    }
+                                  ],
+                                  "saved": {
+                                    "kind": "Number",
+                                    "value": 0
+                                  }
+                                },
+                                "body": [
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked text-extraction: line",
+                                        {
+                                          "kind": "Op",
+                                          "op": "SplitPart",
+                                          "args": [
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked text-extraction: line number"
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked text-extraction: source"
+                                            },
+                                            {
+                                              "kind": "Text",
+                                              "value": "\n"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "410813c19f35511eb4eba9c1bec3e212"
+                                  },
+                                  {
+                                    "kind": {
+                                      "SetVariable": [
+                                        "Blockworked text-extraction: equals position",
+                                        {
+                                          "kind": "Op",
+                                          "op": "IndexOf",
+                                          "args": [
+                                            {
+                                              "kind": "Text",
+                                              "value": "="
+                                            },
+                                            {
+                                              "kind": "Var",
+                                              "name": "Blockworked text-extraction: line"
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    "id": "96f23680904e5626acd13e2c303a2520"
+                                  },
+                                  {
+                                    "kind": {
+                                      "If": {
+                                        "condition": {
+                                          "kind": "Op",
+                                          "op": "And",
+                                          "args": [
+                                            {
+                                              "kind": "Op",
+                                              "op": "Gt",
+                                              "args": [
+                                                {
+                                                  "kind": "Var",
+                                                  "name": "Blockworked text-extraction: equals position"
+                                                },
+                                                {
+                                                  "kind": "Number",
+                                                  "value": 1
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            },
+                                            {
+                                              "kind": "Op",
+                                              "op": "Not",
+                                              "args": [
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "TextCheck",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Op",
+                                                      "op": "Trim",
+                                                      "args": [
+                                                        {
+                                                          "kind": "Var",
+                                                          "name": "Blockworked text-extraction: line"
+                                                        }
+                                                      ],
+                                                      "saved": {
+                                                        "kind": "Number",
+                                                        "value": 0
+                                                      }
+                                                    },
+                                                    {
+                                                      "kind": "Text",
+                                                      "value": "starts with"
+                                                    },
+                                                    {
+                                                      "kind": "Text",
+                                                      "value": "#"
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
+                                            }
+                                          ],
+                                          "saved": {
+                                            "kind": "Number",
+                                            "value": 0
+                                          }
+                                        },
+                                        "body": [
+                                          {
+                                            "kind": {
+                                              "SetVariable": [
+                                                "Blockworked text-extraction: key",
+                                                {
+                                                  "kind": "Op",
+                                                  "op": "Trim",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Op",
+                                                      "op": "Substring",
+                                                      "args": [
+                                                        {
+                                                          "kind": "Number",
+                                                          "value": 1
+                                                        },
+                                                        {
+                                                          "kind": "Op",
+                                                          "op": "Sub",
+                                                          "args": [
+                                                            {
+                                                              "kind": "Var",
+                                                              "name": "Blockworked text-extraction: equals position"
+                                                            },
+                                                            {
+                                                              "kind": "Number",
+                                                              "value": 1
+                                                            }
+                                                          ],
+                                                          "saved": {
+                                                            "kind": "Number",
+                                                            "value": 0
+                                                          }
+                                                        },
+                                                        {
+                                                          "kind": "Var",
+                                                          "name": "Blockworked text-extraction: line"
+                                                        }
+                                                      ],
+                                                      "saved": {
+                                                        "kind": "Number",
+                                                        "value": 0
+                                                      }
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                }
+                                              ]
+                                            },
+                                            "id": "2904b79103cb5c8f8a800f5339db1a8e"
+                                          },
+                                          {
+                                            "kind": {
+                                              "If": {
+                                                "condition": {
+                                                  "kind": "Op",
+                                                  "op": "Eq",
+                                                  "args": [
+                                                    {
+                                                      "kind": "Op",
+                                                      "op": "Join",
+                                                      "args": [
+                                                        {
+                                                          "kind": "Text",
+                                                          "value": "key:"
+                                                        },
+                                                        {
+                                                          "kind": "Var",
+                                                          "name": "Blockworked text-extraction: key"
+                                                        }
+                                                      ],
+                                                      "saved": {
+                                                        "kind": "Number",
+                                                        "value": 0
+                                                      }
+                                                    },
+                                                    {
+                                                      "kind": "Op",
+                                                      "op": "Join",
+                                                      "args": [
+                                                        {
+                                                          "kind": "Text",
+                                                          "value": "key:"
+                                                        },
+                                                        {
+                                                          "kind": "Op",
+                                                          "op": "Trim",
+                                                          "args": [
+                                                            {
+                                                              "kind": "Param",
+                                                              "name": "key"
+                                                            }
+                                                          ],
+                                                          "saved": {
+                                                            "kind": "Number",
+                                                            "value": 0
+                                                          }
+                                                        }
+                                                      ],
+                                                      "saved": {
+                                                        "kind": "Number",
+                                                        "value": 0
+                                                      }
+                                                    }
+                                                  ],
+                                                  "saved": {
+                                                    "kind": "Number",
+                                                    "value": 0
+                                                  }
+                                                },
+                                                "body": [
+                                                  {
+                                                    "kind": {
+                                                      "Return": {
+                                                        "kind": "Op",
+                                                        "op": "Trim",
+                                                        "args": [
+                                                          {
+                                                            "kind": "Op",
+                                                            "op": "Substring",
+                                                            "args": [
+                                                              {
+                                                                "kind": "Op",
+                                                                "op": "Add",
+                                                                "args": [
+                                                                  {
+                                                                    "kind": "Var",
+                                                                    "name": "Blockworked text-extraction: equals position"
+                                                                  },
+                                                                  {
+                                                                    "kind": "Number",
+                                                                    "value": 1
+                                                                  }
+                                                                ],
+                                                                "saved": {
+                                                                  "kind": "Number",
+                                                                  "value": 0
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "Op",
+                                                                "op": "Length",
+                                                                "args": [
+                                                                  {
+                                                                    "kind": "Var",
+                                                                    "name": "Blockworked text-extraction: line"
+                                                                  }
+                                                                ],
+                                                                "saved": {
+                                                                  "kind": "Number",
+                                                                  "value": 0
+                                                                }
+                                                              },
+                                                              {
+                                                                "kind": "Var",
+                                                                "name": "Blockworked text-extraction: line"
+                                                              }
+                                                            ],
+                                                            "saved": {
+                                                              "kind": "Number",
+                                                              "value": 0
+                                                            }
+                                                          }
+                                                        ],
+                                                        "saved": {
+                                                          "kind": "Number",
+                                                          "value": 0
+                                                        }
+                                                      }
+                                                    },
+                                                    "id": "f2b9389bda0b5a99b89f9f5af0a6609f"
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            "id": "edf5c27a5c8c5df2bf677b6ed483ff97"
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "id": "e9393cb628ba593aad1832595f4fc90d"
+                                  },
+                                  {
+                                    "kind": {
+                                      "ChangeVariable": [
+                                        "Blockworked text-extraction: line number",
+                                        {
+                                          "kind": "Number",
+                                          "value": 1
+                                        }
+                                      ]
+                                    },
+                                    "id": "909237cec83c5e05b9f620880504bdf3"
+                                  }
+                                ]
+                              }
+                            },
+                            "id": "c8089ea5eccf521b80a286d023444feb"
+                          },
+                          {
+                            "kind": {
+                              "Return": {
+                                "kind": "Text",
+                                "value": ""
+                              }
+                            },
+                            "id": "4225cee418505a7cbc9a5dc46852fbff"
+                          }
+                        ]
+                      }
+                    },
+                    "id": "b311f4b83d5c5371957e600b364a451d"
+                  }
+                ],
+                "catch_body": [
+                  {
+                    "kind": {
+                      "ThrowError": {
+                        "kind": "Op",
+                        "op": "LastError",
+                        "args": [],
+                        "saved": {
+                          "kind": "Number",
+                          "value": 0
+                        }
+                      }
+                    },
+                    "id": "833e4f01305c5252abc43ec7062eb2ac"
+                  }
+                ]
+              }
+            },
+            "id": "a69d67a4c8be5291b59c0c820300f55c"
+          }
+        ]
+      }
+    ],
+    "variables": [
+      {
+        "name": "Blockworked text-extraction: end position",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: equals position",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: kept",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: key",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: line",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: line number",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: output",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: source",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: start position",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      },
+      {
+        "name": "Blockworked text-extraction: tail",
+        "value": {
+          "kind": "Number",
+          "value": 0
+        }
+      }
+    ]
+  }
+}

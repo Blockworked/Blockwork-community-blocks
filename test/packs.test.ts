@@ -15,6 +15,8 @@ const pack = (extra: object = {}) => ({
 
 test("seed packs are accepted and match index.json", () => {
   const index = JSON.parse(readFileSync("index.json", "utf8"));
+  assert.deepEqual(index.packs.map((p: any) => p.url).sort(),
+    readdirSync("packs").filter((f) => f.endsWith(".json")).map((f) => `packs/${f}`).sort());
   for (const file of readdirSync("packs")) {
     const bytes = readFileSync(`packs/${file}`);
     const meta = readPack(bytes);
@@ -26,6 +28,46 @@ test("seed packs are accepted and match index.json", () => {
     for (const def of JSON.parse(bytes.toString()).blocks.block_defs) {
       assert.match(def.identifier, /^Blockworked_[A-Za-z0-9]+$/, `${file}: invalid Details ID`);
       assert.ok(def.description.trim(), `${file}: missing description`);
+    }
+  }
+});
+
+test("seed block graphs have unique IDs, bound parameters and declared variables", () => {
+  const ids = new Set<string>();
+  const claim = (id: string) => {
+    assert.match(id, /^[a-f0-9]{32}$/);
+    assert.ok(!ids.has(id), `duplicate graph ID: ${id}`);
+    ids.add(id);
+  };
+  for (const file of readdirSync("packs").filter((f) => f.endsWith(".json"))) {
+    const content = JSON.parse(readFileSync(`packs/${file}`, "utf8")).blocks;
+    const defs = new Map<string, any>(content.block_defs.map((d: any) => [d.id, d]));
+    const variables = new Set(content.variables.map((v: any) => v.name));
+    assert.equal(content.strands.length, defs.size, `${file}: each block needs a body`);
+    const headers = new Set<string>();
+    for (const def of defs.values()) {
+      claim(def.id);
+      def.pieces.forEach((piece: any) => claim(piece.id));
+    }
+    for (const strand of content.strands) {
+      claim(strand.id);
+      const header = strand.instructions[0]?.kind?.BlockHeader;
+      assert.ok(defs.has(header), `${file}: body has no matching definition`);
+      assert.ok(!headers.has(header), `${file}: duplicate body`);
+      headers.add(header);
+      const params = new Set(defs.get(header).pieces.filter((p: any) => p.kind === "Input").map((p: any) => p.name));
+      const walk = (node: any) => {
+        if (Array.isArray(node)) return node.forEach(walk);
+        if (!node || typeof node !== "object") return;
+        if (node.id) claim(node.id);
+        if (node.kind === "Param") assert.ok(params.has(node.name), `${file}: unbound ${node.name}`);
+        if (node.kind === "Var") assert.ok(variables.has(node.name), `${file}: undeclared ${node.name}`);
+        for (const kind of ["SetVariable", "ChangeVariable"]) {
+          if (node.kind?.[kind]) assert.ok(variables.has(node.kind[kind][0]), `${file}: undeclared write`);
+        }
+        Object.values(node).forEach(walk);
+      };
+      strand.instructions.forEach(walk);
     }
   }
 });
