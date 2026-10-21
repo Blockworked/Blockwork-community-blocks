@@ -75,9 +75,12 @@ GOOGLE_CLIENT_SECRET=...
 
 After that, every push to master deploys on its own
 (`.github/workflows/deploy.yml`): it typechecks, runs the tests, applies any
-new migrations and deploys the Worker. It needs two repository secrets:
-`CLOUDFLARE_API_TOKEN` (a token from the "Edit Cloudflare Workers" template,
-plus D1 Edit) and `CLOUDFLARE_ACCOUNT_ID`.
+new migrations and deploys the Worker. When a push changes `packs/`, it
+then runs `npm run seed:remote` to publish the starter packs to the live
+library. Manual workflow runs also reseed, so they can retry a failed seed.
+It needs two repository secrets: `CLOUDFLARE_API_TOKEN` (a token from the
+"Edit Cloudflare Workers" template, with permission to edit D1 and write
+R2 objects) and `CLOUDFLARE_ACCOUNT_ID`.
 
 ## Other libraries
 
