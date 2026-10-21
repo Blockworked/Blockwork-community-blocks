@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -21,6 +22,11 @@ test("seed packs are accepted and match index.json", () => {
     const entry = index.packs.find((p: any) => p.url === `packs/${file}`);
     assert.equal((meta as any).id, entry.id);
     assert.deepEqual((meta as any).blocks, entry.blocks);
+    assert.equal(createHash("sha256").update(bytes).digest("hex"), entry.sha256);
+    for (const def of JSON.parse(bytes.toString()).blocks.block_defs) {
+      assert.ok(def.identifier.trim(), `${file}: missing Details ID`);
+      assert.ok(def.description.trim(), `${file}: missing description`);
+    }
   }
 });
 

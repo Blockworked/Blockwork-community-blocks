@@ -27,6 +27,14 @@ loads the same packs into the Worker.
 2. Sign in on the library site, open Submit a pack and upload the file.
    Keep the same id for later versions so they replace the old blocks.
 
+Each entry in `blocks.block_defs` can include `identifier` (for example,
+`WaitSeconds`) and `description` for Blockwork's Details screen. These can
+also be set in the app's Make/Edit Block dialog. Keep the internal `id`
+stable across versions so installed calls continue to match; `identifier`
+is a readable display ID. Older packs without these fields still load.
+Run `python3 scripts/build-block-index.py` after editing starter packs to
+refresh their checksums.
+
 Reviewers: read the whole pack. The review page lists what its blocks can
 do, but a pack in this library should not run commands, go online, write
 files or read secrets unless that's plainly its purpose.
