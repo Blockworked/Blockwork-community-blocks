@@ -36,9 +36,9 @@
       "name": "Mouse patterns",
       "description": "Click grids, drag through a path of points and click relative to a window.",
       "author": "Blockworked",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "url": "packs/mouse-patterns.json",
-      "sha256": "35cc9804acf0a1de07797904d610ed70343975450fac4ed3e75a29e2ee02438e",
+      "sha256": "ea6c19a7e1dcd32d7e3204ab7360ce86eb30c10750d1c39c7449e12d96f5db17",
       "blocks": [
         "click grid at x (x) y (y) rows (rows) columns (columns) spacing x (dx) y (dy) pause (ms) ms",
         "drag through points (points) pause (ms) ms",

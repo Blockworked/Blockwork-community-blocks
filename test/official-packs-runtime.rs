@@ -346,6 +346,24 @@ fn main() {
         events(),
         ["move 10,20", "Press", "move 30,40", "move -5,0", "Release"]
     );
+    run(
+        "mouse-patterns",
+        "DragThroughPoints",
+        strings(&["100,100; 200,200", "0"]),
+    );
+    assert_eq!(
+        events(),
+        ["move 100,100", "Press", "move 200,200", "Release"]
+    );
+    run(
+        "mouse-patterns",
+        "DragThroughPoints",
+        strings(&["10,20; 30,40\n-5,0", "0"]),
+    );
+    assert_eq!(
+        events(),
+        ["move 10,20", "Press", "move 30,40", "move -5,0", "Release"]
+    );
     for path in [
         "1,2",
         "1,2\n3,4\n5,no",
@@ -353,6 +371,8 @@ fn main() {
         "1,2\n\n3,4",
         "1,2\nNaN,4",
         "1,2\n3,inf",
+        "1,2; bad,4",
+        "1,2;;3,4",
     ] {
         let vars = run("mouse-patterns", "DragThroughPoints", strings(&[path, "0"]));
         assert!(vars.contains_key("error"), "{path:?}: {vars:?}");

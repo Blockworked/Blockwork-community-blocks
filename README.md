@@ -78,7 +78,8 @@ it records position and size, not maximized or minimized state.
 
 Mouse grids use absolute screen coordinates and visit columns within each row.
 Rows and columns are nonnegative whole numbers; spacing may be negative.
-Drag paths are text with one `x,y` pair per line and at least two points. Pauses
+Drag paths contain at least two `x,y` pairs separated by semicolons, such as
+`100,100; 200,200`. Line-separated paths are also supported. Pauses
 are in milliseconds. Window-relative clicks use offsets from the client area's
 top-left and focus the window before clicking.
 

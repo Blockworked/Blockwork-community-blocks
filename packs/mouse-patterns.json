@@ -4,7 +4,7 @@
   "name": "Mouse patterns",
   "description": "Click grids, drag through a path of points and click relative to a window.",
   "author": "Blockworked",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "blocks": {
     "block_defs": [
       {
@@ -130,7 +130,7 @@
       {
         "id": "4c97e908001d525a879d638bc3b7ddc5",
         "identifier": "Blockworked_DragThroughPoints",
-        "description": "Left-drags through newline-separated absolute x,y pairs, pausing at each point. Needs at least two pairs and a nonnegative pause in milliseconds. Validates the entire path before pressing; releases the button if an action fails. Supports CRLF/CR lines and surrounding whitespace.",
+        "description": "Left-drags through absolute x,y pairs separated by semicolons or line breaks, pausing at each point. Example: 100,100; 200,200. Needs at least two pairs and a nonnegative pause in milliseconds. Validates the entire path before pressing; releases the button if an action fails. Supports CRLF/CR lines and surrounding whitespace.",
         "color": "#4C97FF",
         "icon": "mouse-pointer-click",
         "pieces": [
@@ -146,7 +146,7 @@
             "id": "8d526ac38e185192b8f8eaf89601a8d8",
             "default_value": {
               "kind": "Text",
-              "value": "100,100\n200,100\n200,200"
+              "value": "100,100; 200,200"
             }
           },
           {
@@ -1517,7 +1517,7 @@
                                       "args": [
                                         {
                                           "kind": "Text",
-                                          "value": "\r"
+                                          "value": ";"
                                         },
                                         {
                                           "kind": "Op",
@@ -1525,11 +1525,29 @@
                                           "args": [
                                             {
                                               "kind": "Text",
-                                              "value": "\r\n"
+                                              "value": "\r"
                                             },
                                             {
-                                              "kind": "Param",
-                                              "name": "points"
+                                              "kind": "Op",
+                                              "op": "TextReplace",
+                                              "args": [
+                                                {
+                                                  "kind": "Text",
+                                                  "value": "\r\n"
+                                                },
+                                                {
+                                                  "kind": "Param",
+                                                  "name": "points"
+                                                },
+                                                {
+                                                  "kind": "Text",
+                                                  "value": "\n"
+                                                }
+                                              ],
+                                              "saved": {
+                                                "kind": "Number",
+                                                "value": 0
+                                              }
                                             },
                                             {
                                               "kind": "Text",
@@ -1733,7 +1751,7 @@
                                             "kind": {
                                               "ThrowError": {
                                                 "kind": "Text",
-                                                "value": "Each path line must contain exactly one x,y pair."
+                                                "value": "Each path entry must contain exactly one x,y pair."
                                               }
                                             },
                                             "id": "58fdcc9a3e065794af1f61042e1f34cb"

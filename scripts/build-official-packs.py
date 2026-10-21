@@ -20,7 +20,7 @@ INPUT_DEFAULTS = {
     'CaptureWindowGeometry': {'window': ''},
     'RestoreWindowGeometry': {'window': '', 'snapshot': '{"x":100,"y":100,"width":800,"height":600}'},
     'ClickGrid': {'x': 100, 'y': 100, 'rows': 2, 'columns': 3, 'dx': 80, 'dy': 60, 'ms': 100},
-    'DragThroughPoints': {'points': '100,100\n200,100\n200,200', 'ms': 100},
+    'DragThroughPoints': {'points': '100,100; 200,200', 'ms': 100},
     'ClickInWindow': {'window': '', 'x': 50, 'y': 50},
 }
 
@@ -150,6 +150,8 @@ class Pack:
                    'block_defs': self.defs, 'strands': strands, 'lists': [], 'dicts': [],
                    'variables': [{'name': self.name_for(n), 'value': {'kind': 'Number', 'value': 0}} for n in sorted(self.vars)]}
         version = '1.0.1' if any(p['kind'] == 'Input' for d in self.defs for p in d['pieces']) else '1.0.0'
+        if self.id == 'mouse-patterns':
+            version = '1.0.2'
         data = {'blockwork_block_pack': 1, 'id': self.id, 'name': self.name, 'description': self.description,
                 'author': 'Blockworked', 'version': version, 'blocks': content}
         (ROOT / f'packs/{self.id}.json').write_text(json.dumps(data, indent=2) + '\n')
@@ -305,12 +307,12 @@ m.block('ClickGrid', 'click grid at x {x} y {y} rows {rows} columns {columns} sp
 # Validate every coordinate before pressing the mouse button. Errors release it.
 path_line = op('SplitPart', m.v('point number'), m.v('path'), '\n')
 m.block('DragThroughPoints', 'drag through points {points} pause {ms} ms',
-        'Left-drags through newline-separated absolute x,y pairs, pausing at each point. Needs at least two pairs and a nonnegative pause in milliseconds. Validates the entire path before pressing; releases the button if an action fails. Supports CRLF/CR lines and surrounding whitespace.', [
+        'Left-drags through absolute x,y pairs separated by semicolons or line breaks, pausing at each point. Example: 100,100; 200,200. Needs at least two pairs and a nonnegative pause in milliseconds. Validates the entire path before pressing; releases the button if an action fails. Supports CRLF/CR lines and surrounding whitespace.', [
     *numeric_inputs('ms'), guard(op('Gte', m.v('ms'), 0), 'Pause must be nonnegative.'),
-    m.set('path', op('Trim', normalized(p('points')))), m.set('point count', op('SplitCount', m.v('path'), '\n')),
+    m.set('path', op('Trim', op('TextReplace', ';', normalized(p('points')), '\n'))), m.set('point count', op('SplitCount', m.v('path'), '\n')),
     guard(op('Gte', m.v('point count'), 2), 'A drag path needs at least two x,y pairs.'),
     m.set('point number', 1), repeat(m.v('point count'), [
-        m.set('point', path_line), guard(op('Eq', op('SplitCount', m.v('point'), ','), 2), 'Each path line must contain exactly one x,y pair.'),
+        m.set('point', path_line), guard(op('Eq', op('SplitCount', m.v('point'), ','), 2), 'Each path entry must contain exactly one x,y pair.'),
         m.set('point x', op('Add', op('SplitPart', 1, m.v('point'), ','), 0)),
         m.set('point y', op('Add', op('SplitPart', 2, m.v('point'), ','), 0)),
         finite(m.v('point x'), 'Path coordinates must be finite numbers.'),
