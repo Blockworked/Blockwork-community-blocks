@@ -76,30 +76,32 @@ img.avatar.large { width: 64px; height: 64px; }
 .source-block > p { max-width: 70ch; }
 .canvas { overflow-x: auto; padding: 18px; border-radius: var(--radius-lg); border: 1px solid var(--glass-border);
   background-color: var(--bg2); background-image: radial-gradient(circle, var(--glass-border) 1px, transparent 1px); background-size: 20px 20px; }
-.src-stack { display: inline-flex; flex-direction: column; gap: 3px; min-width: max-content; }
-.src-block { display: flex; flex-direction: column; align-items: stretch; color: var(--blk-text); background: var(--blk); border: 1.3px solid var(--blk-line); border-radius: 5px; font-size: 12.5px; font-weight: 600; }
-.src-row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 7px; padding: 6px 12px; min-height: 38px; }
-.src-hat { border-radius: 14px 14px 5px 5px; margin-bottom: 2px; }
-.src-hat > .src-row { padding-top: 10px; }
-.src-hat .src-row > .src-word:first-child { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--blk-dim); }
-.src-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--def, #4c97ff); flex: none; }
-/* A C block: the mouth shows the canvas and holds the body, open to the right like the editor's. */
-.src-body { display: flex; flex-direction: column; gap: 3px; margin: 0 -1.3px 0 18px; padding: 4px 0 4px 6px; min-height: 22px;
-  background: var(--bg2); border: 1.3px solid var(--blk-line); border-right: 0; border-radius: 5px 0 0 5px; }
-.src-else { min-height: 28px; padding-top: 3px; padding-bottom: 3px; }
-.src-foot { height: 12px; }
-.src-word { white-space: nowrap; }
-.src-field { color: var(--blk-dim); font-weight: 400; font-size: 11.5px; white-space: nowrap; }
-.src-slot { display: inline-flex; align-items: center; min-height: 24px; min-width: 26px; padding: 2px 8px; border-radius: 5px; border: 1px solid var(--blk-line);
-  background: var(--blk-field); color: var(--blk-text); font-weight: 400; white-space: pre; }
-.src-text::before, .src-text::after { content: '"'; color: var(--blk-dim); }
-.src-number { font-variant-numeric: tabular-nums; }
-.src-choice { font-weight: 600; }
-.src-empty { min-width: 30px; }
-.src-bool { clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 8px 100%, 0 50%); border-radius: 0; }
-.src-reporter { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px 6px; min-height: 26px; padding: 2px 10px; border-radius: 999px;
-  border: 1px solid var(--blk-line); background: color-mix(in srgb, var(--blk) 75%, var(--blk-line)); }
-.src-param { border-color: color-mix(in srgb, var(--accent) 60%, var(--blk-line)); }
+/* Bodies use the same .blk shapes as every other block on the site (pages.ts);
+   these rules stack them, fill C blocks' mouths and shrink reporters in slots. */
+.src { display: inline-block; min-width: max-content; color: var(--blk-text); }
+.src-stack { display: flex; flex-direction: column; align-items: flex-start; }
+.src-stack > .blk { margin: 0; }
+.src-stack > .blk + .blk { margin-top: -8px; }
+.src .blk { max-width: none; }
+.src .blk-row { flex-wrap: nowrap; }
+.src .ico.accent { color: var(--accent); }
+.blk.hat { padding-bottom: 8px; }
+.blk.hat > .blk-row { border-top-left-radius: 12px; border-top-right-radius: 12px; }
+.blk-mouth.filled { width: auto; height: auto; min-height: 24px; margin: -1.3px 0; padding: 0 0 0 20px; background: none; border: 0; }
+.blk-mouth.filled::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 20px; box-sizing: border-box;
+  background: var(--blk); border: 1.3px solid var(--blk-line); border-width: 0 1.3px; }
+.blk-mouth.filled > .src-stack { position: relative; z-index: 1; padding: 1.3px 0; }
+.blk.wrap > .blk-row.foot:not(:last-of-type) { border-radius: 0 5px 5px 0; }
+.src .blk.reporter, .src .blk.boolean { vertical-align: middle; }
+.src .blk.reporter > .blk-row { min-height: 26px; padding: 2px 10px; gap: 5px 6px; }
+.src .blk.boolean { --h: 13px; }
+.src .blk.boolean > .blk-row { min-height: 25px; padding-top: 2px; padding-bottom: 2px; gap: 5px 6px; }
+.src .blk-row > .blk { margin: 0; }
+.slot-tag { margin-right: 7px; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: var(--blk-dim); }
+.slot.dd { gap: 4px; font-weight: 400; }
+.slot.dd svg, .slot.btn svg { flex: none; color: var(--blk-dim); }
+.slot.btn { gap: 5px; }
+.src .slot { white-space: pre; max-width: 360px; overflow: hidden; text-overflow: ellipsis; }
 
 pre.code { max-height: 640px; counter-reset: line; padding-left: 0; }
 pre.code .ln { display: block; padding-left: 56px; position: relative; }

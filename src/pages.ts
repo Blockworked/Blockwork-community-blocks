@@ -199,13 +199,13 @@ export function verifiedBadge(): string {
 export const BLOCK_NOTCH_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="8" viewBox="0 0 30 8"><path d="M0 0 L8 8 L22 8 L30 0 Z"/></svg>`;
 
 /** A Lucide icon as inline SVG, stroked in the given color. */
-function icon(name: string, color: string, size = 16): string {
+export function icon(name: string, color: string, size = 16): string {
   const body = ICONS[name] ?? ICONS.blocks;
   return `<svg class="ico" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${esc(color)}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
 }
 
-const NOTCH = `<svg class="notch" viewBox="0 0 30 10" aria-hidden="true"><path d="M0 0.6 L8 8.6 L22 8.6 L30 0.6"/></svg>`;
-const TAB = (cls = "tab") =>
+export const NOTCH = `<svg class="notch" viewBox="0 0 30 10" aria-hidden="true"><path d="M0 0.6 L8 8.6 L22 8.6 L30 0.6"/></svg>`;
+export const TAB = (cls = "tab") =>
   `<svg class="${cls}" viewBox="0 0 30 10" aria-hidden="true"><path d="M-0.4 -1 L0 0.6 L8 8.6 L22 8.6 L30 0.6 L30.4 -1" stroke="none"/><path d="M0 0.6 L8 8.6 L22 8.6 L30 0.6" fill="none"/></svg>`;
 
 /** One block, drawn as it looks in Blockwork's palette. */

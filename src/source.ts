@@ -2,7 +2,8 @@
 // the file itself as highlighted, numbered JSON. Pure functions, so they test
 // without a Worker.
 
-import { esc } from "./pages.ts";
+import { esc, icon, NOTCH, TAB } from "./pages.ts";
+import { ICONS, OPERATORS, ROWS } from "./block-rows.ts";
 import { blockView, type BlockView } from "./packs.ts";
 
 type Json = null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -19,45 +20,52 @@ export function words(name: string): string {
     .toLowerCase();
 }
 
-// What the editor calls the blocks whose type name reads badly.
-const STATEMENTS: Record<string, string> = {
-  SetVariable: "set",
-  ChangeVariable: "change",
-  IfElse: "if",
-  TryCatch: "try",
-  WithLock: "with lock",
-  ThrowError: "throw error",
-  Token: "",
-  Text: "type",
-  Key: "press key",
-  Button: "click",
-  Command: "run command",
-  CommandWait: "run command and wait",
-  SetClipboard: "set clipboard to",
-  WaitUntil: "wait until",
-  Retry: "retry",
-  EscapeLoop: "escape loop",
-  ContinueLoop: "continue loop",
-  StopMacro: "stop this macro",
-  Return: "return",
-  Wait: "wait (ms)",
+type Piece = { kind: string; [key: string]: any };
+interface Row { shape?: string; icon?: string; head: Piece[] | ((i: Obj) => Piece[]); mouths?: string[]; separators?: string[]; components?: any[] }
+
+const label = (text: string): Piece => ({ kind: "label", text });
+const value = (key: string, extra: object = {}): Piece => ({ kind: "value", key, ...extra });
+const dropdown = (key: string, options: [string, string][]): Piece => ({ kind: "dropdown", key, options: options.map(([v, l]) => ({ value: v, label: l })) });
+const DIRECTIONS: [string, string][] = [["Click", "Click"], ["Press", "Press"], ["Release", "Release"]];
+
+// The blocks blockstitch draws itself (InstructionBlock.qml), in the editor's own words.
+const CORE: Record<string, Row> = {
+  Wait: { head: [label("Wait"), value("duration", { tag: "MS" })] },
+  Text: { head: [label("Text"), value("text")] },
+  Key: { head: [label("Key"), value("key"), dropdown("direction", DIRECTIONS)] },
+  Button: { head: [label("Mouse button"), dropdown("button", []), dropdown("direction", DIRECTIONS)] },
+  MoveMouse: { head: [label("Move mouse"), dropdown("coordinate", [["Rel", "Relative"], ["Abs", "Absolute"]]), value("x", { tag: "X" }), value("y", { tag: "Y" })] },
+  Scroll: { head: [label("Scroll"), value("amount", { tag: "AMOUNT" }), dropdown("axis", [["Vertical", "Vertical"], ["Horizontal", "Horizontal"]])] },
+  CloseApp: { head: [label("Close app"), { kind: "button", icon: "app-window", text: (i: Obj) => String(i.name || "Choose app...") }] },
+  SetVariable: { head: [label("set"), { kind: "name", key: "name" }, label("to"), value("value")] },
+  ChangeVariable: { head: [label("change"), { kind: "name", key: "name" }, label("by"), value("value")] },
+  SetClipboard: { head: [label("set clipboard to"), value("value")] },
+  AddToList: { head: [label("add"), value("value"), label("to"), { kind: "name", key: "name" }] },
+  DeleteOfList: { head: [label("delete"), value("index"), label("of"), { kind: "name", key: "name" }] },
+  DeleteAllOfList: { head: [label("delete all of"), { kind: "name", key: "name" }] },
+  InsertIntoList: { head: [label("insert"), value("value"), label("at"), value("index"), label("of"), { kind: "name", key: "name" }] },
+  ReplaceItemOfList: { head: [label("replace item"), value("index"), label("of"), { kind: "name", key: "name" }, label("with"), value("value")] },
+  ReverseList: { head: [label("reverse"), { kind: "name", key: "name" }] },
+  Return: { shape: "cap", head: [label("return"), value("value")] },
+  EscapeLoop: { shape: "cap", head: [label("break loop")] },
+  ContinueLoop: { shape: "cap", head: [label("continue loop")] },
+  If: { mouths: ["body"], head: [label("if"), value("condition", { bool: true }), label("then")] },
+  IfElse: { mouths: ["then_body", "else_body"], separators: ["else"], head: [label("if"), value("condition", { bool: true }), label("then")] },
+  Repeat: { mouths: ["body"], head: [label("repeat"), value("count")] },
+  Forever: { mouths: ["body"], head: [label("forever")] },
+  While: { mouths: ["body"], head: [label("while"), value("condition", { bool: true })] },
+  Comment: { head: [{ kind: "text", key: "comment" }] },
 };
 
-// Field names worth spelling out; the rest are shown as their own words.
-const BODY_LABELS: Record<string, string> = { body: "", else_body: "else", catch_body: "on error" };
-
-// Fields the block's own word already names.
-const QUIET_FIELDS = new Set(["condition", "count", "name", "value", "times"]);
-
-const INFIX: Record<string, string> = {
-  Add: "+", Sub: "−", Mul: "×", Div: "÷", Mod: "mod", Eq: "=", Neq: "≠",
-  Lt: "<", Gt: ">", Lte: "≤", Gte: "≥", And: "and", Or: "or", Join: "join",
-};
-
-const OPS: Record<string, string> = {
-  Not: "not", Length: "length of", LastError: "error message", IndexOf: "position of",
-  LetterOf: "letter of", SplitPart: "piece of", SplitCount: "pieces in", Substring: "letters of",
-  TextReplace: "replace", RegexReplace: "regex replace", TextCheck: "text check", JsonGet: "JSON value",
+// Variants serialized as tuples, and the field names the editor gives their parts (frontend.rs).
+const TUPLES: Record<string, string[]> = {
+  Wait: ["duration"], Command: ["command"], CommandWait: ["command"], SetVariable: ["name", "value"], ChangeVariable: ["name", "value"],
+  SetClipboard: ["value"], Return: ["value"], Log: ["value"], ThrowError: ["message"], BlockHeader: ["block_id"], PasteText: ["text"],
+  ShowMessage: ["message"], WhenAt: ["at"], StopMacroNamed: ["target"], WhenFileChanged: ["path"], WhenIdle: ["minutes"],
+  WhenCron: ["expression"], WhenBatteryDischargedTo: ["threshold"], WhenBatteryChargedTo: ["threshold"], WhenTime: ["schedule", "time"],
+  WhenKey: ["key", "direction"], RunBranch: ["name"], Comment: ["comment"], WhenSignal: ["name"],
+  // Recorded input, under Token.
+  Text: ["text"], Key: ["key", "direction"], Button: ["button", "direction"], MoveMouse: ["x", "y", "coordinate"], Scroll: ["amount", "axis"],
 };
 
 interface Ctx {
@@ -66,10 +74,6 @@ interface Ctx {
 
 function isInstruction(v: Json): v is Obj {
   return isObj(v) && "id" in v && "kind" in v;
-}
-
-function isBody(v: Json): v is Obj[] {
-  return Array.isArray(v) && v.length > 0 && v.every(isInstruction);
 }
 
 function variantOf(kind: Json): [string, Json] {
@@ -81,94 +85,178 @@ function variantOf(kind: Json): [string, Json] {
   return ["Unknown", kind];
 }
 
-function defLabel(def: Obj | undefined, args: Json[], ctx: Ctx): string {
-  if (!def || !Array.isArray(def.pieces)) return `<span class="src-word">call</span>${args.map((a) => value(a, ctx)).join("")}`;
-  let i = 0;
+/** A saved instruction in the editor's shape: {type, ...fields}. */
+export function flatten(ins: Obj): Obj {
+  let [type, payload] = variantOf(ins.kind);
+  if (type === "Token") [type, payload] = variantOf(payload);
+  const out: Obj = { type, id: ins.id ?? "" };
+  if (isObj(payload) && !("kind" in payload) && !(type === "WhenSignal")) return { ...payload, ...out };
+  const names = TUPLES[type] ?? ["value"];
+  const parts = Array.isArray(payload) ? payload : payload === null ? [] : [payload];
+  // A signal name is {value, expression}.
+  parts.forEach((p, i) => (out[names[i] ?? `arg${i}`] = isObj(p) && "expression" in p && typeof p.value === "string" ? { kind: "Text", value: p.value } : p));
+  return out;
+}
+
+function attempt<T>(f: () => T, fallback: T): T {
+  try {
+    return f();
+  } catch {
+    return fallback;
+  }
+}
+
+const CHEVRON = icon("chevron-down", "currentColor", 12);
+
+function nameSlot(name: Json): string {
+  return `<span class="slot dd">${esc(name) || "&nbsp;"}${CHEVRON}</span>`;
+}
+
+/** A value slot: a literal in a box, or a reporter dropped into it. */
+function slot(v: Json, ctx: Ctx, opts: { bool?: boolean; tag?: string } = {}): string {
+  const tag = opts.tag ? `<span class="slot-tag">${esc(opts.tag)}</span>` : "";
+  if (isObj(v) && (v.kind === "Op" || v.kind === "Var" || v.kind === "Param" || v.kind === "Call")) return reporter(v, ctx);
+  if (v === null || v === undefined || (isObj(v) && v.kind === "Bool" && typeof v.value !== "boolean")) {
+    return opts.bool ? `<span class="slot bool"></span>` : `<span class="slot">${tag}&nbsp;</span>`;
+  }
+  const text = isObj(v) ? v.value : v;
+  return `<span class="slot">${tag}${esc(String(text ?? "")).replace(/\n/g, "↵") || "&nbsp;"}</span>`;
+}
+
+function reporterShell(bool: boolean, inner: string): string {
+  return `<span class="blk ${bool ? "boolean" : "reporter"}"><span class="blk-row">${inner}</span></span>`;
+}
+
+function defPieces(def: Obj | undefined, args: Json[], ctx: Ctx, asParams: boolean): string {
+  if (!def || !Array.isArray(def.pieces)) return `<span>custom block</span>`;
+  let n = 0;
   return def.pieces
+    .filter(isObj)
     .map((p) => {
-      if (!isObj(p)) return "";
-      if (p.kind === "Label") return `<span class="src-word">${esc(p.text)}</span>`;
-      const arg = args[i++];
-      return arg === undefined ? `<span class="src-slot src-param">${esc(p.name)}</span>` : value(arg, ctx);
+      if (p.kind === "Label") return `<span>${esc(p.text)}</span>`;
+      if (p.kind !== "Input") return "";
+      const bool = p.value_type === "Bool";
+      if (asParams) return reporterShell(bool, `<span>${esc(p.name)}</span>`);
+      return slot(args[n++] ?? null, ctx, { bool });
     })
     .join("");
 }
 
-/** A value slot: a literal, a variable, an input of the block, or a nested reporter. */
-export function value(v: Json, ctx: Ctx = { defs: new Map() }): string {
-  if (v === null || v === undefined) return `<span class="src-slot src-empty"></span>`;
-  if (typeof v === "string") return `<span class="src-slot src-choice">${esc(words(v))}</span>`;
-  if (typeof v === "number" || typeof v === "boolean") return `<span class="src-slot">${esc(v)}</span>`;
-  if (Array.isArray(v)) return v.map((x) => value(x, ctx)).join("");
-  switch (v.kind) {
-    case "Text":
-      return `<span class="src-slot src-text">${esc(v.value).replace(/\n/g, "↵")}</span>`;
-    case "Number":
-      return `<span class="src-slot src-number">${esc(v.value)}</span>`;
-    case "Bool":
-      return typeof v.value === "boolean" ? `<span class="src-slot">${v.value}</span>` : `<span class="src-slot src-empty src-bool"></span>`;
-    case "Var":
-      return `<span class="src-reporter">${esc(v.name)}</span>`;
-    case "Param":
-      return `<span class="src-reporter src-param">${esc(v.name)}</span>`;
-    case "Call": {
-      const def = ctx.defs.get(String(v.block_id));
-      return `<span class="src-reporter">${defLabel(def, Array.isArray(v.args) ? v.args : [], ctx)}</span>`;
-    }
-    case "Op": {
-      const [op, data] = variantOf(v.op);
-      const args = Array.isArray(v.args) ? v.args : [];
-      const extra = data === null ? "" : value(data, ctx);
-      if (INFIX[op] && args.length === 2) {
-        return `<span class="src-reporter">${value(args[0], ctx)}<span class="src-word">${esc(INFIX[op])}</span>${value(args[1], ctx)}</span>`;
-      }
-      return `<span class="src-reporter"><span class="src-word">${esc(OPS[op] ?? words(op))}</span>${extra}${args.map((a) => value(a, ctx)).join("")}</span>`;
-    }
-  }
-  // Anything else: its fields in order.
-  return Object.entries(v)
-    .map(([k, x]) => `<span class="src-word">${esc(words(k))}</span>${value(x, ctx)}`)
-    .join("");
+function defIcon(def: Obj | undefined, size = 16): string {
+  const color = def && typeof def.color === "string" && /^#[0-9a-fA-F]{6}$/.test(def.color) ? def.color : "#4C97FF";
+  const name = def && typeof def.icon === "string" && /^[a-z0-9-]{1,64}$/.test(def.icon) ? def.icon : "blocks";
+  return icon(name, color, size);
 }
 
-function statement(ins: Obj, ctx: Ctx): string {
-  const [name, payload] = variantOf(ins.kind);
-  if (name === "BlockHeader") {
-    const def = ctx.defs.get(String(payload));
-    return `<div class="src-block src-hat"><div class="src-row"><span class="src-word">define</span><span class="src-dot"></span>${defLabel(def, [], ctx)}</div></div>`;
+/** A reporter: an oval, or a hexagon for a true/false one, laid out as the editor lays it out. */
+function reporter(v: Obj, ctx: Ctx): string {
+  if (v.kind === "Var") return reporterShell(false, `<span>${esc(v.name)}</span>`);
+  if (v.kind === "Param") return reporterShell(false, `<span>${esc(v.name)}</span>`);
+  if (v.kind === "Call") {
+    const def = ctx.defs.get(String(v.block_id));
+    return reporterShell(def?.shape === "ReturnsBool", `${defIcon(def, 14)}${defPieces(def, Array.isArray(v.args) ? v.args : [], ctx, false)}`);
   }
-  let label = name in STATEMENTS ? STATEMENTS[name] : words(name);
-  let inline = "";
-  const bodies: [string, Obj[]][] = [];
-  if (name === "CallBlock" && isObj(payload)) {
-    const def = ctx.defs.get(String(payload.block_id));
-    label = "";
-    inline = defLabel(def, Array.isArray(payload.args) ? payload.args : [], ctx);
-  } else if ((name === "SetVariable" || name === "ChangeVariable") && Array.isArray(payload)) {
-    inline = `<span class="src-slot src-choice">${esc(payload[0])}</span><span class="src-word">${name === "SetVariable" ? "to" : "by"}</span>${value(payload[1], ctx)}`;
-  } else if (name === "Token" && isObj(payload)) {
-    // Recorded input: {"MoveMouse": [x, y, "Abs"]}.
-    const [inner, data] = variantOf(payload);
-    label = words(inner);
-    inline = value(data, ctx);
-  } else if (isObj(payload) && !("kind" in payload)) {
-    for (const [k, x] of Object.entries(payload)) {
-      if (k in BODY_LABELS || isBody(x)) bodies.push([BODY_LABELS[k] ?? words(k), Array.isArray(x) ? (x as Obj[]) : []]);
-      else inline += `${QUIET_FIELDS.has(k) ? "" : `<span class="src-field">${esc(words(k))}</span>`}${value(x, ctx)}`;
+  const [op] = variantOf(v.op);
+  const spec = OPERATORS[op];
+  const args = Array.isArray(v.args) ? v.args : [];
+  if (!spec) return reporterShell(false, `<span>${esc(words(op))}</span>${args.map((a) => slot(a, ctx)).join("")}`);
+  const infix: string[] = Array.isArray(spec.infix) ? spec.infix : spec.infix ? [spec.infix] : [];
+  const enumArg = spec.enumArg;
+  const parts: string[] = [];
+  if (spec.prefix) parts.push(`<span>${esc(spec.prefix)}</span>`);
+  args.forEach((a, i) => {
+    if (i > 0) {
+      const gap = infix.length ? infix[Math.min(i - 1, infix.length - 1)] : "";
+      if (gap) parts.push(`<span>${esc(gap)}</span>`);
     }
-  } else if (payload !== null) {
-    inline = value(payload, ctx);
+    if (enumArg && enumArg.index === i && isObj(a) && a.kind === "Text") {
+      const options = Array.isArray(enumArg.options) ? enumArg.options : [];
+      const chosen = options.find((o: any) => o.value === a.value);
+      parts.push(nameSlot(chosen ? chosen.label : a.value));
+    } else {
+      const bool = spec.result === "bool" && ["And", "Or", "Not"].includes(op);
+      parts.push(slot(a, ctx, { bool }));
+    }
+  });
+  if (spec.suffix) parts.push(`<span>${esc(spec.suffix)}</span>`);
+  return reporterShell(spec.result === "bool", parts.join(""));
+}
+
+function piece(p: Piece, ins: Obj, ctx: Ctx): string {
+  if (typeof p.when === "function" && !attempt(() => p.when(ins), true)) return "";
+  const raw = (k: string) => (p.index !== undefined ? (ins[k] as any)?.[p.index] : ins[k]);
+  switch (p.kind) {
+    case "label":
+      return `<span>${esc(p.text)}</span>`;
+    case "value":
+      return slot(raw(p.key) ?? null, ctx, { bool: !!p.bool, tag: p.tag });
+    case "text":
+      return `<span class="slot">${esc(raw(p.key)) || "&nbsp;"}</span>`;
+    case "name":
+      return nameSlot(raw(p.key));
+    case "dropdown": {
+      const stored = raw(p.key);
+      const current = typeof p.decode === "function" ? attempt(() => p.decode(stored, ins), stored) : stored;
+      const options = typeof p.options === "function" ? attempt(() => p.options(ins), []) : Array.isArray(p.options) ? p.options : [];
+      const chosen = options.find((o: any) => o.value === current);
+      return nameSlot(chosen ? chosen.label : typeof current === "object" ? "" : current);
+    }
+    case "button": {
+      const text = typeof p.text === "function" ? attempt(() => p.text(ins), "") : p.text ?? "";
+      return `<span class="slot btn">${p.icon ? icon(p.icon, "currentColor", 13) : ""}${esc(text)}</span>`;
+    }
   }
-  const head = `<div class="src-row">${label ? `<span class="src-word">${esc(label)}</span>` : ""}${inline}</div>`;
-  if (!bodies.length) return `<div class="src-block">${head}</div>`;
-  const arms = bodies
-    .map(([l, body], i) => `${i ? `<div class="src-row src-else"><span class="src-word">${esc(l)}</span></div>` : ""}<div class="src-body">${stack(body, ctx)}</div>`)
-    .join("");
-  return `<div class="src-block src-c">${head}${arms}<div class="src-foot"></div></div>`;
+  return "";
+}
+
+function rowFor(type: string): Row | undefined {
+  return (ROWS as Record<string, Row>)[type] ?? CORE[type];
+}
+
+/** One statement, drawn as the editor draws it, with any bodies inside. */
+function statement(raw: Obj, ctx: Ctx): string {
+  const ins = flatten(raw);
+  const type = String(ins.type);
+  let head = "";
+  let shape = "stack";
+  let mouths: Obj[][] = [];
+  let separators: string[] = [];
+  if (type === "BlockHeader" || type === "CallBlock") {
+    const def = ctx.defs.get(String(ins.block_id));
+    head = defIcon(def) + defPieces(def, Array.isArray(ins.args) ? ins.args : [], ctx, type === "BlockHeader");
+    if (type === "BlockHeader") shape = "hat";
+    else if (def?.shape === "Ending") shape = "ending";
+    if (Array.isArray(ins.branches)) mouths = ins.branches.map((b) => (Array.isArray(b) ? b.filter(isInstruction) : []));
+  } else {
+    const row = rowFor(type);
+    const pieces: Piece[] = row ? (typeof row.head === "function" ? attempt(() => (row.head as any)(ins), []) : row.head) : [label(words(type))];
+    const extra = (row?.components ?? []).filter((c: any) =>
+      typeof c.present === "function" ? attempt(() => c.present(ins), false) : ins[c.key] !== undefined && ins[c.key] !== null && ins[c.key] !== "",
+    );
+    const iconName = (ICONS as Record<string, string>)[type] ?? row?.icon ?? "blocks";
+    const header = row?.shape === "header" || (!row?.shape && type.startsWith("When"));
+    head = `${icon(iconName, "currentColor", 16).replace('class="ico"', `class="ico${header ? " accent" : ""}"`)}${pieces.map((p) => piece(p, ins, ctx)).join("")}${extra
+      .flatMap((c: any) => c.pieces ?? [])
+      .map((p: Piece) => piece(p, ins, ctx))
+      .join("")}`;
+    if (!row) head += Object.entries(ins).filter(([k]) => k !== "type" && k !== "id").map(([k, v]) => `<span class="dim">${esc(words(k))}</span>${slot(v, ctx)}`).join("");
+    shape = header ? "hat" : row?.shape === "cap" ? "ending" : "stack";
+    mouths = (row?.mouths ?? []).map((k) => (Array.isArray(ins[k]) ? (ins[k] as Json[]).filter(isInstruction) : []));
+    separators = row?.separators ?? [];
+  }
+  if (!mouths.length) {
+    return `<div class="blk ${shape}"><div class="blk-row">${head}</div>${shape === "hat" ? "" : NOTCH}${shape === "ending" ? "" : TAB()}</div>`;
+  }
+  let html = `<div class="blk wrap"><div class="blk-row">${head}</div>`;
+  mouths.forEach((body, k) => {
+    const sep = k < mouths.length - 1 ? separators[k] ?? "" : "";
+    html += `<div class="blk-mouth filled">${stack(body, ctx)}</div><div class="blk-row foot">${sep ? `<span>${esc(sep)}</span>` : ""}</div>`;
+  });
+  return `${html}${NOTCH}${shape === "ending" ? "" : TAB()}</div>`;
 }
 
 function stack(list: Obj[], ctx: Ctx): string {
-  return list.map((i) => statement(i, ctx)).join("");
+  return `<div class="src-stack">${list.map((i) => statement(i, ctx)).join("")}</div>`;
 }
 
 export interface BlockSource {
@@ -217,7 +305,7 @@ export function packSource(pack: unknown): BlockSource[] {
         .filter((p) => p.kind === "Input")
         .map((p) => ({ name: String(p.name ?? ""), type: String(p.value_type ?? "Any"), default: literal(p.default_value) })),
       view: blockView(d),
-      html: body ? `<div class="src-stack">${stack(body, ctx)}</div>` : "",
+      html: body ? `<div class="src">${stack(body, ctx)}</div>` : "",
     };
   });
 }

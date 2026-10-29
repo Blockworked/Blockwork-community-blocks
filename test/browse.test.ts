@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { filterPacks, matchScore, readFilters, type ListedPack } from "../src/browse.ts";
 import { checkComment, commentHtml, MAX_COMMENT } from "../src/comments.ts";
-import { highlightJson, packSource, value } from "../src/source.ts";
+import { flatten, highlightJson, packSource } from "../src/source.ts";
 
 const row = (o: Partial<ListedPack>): ListedPack => ({
   id: 1, pack_id: "p", sha256: "", name: "P", description: "", version: "1", blocks: "[]", capabilities: "[]",
@@ -47,8 +47,8 @@ test("every starter pack's blocks draw, with no unknown parts", () => {
     const blocks = packSource(JSON.parse(readFileSync(`packs/${file}`, "utf8")));
     assert.ok(blocks.length > 0, file);
     for (const b of blocks) {
-      assert.ok(b.html.includes("src-hat"), `${file}: ${b.name} has no body`);
-      assert.ok(!/unknown|undefined|\[object/i.test(b.html), `${file}: ${b.name}`);
+      assert.ok(b.html.includes('class="blk hat"'), `${file}: ${b.name} has no body`);
+      assert.ok(!/unknown|undefined|\[object|custom block|class="dim"/i.test(b.html), `${file}: ${b.name}`);
     }
   }
 });
@@ -58,14 +58,20 @@ test("source view escapes whatever a pack says", () => {
   const pack = {
     blocks: {
       block_defs: [{ id: "d", pieces: [{ kind: "Label", text: evil }], description: evil, color: "red;}" }],
-      strands: [{ instructions: [{ id: "1", kind: { BlockHeader: "d" } }, { id: "2", kind: { Log: { kind: "Text", value: evil } } }] }],
+      strands: [{ instructions: [{ id: "1", kind: { BlockHeader: "d" } }, { id: "2", kind: { Log: { kind: "Text", value: evil } } }, { id: "3", kind: { SetVariable: [evil, { kind: "Var", name: evil }] } }] }],
     },
   };
   const [b] = packSource(pack);
   assert.ok(!b.html.includes("<img"));
   assert.equal(b.color, "");
-  assert.ok(!value({ kind: "Var", name: evil }).includes("<img"));
   assert.ok(!highlightJson(JSON.stringify({ [evil]: evil })).includes("<img"));
+});
+
+test("saved instructions take the editor's field names", () => {
+  assert.deepEqual(flatten({ id: "a", kind: { SetVariable: ["n", { kind: "Number", value: 1 }] } }), { type: "SetVariable", id: "a", name: "n", value: { kind: "Number", value: 1 } });
+  assert.deepEqual(flatten({ id: "b", kind: { Token: { MoveMouse: [1, 2, "Abs"] } } }), { type: "MoveMouse", id: "b", x: 1, y: 2, coordinate: "Abs" });
+  assert.deepEqual(flatten({ id: "c", kind: { WindowAction: { action: "Focus", by: "Title" } } }), { type: "WindowAction", id: "c", action: "Focus", by: "Title" });
+  assert.deepEqual(flatten({ id: "d", kind: "StopMacro" }), { type: "StopMacro", id: "d" });
 });
 
 test("highlighted JSON keeps one line per line", () => {

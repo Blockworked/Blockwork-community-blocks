@@ -16,6 +16,9 @@ packs; every upload is reviewed before it's listed.
   versions and comments. `/packs/<id>/source` draws each block's body as
   blocks or shows the pack file (`?view=json`, `?v=<sha256>` for an older
   version). `/authors/<public id>` lists one account's packs.
+  The source view draws bodies with the editor's own block rows, words and
+  icons, copied into `src/block-rows.ts` by `node scripts/extract-block-rows.mjs
+  ../Blockwork ../blockstitch`; rerun it when the editor's blocks change.
 - Signed-in accounts can comment on a pack; the writer, the pack's owner and
   admins can delete a comment.
 - `/submit` takes uploads, `/me` shows their status, `/admin` is the review
