@@ -3,7 +3,9 @@
 
 import { callback, currentUser, isAdmin, login, logout, PROVIDERS, type Provider, type User } from "./auth.ts";
 import { BLOCK_NOTCH_SVG, blockTags, capabilityList, esc, loginPage, message, page, verifiedBadge } from "./pages.ts";
-import { blockView, OFFICIAL_OWNER, readPack, sha256Hex } from "./packs.ts";
+import { authorPage, home, packPage, published, sourcePage, sourceView, withBlockViews, type VersionRow } from "./browse.ts";
+import { deleteComment, postComment } from "./comments.ts";
+import { OFFICIAL_OWNER, readPack, sha256Hex } from "./packs.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 import { setMainSite, SITE_JS } from "./site-nav.ts";
 
@@ -24,25 +26,6 @@ export interface Env {
 
 const MAX_PENDING = 5;
 const MAX_PER_DAY = 20;
-
-interface VersionRow {
-  id: number;
-  pack_id: string;
-  sha256: string;
-  name: string;
-  description: string;
-  version: string;
-  blocks: string;
-  block_views: string;
-  capabilities: string;
-  status: string;
-  reason: string;
-  submitted_by: string;
-  submitted_at: number;
-  author: string;
-  /** Only set by queries that join the pack's owner. */
-  owner_id?: string;
-}
 
 const SECURITY_HEADERS: Record<string, string> = {
   "Content-Security-Policy":
@@ -91,7 +74,27 @@ async function route(req: Request, env: Env): Promise<Response> {
 
   const user = await currentUser(req, env);
   const admin = isAdmin(env, user);
-  if (method === "GET" && path === "/") return home(env, user, admin);
+  if (method === "GET" && path === "/") return home(env, user, admin, url.searchParams);
+  if ((m = path.match(/^\/packs\/([^/]{1,400})(\/source|\/comments)?$/))) {
+    let id = "";
+    try {
+      id = decodeURIComponent(m[1]);
+    } catch {}
+    if (method === "GET" && !m[2]) return packPage(env, user, admin, id);
+    if (method === "GET" && m[2] === "/source") return sourcePage(env, user, admin, id, url.searchParams);
+    if (method === "POST" && m[2] === "/comments") {
+      if (!user) return new Response(null, { status: 303, headers: { Location: `/login?next=${encodeURIComponent(`/packs/${id}#comments`)}` } });
+      return postComment(req, env, user, admin, id, async (error, draft) => {
+        const res = await packPage(env, user, admin, id, error, draft);
+        return new Response(res.body, { status: 400, headers: res.headers });
+      });
+    }
+  }
+  if (method === "GET" && (m = path.match(/^\/authors\/([a-z0-9]{1,32})$/))) return authorPage(env, user, admin, m[1]);
+  if (method === "POST" && (m = path.match(/^\/comments\/(\d+)\/delete$/))) {
+    if (!user) return message(user, admin, "Not found", "That comment doesn't exist.", 404);
+    return deleteComment(env, user, admin, Number(m[1]));
+  }
   if (method === "GET" && path === "/login") return loginPage(user, url.searchParams.get("next") ?? "");
   if ((m = path.match(/^\/auth\/(\w+)\/(login|callback)$/)) && m[1] in PROVIDERS && method === "GET") {
     const provider = m[1] as Provider;
@@ -109,45 +112,13 @@ async function route(req: Request, env: Env): Promise<Response> {
     if (!admin || !user) return message(user, admin, "Not found", "There's nothing here.", 404);
     if (method === "GET" && path === "/admin") return reviewQueue(env, user, admin);
     if ((m = path.match(/^\/admin\/versions\/(\d+)$/))) {
-      return method === "POST" ? reviewDecision(req, env, Number(m[1])) : reviewPage(env, user, admin, Number(m[1]));
+      return method === "POST" ? reviewDecision(req, env, Number(m[1])) : reviewPage(env, user, admin, Number(m[1]), url.searchParams);
     }
+    if (method === "GET" && (m = path.match(/^\/admin\/versions\/(\d+)\/file$/))) return reviewFile(env, Number(m[1]));
     if (method === "POST" && (m = path.match(/^\/admin\/packs\/([^/]+)$/))) return setListed(req, env, decodeURIComponent(m[1]));
     if (method === "POST" && (m = path.match(/^\/admin\/users\/([^/]+)$/))) return setBanned(req, env, decodeURIComponent(m[1]));
   }
   return message(user, admin, "Not found", "There's nothing here.", 404);
-}
-
-/** Each listed pack's newest approved version. */
-async function published(env: Env): Promise<VersionRow[]> {
-  const { results } = await env.DB.prepare(
-    `SELECT v.*, u.name AS author, p.owner_id AS owner_id FROM versions v
-     JOIN packs p ON p.id = v.pack_id JOIN users u ON u.id = p.owner_id
-     WHERE p.listed = 1 AND u.banned = 0
-       AND v.id = (SELECT MAX(id) FROM versions WHERE pack_id = p.id AND status = 'approved')
-     ORDER BY v.name COLLATE NOCASE`,
-  ).all<VersionRow>();
-  return withBlockViews(env, results);
-}
-
-/** Fills in block_views for versions saved before the site kept them, from their pack files, once. */
-export async function withBlockViews<T extends { id: number; sha256: string; block_views: string }>(env: Env, rows: T[]): Promise<T[]> {
-  const missing = rows.filter((v) => !v.block_views);
-  if (!missing.length) return rows;
-  const updates: D1PreparedStatement[] = [];
-  await Promise.all(
-    missing.map(async (v) => {
-      const object = await env.PACKS.get(`packs/${v.sha256}.json`);
-      if (!object) return;
-      try {
-        const defs = JSON.parse(await object.text())?.blocks?.block_defs;
-        if (!Array.isArray(defs)) return;
-        v.block_views = JSON.stringify(defs.map(blockView));
-        updates.push(env.DB.prepare("UPDATE versions SET block_views = ? WHERE id = ?").bind(v.block_views, v.id));
-      } catch {}
-    }),
-  );
-  if (updates.length) await env.DB.batch(updates);
-  return rows;
 }
 
 async function indexJson(env: Env): Promise<Response> {
@@ -190,20 +161,6 @@ function packCard(v: VersionRow, extra = ""): string {
   return `<div class="card"><h3>${esc(v.name)} <span class="version">${esc(v.version)}</span></h3>
     <p class="muted by">by ${esc(v.author)}${v.owner_id === OFFICIAL_OWNER ? verifiedBadge() : ""}</p><p>${esc(v.description)}</p>
     ${blockTags(v)}${capabilityList(JSON.parse(v.capabilities))}${extra}</div>`;
-}
-
-async function home(env: Env, user: User | null, admin: boolean): Promise<Response> {
-  const packs = await published(env);
-  const list = packs.length ? packs.map((v) => packCard(v)).join("") : `<p class="muted">No packs yet.</p>`;
-  return page(
-    "Packs",
-    user,
-    admin,
-    `<section class="hero"><h1>${esc(env.LIBRARY_NAME)}</h1>
-     <p>Custom blocks shared by the Blockwork community. To add a pack, click Browse under My Blocks in the editor.
-     Every pack is reviewed before it's listed, and Blockwork tells you what its blocks can do before you add them.</p>
-     <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a></p></section>${list}`,
-  );
 }
 
 function submitForm(user: User, admin: boolean, error = ""): Response {
@@ -300,7 +257,7 @@ async function reviewQueue(env: Env, user: User, admin: boolean): Promise<Respon
   return page("Review", user, admin, `<h1>Waiting for review</h1>${list || `<p class="muted">Nothing to review.</p>`}`);
 }
 
-async function reviewPage(env: Env, user: User, admin: boolean, id: number): Promise<Response> {
+async function reviewPage(env: Env, user: User, admin: boolean, id: number, params: URLSearchParams): Promise<Response> {
   const v = await env.DB.prepare(
     `SELECT v.*, u.name AS author, u.banned AS banned, p.listed AS listed FROM versions v
      JOIN users u ON u.id = v.submitted_by JOIN packs p ON p.id = v.pack_id WHERE v.id = ?`,
@@ -310,10 +267,12 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number): Pro
   if (!v) return message(user, admin, "Not found", "That submission doesn't exist.", 404);
   await withBlockViews(env, [v]);
   const object = await env.PACKS.get(`packs/${v.sha256}.json`);
-  let source = object ? await object.text() : "(file missing)";
-  try {
-    source = JSON.stringify(JSON.parse(source), null, 2);
-  } catch {}
+  const base = `/admin/versions/${v.id}`;
+  const source = sourceView(object ? await object.text() : null, params.get("view") === "json" ? "json" : "blocks", {
+    blocks: `${base}#file`,
+    json: `${base}?view=json#file`,
+    file: `${base}/file`,
+  });
   const previous = await env.DB.prepare(
     "SELECT version, sha256 FROM versions WHERE pack_id = ? AND status = 'approved' AND id < ? ORDER BY id DESC LIMIT 1",
   )
@@ -334,13 +293,20 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number): Pro
      <p>${esc(v.description)}</p>${blockTags(v)}
      <h2>What it can do</h2>${capabilityList(JSON.parse(v.capabilities))}
      <h2>Decision</h2>${decide}
-     <h2>File</h2><pre>${esc(source.slice(0, 200_000))}</pre>
+     <h2 id="file">File</h2>${source}
      <h2>Moderation</h2>
      <form class="inline" method="post" action="/admin/packs/${encodeURIComponent(v.pack_id)}">
        <button name="action" value="${v.listed ? "unlist" : "list"}">${v.listed ? "Take the pack down" : "List the pack again"}</button></form>
      <form class="inline" method="post" action="/admin/users/${encodeURIComponent(v.submitted_by)}">
        <button name="action" value="${v.banned ? "unban" : "ban"}">${v.banned ? "Unban the submitter" : "Ban the submitter"}</button></form>`,
   );
+}
+
+async function reviewFile(env: Env, id: number): Promise<Response> {
+  const v = await env.DB.prepare("SELECT sha256 FROM versions WHERE id = ?").bind(id).first<{ sha256: string }>();
+  const object = v ? await env.PACKS.get(`packs/${v.sha256}.json`) : null;
+  if (!object) return new Response("Not found", { status: 404 });
+  return new Response(object.body, { headers: { "Content-Type": "application/json" } });
 }
 
 async function reviewDecision(req: Request, env: Env, id: number): Promise<Response> {

@@ -9,6 +9,15 @@ packs; every upload is reviewed before it's listed.
   `official` marks the team account's packs (Blockwork shows a verified
   badge for them, from this library only).
 - `GET /packs/<sha256>.json` serves an approved pack file.
+- `/` lists packs with search (names, blocks, descriptions, authors) and
+  filters for permissions, official packs and sort order, all as query
+  parameters (`?q=&uses=&official=1&sort=`).
+- `/packs/<id>` is a pack's page: its blocks, what they can do, its
+  versions and comments. `/packs/<id>/source` draws each block's body as
+  blocks or shows the pack file (`?view=json`, `?v=<sha256>` for an older
+  version). `/authors/<public id>` lists one account's packs.
+- Signed-in accounts can comment on a pack; the writer, the pack's owner and
+  admins can delete a comment.
 - `/submit` takes uploads, `/me` shows their status, `/admin` is the review
   queue (approve, reject with a reason, take a pack down, ban an account).
 

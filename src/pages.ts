@@ -5,6 +5,7 @@ import { PROVIDERS } from "./auth.ts";
 import { blockName, CAPABILITIES, type BlockView } from "./packs.ts";
 import { ICONS } from "./icons.ts";
 import { SITE_NAV_CSS, siteFooter, siteHeader } from "./site-nav.ts";
+import { BROWSE_CSS } from "./browse-css.ts";
 
 export function esc(value: unknown): string {
   return String(value ?? "").replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -160,6 +161,7 @@ img.avatar { width: 22px; height: 22px; border-radius: 50%; }
   .subbar nav a { padding: 6px 8px; }
   .site-footer .copyright { margin-left: 0; }
 }
+${BROWSE_CSS}
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 `;
 

@@ -157,7 +157,9 @@ export async function callback(req: Request, env: Env, provider: Provider): Prom
   const now = Date.now();
   // Name and avatar follow the provider; banned stays as it was.
   await env.DB.prepare(
-    "INSERT INTO users (id, name, avatar, created_at) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, avatar = excluded.avatar",
+    // public_id names the account in author page links, so provider ids stay private.
+    `INSERT INTO users (id, name, avatar, created_at, public_id) VALUES (?, ?, ?, ?, lower(hex(randomblob(6))))
+     ON CONFLICT(id) DO UPDATE SET name = excluded.name, avatar = excluded.avatar`,
   )
     .bind(profile.id, profile.name.slice(0, 80), profile.avatar, now)
     .run();

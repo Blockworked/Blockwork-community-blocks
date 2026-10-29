@@ -16,7 +16,7 @@ const q = (s) => `'${String(s).replace(/'/g, "''")}'`;
 const now = Date.now();
 const owner = OFFICIAL_OWNER;
 const sql = [
-  `INSERT INTO users (id, name, created_at) VALUES (${q(owner)}, 'Blockworked', ${now}) ON CONFLICT (id) DO UPDATE SET name = excluded.name;`,
+  `INSERT INTO users (id, name, created_at, public_id) VALUES (${q(owner)}, 'Blockworked', ${now}, 'blockworked') ON CONFLICT (id) DO UPDATE SET name = excluded.name;`,
 ];
 for (const file of readdirSync("packs").filter((f) => f.endsWith(".json"))) {
   const path = join("packs", file);
