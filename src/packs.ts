@@ -12,8 +12,24 @@ export interface PackMeta {
   description: string;
   version: string;
   blocks: string[];
+  /** How each block looks, for drawing it on the site. */
+  views: BlockView[];
   capabilities: string[];
 }
+
+/** What the site needs to draw a block the way Blockwork's canvas does. */
+export interface BlockView {
+  shape: "Normal" | "Ending" | "ReturnsValue" | "ReturnsBool";
+  color: string;
+  icon: string;
+  description: string;
+  pieces: PieceView[];
+}
+
+export type PieceView =
+  | { kind: "Label"; text: string; optional: boolean }
+  | { kind: "Input"; name: string; bool: boolean; optional: boolean; value: string | null }
+  | { kind: "Branch"; name: string };
 
 // Same order and wording as the app's import review.
 export const CAPABILITIES: [kind: string, label: string, risky: boolean][] = [
@@ -105,6 +121,36 @@ export function blockName(def: any): string {
   return words.filter((w) => w).join(" ");
 }
 
+const SHAPES = ["Normal", "Ending", "ReturnsValue", "ReturnsBool"] as const;
+
+/** A block definition reduced to what drawing it needs, cleaned like blockstitch's normalize_block_* do. */
+export function blockView(def: any): BlockView {
+  // Older files have returns_value: bool instead of shape.
+  const raw = def?.shape ?? def?.returns_value;
+  const shape = raw === true ? "ReturnsValue" : SHAPES.find((s) => s === raw) ?? "Normal";
+  const color = typeof def?.color === "string" && /^#[0-9a-f]{6}$/i.test(def.color.trim()) ? def.color.trim().toUpperCase() : "#4C97FF";
+  const icon = typeof def?.icon === "string" && /^[a-z0-9-]{1,64}$/.test(def.icon.trim()) ? def.icon.trim() : "";
+  const text = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
+  const pieces: PieceView[] = [];
+  let optional = false;
+  for (const piece of Array.isArray(def?.pieces) ? def.pieces : []) {
+    if (piece?.kind === "Label") {
+      const t = text(piece.text, 200);
+      if (t) pieces.push({ kind: "Label", text: t, optional });
+    } else if (piece?.kind === "Input") {
+      // A component input starts an optional group that runs to the next component or branch.
+      if (piece.component) optional = true;
+      const d = piece.default_value;
+      const value = d && (d.kind === "Text" || d.kind === "Number") ? text(d.value, 120) : null;
+      pieces.push({ kind: "Input", name: text(piece.name, 80), bool: piece.value_type === "Bool", optional, value });
+    } else if (piece?.kind === "Branch") {
+      optional = false;
+      pieces.push({ kind: "Branch", name: text(piece.name, 80) });
+    }
+  }
+  return { shape, color, icon, description: text(def?.description, 500), pieces };
+}
+
 // The variant name of a serialized InstructionKind: "WhenRan" or {"Token": ...}.
 function variant(kind: unknown): string | null {
   if (typeof kind === "string") return kind;
@@ -178,7 +224,7 @@ export function readPack(bytes: Uint8Array): PackMeta | string {
       if (!valid) return `Input "${piece.name}" needs a literal default matching its type.`;
     }
   }
-  return { id, name, description, version, blocks: defs.map(blockName), capabilities: capabilities(value.blocks) };
+  return { id, name, description, version, blocks: defs.map(blockName), views: defs.map(blockView), capabilities: capabilities(value.blocks) };
 }
 
 export async function sha256Hex(bytes: Uint8Array): Promise<string> {

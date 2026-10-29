@@ -27,8 +27,8 @@ for (const file of readdirSync("packs").filter((f) => f.endsWith(".json"))) {
   execFileSync("npx", ["wrangler", "r2", "object", "put", `blockwork-library/packs/${sha}.json`, "--file", path, "--content-type", "application/json", where], { stdio: "inherit" });
   sql.push(
     `INSERT OR IGNORE INTO packs (id, owner_id, created_at) VALUES (${q(meta.id)}, ${q(owner)}, ${now});`,
-    `INSERT OR IGNORE INTO versions (pack_id, sha256, name, description, version, blocks, capabilities, status, submitted_by, submitted_at, reviewed_at)
-     VALUES (${q(meta.id)}, ${q(sha)}, ${q(meta.name)}, ${q(meta.description)}, ${q(meta.version)}, ${q(JSON.stringify(meta.blocks))}, ${q(JSON.stringify(meta.capabilities))}, 'approved', ${q(owner)}, ${now}, ${now});`,
+    `INSERT OR IGNORE INTO versions (pack_id, sha256, name, description, version, blocks, block_views, capabilities, status, submitted_by, submitted_at, reviewed_at)
+     VALUES (${q(meta.id)}, ${q(sha)}, ${q(meta.name)}, ${q(meta.description)}, ${q(meta.version)}, ${q(JSON.stringify(meta.blocks))}, ${q(JSON.stringify(meta.views))}, ${q(JSON.stringify(meta.capabilities))}, 'approved', ${q(owner)}, ${now}, ${now});`,
   );
 }
 const file = join(mkdtempSync(join(tmpdir(), "blockwork-seed-")), "seed.sql");

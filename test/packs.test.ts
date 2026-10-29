@@ -141,3 +141,35 @@ test("capabilities cover instructions, operators and triggers", () => {
   assert.deepEqual(capabilities(blocks), ["commands", "secrets", "input", "clipboard", "triggers"]);
   assert.deepEqual(capabilities({ strands: [{ instructions: [{ id: "1", kind: "WhenRan" }] }] }), []);
 });
+
+test("block views keep what drawing a block needs", () => {
+  const meta = readPack(enc(pack({
+    blocks: {
+      block_defs: [
+        { id: "a", shape: "ReturnsBool", color: "#59c059", icon: "clipboard", description: "d", pieces: [
+          { kind: "Label", text: " is " }, { kind: "Input", name: "x", value_type: "Bool" },
+          { kind: "Input", name: "n", component: true, default_value: { kind: "Number", value: 3 } }, { kind: "Label", text: "times" },
+          { kind: "Branch", name: "then" }, { kind: "Label", text: "after" },
+        ] },
+        { id: "b", returns_value: true, color: "red", icon: "Bad Icon", pieces: [{ kind: "Input", name: "t", default_value: { kind: "Text", value: "hi" } }] },
+      ],
+      strands: [],
+    },
+  })));
+  assert.equal(typeof meta, "object");
+  const [a, b] = (meta as any).views;
+  assert.equal(a.shape, "ReturnsBool");
+  assert.equal(a.color, "#59C059");
+  assert.deepEqual(a.pieces, [
+    { kind: "Label", text: "is", optional: false },
+    { kind: "Input", name: "x", bool: true, optional: false, value: null },
+    { kind: "Input", name: "n", bool: false, optional: true, value: "3" },
+    { kind: "Label", text: "times", optional: true },
+    { kind: "Branch", name: "then" },
+    { kind: "Label", text: "after", optional: false },
+  ]);
+  assert.equal(b.shape, "ReturnsValue");
+  assert.equal(b.color, "#4C97FF");
+  assert.equal(b.icon, "");
+  assert.equal(b.pieces[0].value, "hi");
+});

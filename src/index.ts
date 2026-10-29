@@ -2,8 +2,8 @@
 // Blockwork downloads, and takes reviewed submissions from signed-in accounts.
 
 import { callback, currentUser, isAdmin, login, logout, PROVIDERS, type Provider, type User } from "./auth.ts";
-import { blockTags, capabilityList, esc, loginPage, message, page, verifiedBadge } from "./pages.ts";
-import { OFFICIAL_OWNER, readPack, sha256Hex } from "./packs.ts";
+import { BLOCK_NOTCH_SVG, blockTags, capabilityList, esc, loginPage, message, page, verifiedBadge } from "./pages.ts";
+import { blockView, OFFICIAL_OWNER, readPack, sha256Hex } from "./packs.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 import { setMainSite, SITE_JS } from "./site-nav.ts";
 
@@ -33,6 +33,7 @@ interface VersionRow {
   description: string;
   version: string;
   blocks: string;
+  block_views: string;
   capabilities: string;
   status: string;
   reason: string;
@@ -79,6 +80,9 @@ async function route(req: Request, env: Env): Promise<Response> {
   if (method === "GET" && (m = path.match(/^\/packs\/([0-9a-f]{64})\.json$/))) return packFile(env, m[1]);
   if (method === "GET" && path === "/logo.png") return png(LOGO_PNG);
   if (method === "GET" && path === "/favicon.png") return png(FAVICON_PNG);
+  if (method === "GET" && path === "/block-notch.svg") {
+    return new Response(BLOCK_NOTCH_SVG, { headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" } });
+  }
   if (method === "GET" && path === "/site.js") {
     return new Response(SITE_JS, {
       headers: { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=3600" },
@@ -122,7 +126,28 @@ async function published(env: Env): Promise<VersionRow[]> {
        AND v.id = (SELECT MAX(id) FROM versions WHERE pack_id = p.id AND status = 'approved')
      ORDER BY v.name COLLATE NOCASE`,
   ).all<VersionRow>();
-  return results;
+  return withBlockViews(env, results);
+}
+
+/** Fills in block_views for versions saved before the site kept them, from their pack files, once. */
+export async function withBlockViews<T extends { id: number; sha256: string; block_views: string }>(env: Env, rows: T[]): Promise<T[]> {
+  const missing = rows.filter((v) => !v.block_views);
+  if (!missing.length) return rows;
+  const updates: D1PreparedStatement[] = [];
+  await Promise.all(
+    missing.map(async (v) => {
+      const object = await env.PACKS.get(`packs/${v.sha256}.json`);
+      if (!object) return;
+      try {
+        const defs = JSON.parse(await object.text())?.blocks?.block_defs;
+        if (!Array.isArray(defs)) return;
+        v.block_views = JSON.stringify(defs.map(blockView));
+        updates.push(env.DB.prepare("UPDATE versions SET block_views = ? WHERE id = ?").bind(v.block_views, v.id));
+      } catch {}
+    }),
+  );
+  if (updates.length) await env.DB.batch(updates);
+  return rows;
 }
 
 async function indexJson(env: Env): Promise<Response> {
@@ -164,7 +189,7 @@ function png(base64: string): Response {
 function packCard(v: VersionRow, extra = ""): string {
   return `<div class="card"><h3>${esc(v.name)} <span class="version">${esc(v.version)}</span></h3>
     <p class="muted by">by ${esc(v.author)}${v.owner_id === OFFICIAL_OWNER ? verifiedBadge() : ""}</p><p>${esc(v.description)}</p>
-    <p>${blockTags(JSON.parse(v.blocks))}</p>${capabilityList(JSON.parse(v.capabilities))}${extra}</div>`;
+    ${blockTags(v)}${capabilityList(JSON.parse(v.capabilities))}${extra}</div>`;
 }
 
 async function home(env: Env, user: User | null, admin: boolean): Promise<Response> {
@@ -175,8 +200,8 @@ async function home(env: Env, user: User | null, admin: boolean): Promise<Respon
     user,
     admin,
     `<section class="hero"><h1>${esc(env.LIBRARY_NAME)}</h1>
-     <p>Shared custom blocks for Blockwork. Add them from My Blocks &gt; Browse library in the editor.
-     Blockwork shows what a pack's blocks can do before you add it.</p>
+     <p>Custom blocks shared by the Blockwork community. To add a pack, click Browse under My Blocks in the editor.
+     Every pack is reviewed before it's listed, and Blockwork tells you what its blocks can do before you add them.</p>
      <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a></p></section>${list}`,
   );
 }
@@ -234,9 +259,9 @@ async function submit(req: Request, env: Env, user: User, admin: boolean): Promi
       "UPDATE versions SET status = 'rejected', reason = 'Replaced by a newer upload', reviewed_at = ? WHERE pack_id = ? AND status = 'pending'",
     ).bind(now, meta.id),
     env.DB.prepare(
-      `INSERT INTO versions (pack_id, sha256, name, description, version, blocks, capabilities, status, submitted_by, submitted_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`,
-    ).bind(meta.id, sha, meta.name, meta.description, meta.version, JSON.stringify(meta.blocks), JSON.stringify(meta.capabilities), user.id, now),
+      `INSERT INTO versions (pack_id, sha256, name, description, version, blocks, block_views, capabilities, status, submitted_by, submitted_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`,
+    ).bind(meta.id, sha, meta.name, meta.description, meta.version, JSON.stringify(meta.blocks), JSON.stringify(meta.views), JSON.stringify(meta.capabilities), user.id, now),
   ];
   if (!pack) {
     statements.unshift(env.DB.prepare("INSERT INTO packs (id, owner_id, created_at) VALUES (?, ?, ?)").bind(meta.id, user.id, now));
@@ -251,6 +276,7 @@ async function myPacks(env: Env, user: User, admin: boolean): Promise<Response> 
   )
     .bind(user.name, user.id)
     .all<VersionRow>();
+  await withBlockViews(env, results);
   const label: Record<string, string> = { pending: "Waiting for review", approved: "Listed", rejected: "Not listed" };
   const list = results
     .map((v) =>
@@ -269,6 +295,7 @@ async function reviewQueue(env: Env, user: User, admin: boolean): Promise<Respon
     `SELECT v.*, u.name AS author FROM versions v JOIN users u ON u.id = v.submitted_by
      WHERE v.status = 'pending' ORDER BY v.submitted_at`,
   ).all<VersionRow>();
+  await withBlockViews(env, results);
   const list = results.map((v) => packCard(v, `<p><a class="button primary" href="/admin/versions/${v.id}">Review</a></p>`)).join("");
   return page("Review", user, admin, `<h1>Waiting for review</h1>${list || `<p class="muted">Nothing to review.</p>`}`);
 }
@@ -281,6 +308,7 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number): Pro
     .bind(id)
     .first<VersionRow & { banned: number; listed: number }>();
   if (!v) return message(user, admin, "Not found", "That submission doesn't exist.", 404);
+  await withBlockViews(env, [v]);
   const object = await env.PACKS.get(`packs/${v.sha256}.json`);
   let source = object ? await object.text() : "(file missing)";
   try {
@@ -303,7 +331,7 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number): Pro
     `<h1>${esc(v.name)} <span class="version">${esc(v.version)}</span></h1>
      <p class="muted">id ${esc(v.pack_id)} · by ${esc(v.author)} (${esc(v.submitted_by)}) · sha256 <span class="mono">${esc(v.sha256)}</span></p>
      <p>${previous ? `Updates the listed version ${esc(previous.version || previous.sha256.slice(0, 12))}.` : "A new pack."}</p>
-     <p>${esc(v.description)}</p><p>${blockTags(JSON.parse(v.blocks))}</p>
+     <p>${esc(v.description)}</p>${blockTags(v)}
      <h2>What it can do</h2>${capabilityList(JSON.parse(v.capabilities))}
      <h2>Decision</h2>${decide}
      <h2>File</h2><pre>${esc(source.slice(0, 200_000))}</pre>
