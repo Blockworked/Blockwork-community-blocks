@@ -2,9 +2,10 @@
 // Blockwork downloads, and takes reviewed submissions from signed-in accounts.
 
 import { callback, currentUser, isAdmin, login, logout, PROVIDERS, type Provider, type User } from "./auth.ts";
-import { BLOCK_NOTCH_SVG, blockTags, capabilityList, esc, loginPage, message, page, verifiedBadge } from "./pages.ts";
+import { capabilityList, esc, loginPage, message, page, verifiedBadge } from "./pages.ts";
 import { authorPage, home, packPage, published, sourcePage, sourceView, withBlockViews, type VersionRow } from "./browse.ts";
 import { deleteComment, postComment } from "./comments.ts";
+import { blockPictures, BROWSE_JS, renderFile, rendersPage, saveRenders, viewerUrl } from "./renders.ts";
 import { OFFICIAL_OWNER, readPack, sha256Hex } from "./packs.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 import { setMainSite, SITE_JS } from "./site-nav.ts";
@@ -27,12 +28,16 @@ export interface Env {
 const MAX_PENDING = 5;
 const MAX_PER_DAY = 20;
 
-const SECURITY_HEADERS: Record<string, string> = {
-  "Content-Security-Policy":
-    "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' https:; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
-  "X-Content-Type-Options": "nosniff",
-  "Referrer-Policy": "same-origin",
-};
+function securityHeaders(env: Env): Record<string, string> {
+  // The pack viewer is Blockwork's editor on blockworked.com (renders.ts).
+  const viewer = new URL(viewerUrl(env)).origin;
+  return {
+    "Content-Security-Policy":
+      `default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' https:; connect-src 'self'; frame-src ${viewer}; form-action 'self'; frame-ancestors 'none'; base-uri 'none'`,
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "same-origin",
+  };
+}
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
@@ -45,7 +50,7 @@ export default {
       res = message(null, false, "Something went wrong", "Try again in a moment.", 500);
     }
     const headers = new Headers(res.headers);
-    for (const [k, v] of Object.entries(SECURITY_HEADERS)) headers.set(k, v);
+    for (const [k, v] of Object.entries(securityHeaders(env))) headers.set(k, v);
     return new Response(res.body, { status: res.status, headers });
   },
 };
@@ -63,8 +68,10 @@ async function route(req: Request, env: Env): Promise<Response> {
   if (method === "GET" && (m = path.match(/^\/packs\/([0-9a-f]{64})\.json$/))) return packFile(env, m[1]);
   if (method === "GET" && path === "/logo.png") return png(LOGO_PNG);
   if (method === "GET" && path === "/favicon.png") return png(FAVICON_PNG);
-  if (method === "GET" && path === "/block-notch.svg") {
-    return new Response(BLOCK_NOTCH_SVG, { headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" } });
+  if (method === "GET" && path === "/browse.js") {
+    return new Response(BROWSE_JS, {
+      headers: { "Content-Type": "text/javascript; charset=utf-8", "Cache-Control": "public, max-age=3600" },
+    });
   }
   if (method === "GET" && path === "/site.js") {
     return new Response(SITE_JS, {
@@ -75,6 +82,9 @@ async function route(req: Request, env: Env): Promise<Response> {
   const user = await currentUser(req, env);
   const admin = isAdmin(env, user);
   if (method === "GET" && path === "/") return home(env, user, admin, url.searchParams);
+  if (method === "GET" && (m = path.match(/^\/renders\/([0-9a-f]{64})\/([A-Za-z0-9_-]{1,64})\.(dark|light)\.png$/))) {
+    return renderFile(env, admin, m[1], m[2], m[3]);
+  }
   if ((m = path.match(/^\/packs\/([^/]{1,400})(\/source|\/comments)?$/))) {
     let id = "";
     try {
@@ -111,6 +121,8 @@ async function route(req: Request, env: Env): Promise<Response> {
   if (path.startsWith("/admin")) {
     if (!admin || !user) return message(user, admin, "Not found", "There's nothing here.", 404);
     if (method === "GET" && path === "/admin") return reviewQueue(env, user, admin);
+    if (method === "GET" && path === "/admin/renders") return rendersPage(env, user, admin);
+    if (method === "POST" && (m = path.match(/^\/admin\/versions\/(\d+)\/renders$/))) return saveRenders(req, env, Number(m[1]));
     if ((m = path.match(/^\/admin\/versions\/(\d+)$/))) {
       return method === "POST" ? reviewDecision(req, env, Number(m[1])) : reviewPage(env, user, admin, Number(m[1]), url.searchParams);
     }
@@ -160,7 +172,7 @@ function png(base64: string): Response {
 function packCard(v: VersionRow, extra = ""): string {
   return `<div class="card"><h3>${esc(v.name)} <span class="version">${esc(v.version)}</span></h3>
     <p class="muted by">by ${esc(v.author)}${v.owner_id === OFFICIAL_OWNER ? verifiedBadge() : ""}</p><p>${esc(v.description)}</p>
-    ${blockTags(v)}${capabilityList(JSON.parse(v.capabilities))}${extra}</div>`;
+    ${blockPictures(v)}${capabilityList(JSON.parse(v.capabilities))}${extra}</div>`;
 }
 
 function submitForm(user: User, admin: boolean, error = ""): Response {
@@ -254,7 +266,13 @@ async function reviewQueue(env: Env, user: User, admin: boolean): Promise<Respon
   ).all<VersionRow>();
   await withBlockViews(env, results);
   const list = results.map((v) => packCard(v, `<p><a class="button primary" href="/admin/versions/${v.id}">Review</a></p>`)).join("");
-  return page("Review", user, admin, `<h1>Waiting for review</h1>${list || `<p class="muted">Nothing to review.</p>`}`);
+  return page(
+    "Review",
+    user,
+    admin,
+    `<h1>Waiting for review</h1>${list || `<p class="muted">Nothing to review.</p>`}
+     <p class="muted"><a href="/admin/renders">Draw block pictures</a> for versions that don't have them yet.</p>`,
+  );
 }
 
 async function reviewPage(env: Env, user: User, admin: boolean, id: number, params: URLSearchParams): Promise<Response> {
@@ -268,11 +286,14 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number, para
   await withBlockViews(env, [v]);
   const object = await env.PACKS.get(`packs/${v.sha256}.json`);
   const base = `/admin/versions/${v.id}`;
-  const source = sourceView(object ? await object.text() : null, params.get("view") === "json" ? "json" : "blocks", {
-    blocks: `${base}#file`,
-    json: `${base}?view=json#file`,
-    file: `${base}/file`,
-  });
+  const source = sourceView(
+    env,
+    object ? await object.text() : null,
+    params.get("view") === "json" ? "json" : "blocks",
+    // Opening it also draws the pictures the lists show, once.
+    { blocks: `${base}#file`, json: `${base}?view=json#file`, file: `${base}/file`, render: v.renders ? "" : `${base}/renders` },
+    `${v.name} in Blockwork's editor`,
+  );
   const previous = await env.DB.prepare(
     "SELECT version, sha256 FROM versions WHERE pack_id = ? AND status = 'approved' AND id < ? ORDER BY id DESC LIMIT 1",
   )
@@ -290,7 +311,7 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number, para
     `<h1>${esc(v.name)} <span class="version">${esc(v.version)}</span></h1>
      <p class="muted">id ${esc(v.pack_id)} · by ${esc(v.author)} (${esc(v.submitted_by)}) · sha256 <span class="mono">${esc(v.sha256)}</span></p>
      <p>${previous ? `Updates the listed version ${esc(previous.version || previous.sha256.slice(0, 12))}.` : "A new pack."}</p>
-     <p>${esc(v.description)}</p>${blockTags(v)}
+     <p>${esc(v.description)}</p>${blockPictures(v)}
      <h2>What it can do</h2>${capabilityList(JSON.parse(v.capabilities))}
      <h2>Decision</h2>${decide}
      <h2 id="file">File</h2>${source}

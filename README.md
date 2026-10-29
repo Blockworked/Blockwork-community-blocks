@@ -13,12 +13,17 @@ packs; every upload is reviewed before it's listed.
   filters for permissions, official packs and sort order, all as query
   parameters (`?q=&uses=&official=1&sort=`).
 - `/packs/<id>` is a pack's page: its blocks, what they can do, its
-  versions and comments. `/packs/<id>/source` draws each block's body as
-  blocks or shows the pack file (`?view=json`, `?v=<sha256>` for an older
+  versions and comments. `/packs/<id>/source` shows the pack in Blockwork's
+  own editor or as the pack file (`?view=json`, `?v=<sha256>` for an older
   version). `/authors/<public id>` lists one account's packs.
-  The source view draws bodies with the editor's own block rows, words and
-  icons, copied into `src/block-rows.ts` by `node scripts/extract-block-rows.mjs
-  ../Blockwork ../blockstitch`; rerun it when the editor's blocks change.
+- The site never draws blocks itself. The source view embeds the pack viewer,
+  blockworked.com's web build of the editor (`/packview/`, built from
+  `qt-demo/PackView.qml` in that repo), and `/browse.js` hands it the pack.
+  Cards and block lists show pictures that viewer drew (`src/renders.ts`):
+  opening a version's review page draws and saves them (PNGs per theme in R2
+  under `renders/<sha256>/`), and `/admin/renders` draws any still missing.
+  `MAIN_SITE_URL` says where the viewer lives (and goes in the CSP's
+  `frame-src`).
 - Signed-in accounts can comment on a pack; the writer, the pack's owner and
   admins can delete a comment.
 - `/submit` takes uploads, `/me` shows their status, `/admin` is the review

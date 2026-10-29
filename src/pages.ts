@@ -2,8 +2,7 @@
 
 import type { User } from "./auth.ts";
 import { PROVIDERS } from "./auth.ts";
-import { blockName, CAPABILITIES, type BlockView } from "./packs.ts";
-import { ICONS } from "./icons.ts";
+import { CAPABILITIES } from "./packs.ts";
 import { SITE_NAV_CSS, siteFooter, siteHeader } from "./site-nav.ts";
 import { BROWSE_CSS } from "./browse-css.ts";
 
@@ -24,7 +23,6 @@ const LIGHT = `
     --block: #e7e7ec; --block-top: #f4f4f7;
     --glass: rgba(255, 255, 255, 0.6); --glass-strong: rgba(230, 230, 236, 0.75); --glass-border: rgba(0, 0, 0, 0.12);
     --hover: rgba(0, 0, 0, 0.04);
-    --blk: #e1e5eb; --blk-line: #aeb5c0; --blk-field: #f0f2f5; --blk-text: #202631; --blk-dim: #616b79;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);`;
 
 const STYLE = `
@@ -37,7 +35,6 @@ const STYLE = `
   --block: #3b3c40; --block-top: #44454a;
   --glass: rgba(44, 44, 46, 0.55); --glass-strong: rgba(58, 58, 60, 0.6); --glass-border: rgba(255, 255, 255, 0.08);
   --hover: rgba(255, 255, 255, 0.05);
-  --blk: #3b3c40; --blk-line: #4a4b50; --blk-field: #292a2d; --blk-text: #dedee0; --blk-dim: #96979c;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25); --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
   --radius: 6px; --radius-lg: 14px;
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -97,38 +94,6 @@ li.risky::before { background: var(--warn); }
 .card .status { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--glass-border); font-size: 13px; }
 ol { padding-left: 22px; }
 ol li { margin: 4px 0; }
-
-/* Blocks, drawn as Blockwork's canvas draws them (blockstitch's Theme,
-   BlockSurface and ValueChip): a neutral body with the connector notch and
-   tab, the block's own color on its icon, and boxed input slots. */
-.blocks { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px 8px; margin: 14px 0 6px; }
-.blk { position: relative; display: inline-flex; flex-direction: column; max-width: 100%; color: var(--blk-text); font-size: 12.5px; font-weight: 600; line-height: 1.2; }
-.blk-row { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 7px; min-height: 42px; padding: 7px 12px; background: var(--blk); border: 1.3px solid var(--blk-line); border-radius: 5px; }
-.blk-row > .ico { flex: none; }
-.blk.stack, .blk.wrap { padding-bottom: 8px; }
-.blk.ending { padding-bottom: 0; }
-/* The top notch is cut out of the body; the tab is drawn under it. */
-.blk.stack > .blk-row, .blk.ending > .blk-row, .blk.wrap > .blk-row:first-child {
-  -webkit-mask: url(/block-notch.svg) 13px 0 / 30px 8px no-repeat, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: url(/block-notch.svg) 13px 0 / 30px 8px no-repeat exclude, linear-gradient(#000 0 0); }
-.blk .notch, .blk .tab { position: absolute; left: 13px; width: 30px; height: 10px; overflow: visible; fill: var(--blk); stroke: var(--blk-line); stroke-width: 1.3; stroke-linejoin: round; }
-.blk .notch { top: 0; fill: none; }
-.blk .tab { bottom: 0; }
-/* A C block: head, an empty mouth on a spine, and a foot. */
-.blk.wrap > .blk-row:first-child { border-bottom-left-radius: 0; }
-.blk-mouth { position: relative; width: 20px; height: 22px; margin: -1.3px 0; background: var(--blk); border: 1.3px solid var(--blk-line); border-width: 0 1.3px; z-index: 1; }
-.blk.wrap > .blk-row.foot { min-height: 26px; padding-top: 3px; padding-bottom: 3px; border-top-left-radius: 0; }
-.blk-mouth .branch { position: absolute; left: 28px; top: 50%; transform: translateY(-50%); white-space: nowrap; color: var(--blk-dim); font-weight: 400; font-size: 11.5px; }
-/* Reporters: an oval, or a hexagon for a true/false one. */
-.blk.reporter > .blk-row { min-height: 32px; padding: 4px 12px; border-radius: 999px; }
-.blk.boolean { --h: 16px; padding: 1.3px; background: var(--blk-line); clip-path: polygon(var(--h) 0, calc(100% - var(--h)) 0, 100% 50%, calc(100% - var(--h)) 100%, var(--h) 100%, 0 50%); }
-.blk.boolean > .blk-row { min-height: 29.4px; padding: 4px calc(var(--h) + 2px); border: 0; border-radius: 0; clip-path: polygon(calc(var(--h) - 0.6px) 0, calc(100% - var(--h) + 0.6px) 0, 100% 50%, calc(100% - var(--h) + 0.6px) 100%, calc(var(--h) - 0.6px) 100%, 0 50%); }
-.slot { display: inline-flex; align-items: center; min-width: 26px; max-width: 220px; min-height: 24px; padding: 3px 8px; border: 1px solid var(--blk-line); border-radius: 5px; background: var(--blk-field); font-weight: 400; overflow-wrap: anywhere; }
-.slot.empty { color: var(--blk-dim); font-style: italic; }
-.slot.bool { min-width: 40px; border: 0; padding: 1px; background: var(--blk-line); clip-path: polygon(11px 0, calc(100% - 11px) 0, 100% 50%, calc(100% - 11px) 100%, 11px 100%, 0 50%); }
-.slot.bool::before { content: ""; flex: 1; align-self: stretch; min-height: 22px; background: var(--blk-field); clip-path: inherit; }
-.more { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border: 1px solid var(--blk-line); border-radius: 50%; color: var(--blk-dim); }
 
 /* Controls: blockworked.com's .btn and .btn-primary. */
 button, .button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 0 12px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg3); color: var(--fg); font: inherit; font-size: 13px; line-height: 1; white-space: nowrap; cursor: pointer; text-decoration: none; transition: background 120ms var(--ease), border-color 120ms var(--ease); }
@@ -193,77 +158,6 @@ export function capabilityList(kinds: string[]): string {
 /** The checkmark next to the author of a pack published by the Blockworked team. */
 export function verifiedBadge(): string {
   return `<span class="verified" title="Verified official pack" role="img" aria-label="Verified official pack"><svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8" fill="currentColor"/><path d="M4.6 8.3l2.2 2.2 4.6-4.8" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
-}
-
-/** The trapezoid cut out of a block's top edge, as a CSS mask (served at /block-notch.svg). */
-export const BLOCK_NOTCH_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="30" height="8" viewBox="0 0 30 8"><path d="M0 0 L8 8 L22 8 L30 0 Z"/></svg>`;
-
-/** A Lucide icon as inline SVG, stroked in the given color. */
-export function icon(name: string, color: string, size = 16): string {
-  const body = ICONS[name] ?? ICONS.blocks;
-  return `<svg class="ico" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${esc(color)}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
-}
-
-export const NOTCH = `<svg class="notch" viewBox="0 0 30 10" aria-hidden="true"><path d="M0 0.6 L8 8.6 L22 8.6 L30 0.6"/></svg>`;
-export const TAB = (cls = "tab") =>
-  `<svg class="${cls}" viewBox="0 0 30 10" aria-hidden="true"><path d="M-0.4 -1 L0 0.6 L8 8.6 L22 8.6 L30 0.6 L30.4 -1" stroke="none"/><path d="M0 0.6 L8 8.6 L22 8.6 L30 0.6" fill="none"/></svg>`;
-
-/** One block, drawn as it looks in Blockwork's palette. */
-export function blockHtml(view: BlockView): string {
-  const reporter = view.shape === "ReturnsValue" || view.shape === "ReturnsBool";
-  const rows: string[][] = [[icon(view.icon || "blocks", view.color, reporter ? 14 : 16)]];
-  const branches: string[] = [];
-  let more = false;
-  for (const piece of view.pieces) {
-    const row = rows[rows.length - 1];
-    if (piece.kind === "Branch") {
-      branches.push(piece.name);
-      rows.push([]);
-    } else if (piece.optional) {
-      // Optional components are left off a fresh block; the app adds them with "+".
-      more = true;
-    } else if (piece.kind === "Label") {
-      row.push(`<span>${esc(piece.text)}</span>`);
-    } else if (piece.bool) {
-      row.push(`<span class="slot bool" title="${esc(piece.name)}"></span>`);
-    } else if (piece.value === null) {
-      row.push(`<span class="slot empty">${esc(piece.name)}</span>`);
-    } else {
-      row.push(`<span class="slot" title="${esc(piece.name)}">${esc(piece.value) || "&nbsp;"}</span>`);
-    }
-  }
-  if (more) rows[rows.length - 1].push(`<span class="more" title="Has optional parts">${icon("plus", "currentColor", 12)}</span>`);
-  const label = blockName({ pieces: view.pieces.filter((p) => !(p.kind !== "Branch" && p.optional)) });
-  const title = view.description ? ` title="${esc(view.description)}"` : "";
-  const open = (cls: string) => `<div class="blk ${cls}" role="img" aria-label="${esc(label)}"${title}>`;
-  if (reporter) {
-    return `${open(view.shape === "ReturnsBool" ? "boolean" : "reporter")}<div class="blk-row">${rows[0].join("")}</div></div>`;
-  }
-  if (!branches.length) {
-    const ending = view.shape === "Ending";
-    return `${open(ending ? "ending" : "stack")}<div class="blk-row">${rows[0].join("")}</div>${NOTCH}${ending ? "" : TAB()}</div>`;
-  }
-  // A block with branches is a C: each branch is an empty mouth, and what follows it sits on the bar below.
-  let html = `${open("wrap")}<div class="blk-row">${rows[0].join("")}</div>`;
-  branches.forEach((name, i) => {
-    const after = rows[i + 1];
-    html += `<div class="blk-mouth"><span class="branch">${esc(name)}</span></div><div class="blk-row foot">${after.join("")}</div>`;
-  });
-  return `${html}${NOTCH}${view.shape === "Ending" ? "" : TAB()}</div>`;
-}
-
-/** A pack's blocks. Versions saved before the site kept block shapes only have their names. */
-export function blockTags(v: { blocks: string; block_views?: string | null }): string {
-  let views: BlockView[] = [];
-  try {
-    views = v.block_views ? JSON.parse(v.block_views) : [];
-  } catch {}
-  if (!views.length) {
-    views = (JSON.parse(v.blocks) as string[]).map((name) => ({
-      shape: "Normal", color: "#4C97FF", icon: "", description: "", pieces: [{ kind: "Label", text: name, optional: false }],
-    }));
-  }
-  return `<div class="blocks">${views.map(blockHtml).join("")}</div>`;
 }
 
 export function loginPage(user: User | null, next: string): Response {

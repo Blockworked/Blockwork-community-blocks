@@ -3,9 +3,10 @@
 
 import type { User } from "./auth.ts";
 import type { Env } from "./index.ts";
-import { blockHtml, blockTags, capabilityList, esc, message, page, verifiedBadge } from "./pages.ts";
+import { capabilityList, esc, message, page, verifiedBadge } from "./pages.ts";
 import { blockView, CAPABILITIES, OFFICIAL_OWNER } from "./packs.ts";
 import { highlightJson, packSource } from "./source.ts";
+import { blockPicture, blockPictures, viewer } from "./renders.ts";
 import { commentsSection } from "./comments.ts";
 
 export interface VersionRow {
@@ -17,6 +18,8 @@ export interface VersionRow {
   version: string;
   blocks: string;
   block_views: string;
+  /** Pictures of its blocks (renders.ts), or "". */
+  renders: string;
   capabilities: string;
   status: string;
   reason: string;
@@ -171,7 +174,7 @@ export function listedCard(p: ListedPack): string {
     <div class="pack-head"><h3><a href="${href}">${esc(p.name)}</a> <span class="version">${esc(p.version)}</span></h3>
       ${p.comments ? `<a class="count" href="${href}#comments" title="${plural(p.comments, "comment")}">${COMMENT_ICON}${p.comments}</a>` : ""}</div>
     <p class="muted by">by ${authorLink(p.author, p.author_public_id, p.owner_id === OFFICIAL_OWNER)} · ${plural(count, "block")} · updated ${date(p.submitted_at)}</p>
-    <p>${esc(p.description)}</p>${blockTags(p)}${capabilityList(JSON.parse(p.capabilities))}</article>`;
+    <p>${esc(p.description)}</p>${blockPictures(p)}${capabilityList(JSON.parse(p.capabilities))}</article>`;
 }
 
 function select(name: string, current: string, options: readonly (readonly [string, string])[]): string {
@@ -270,9 +273,8 @@ export async function packPage(env: Env, user: User | null, admin: boolean, id: 
   const blocks = packSource(parse(text));
   const blockList = blocks
     .map(
-      (b) => `<li class="block-item"><div class="block-name">${blockHtml(b.view)}</div>
-        ${b.description ? `<p>${esc(b.description)}</p>` : ""}${inputsTable(b.inputs)}
-        <p class="see-how"><a href="/packs/${encodeURIComponent(p.pack_id)}/source#block-${esc(b.id)}">See how it works</a></p></li>`,
+      (b) => `<li class="block-item"><div class="block-name">${blockPicture(p, b.id) || `<strong>${esc(b.name)}</strong>`}</div>
+        ${b.description ? `<p>${esc(b.description)}</p>` : ""}${inputsTable(b.inputs)}</li>`,
     )
     .join("");
   const versionList = versions
@@ -291,30 +293,27 @@ export async function packPage(env: Env, user: User | null, admin: boolean, id: 
      <p class="hint">To add it, open Blockwork and go to My Blocks &gt; Browse library.</p>
      <h2>What it can do</h2>${capabilityList(JSON.parse(p.capabilities))}
      <h2>${plural(blocks.length, "block")}</h2><ul class="block-list">${blockList}</ul>
+     <p class="see-how"><a href="/packs/${encodeURIComponent(p.pack_id)}/source">See how they work</a></p>
      <h2>Versions</h2><ul class="versions">${versionList}</ul>
      ${await commentsSection(env, user, admin, p, error, draft)}`,
   );
 }
 
-/** Blocks drawn and the file as JSON, shared by the source page and the review page. */
-export function sourceView(text: string | null, view: "blocks" | "json", links: { blocks: string; json: string; file: string }): string {
+/** The pack in Blockwork's editor, or the file as JSON; shared by the source page and the review page. */
+export function sourceView(
+  env: Env,
+  text: string | null,
+  view: "blocks" | "json",
+  links: { blocks: string; json: string; file: string; render?: string },
+  title: string,
+): string {
   const tabs = `<nav class="tabs small" aria-label="Source view">
     <a href="${links.blocks}"${view === "blocks" ? ` aria-current="page"` : ""}>Blocks</a>
     <a href="${links.json}"${view === "json" ? ` aria-current="page"` : ""}>Pack file</a>
     <a class="end" href="${links.file}">Raw</a></nav>`;
   if (text === null) return `${tabs}<p class="muted">The pack file is missing.</p>`;
   if (view === "json") return `${tabs}<pre class="code"><code>${highlightJson(text.slice(0, 400_000))}</code></pre>`;
-  const blocks = packSource(parse(text));
-  if (!blocks.length) return `${tabs}<p class="muted">This file has no blocks to draw.</p>`;
-  const toc = blocks.length > 1 ? `<ul class="toc">${blocks.map((b) => `<li><a href="#block-${esc(b.id)}">${esc(b.name)}</a></li>`).join("")}</ul>` : "";
-  return `${tabs}${toc}${blocks
-    .map(
-      (b) => `<section class="source-block" id="block-${esc(b.id)}"${b.color ? ` style="--def: ${b.color}"` : ""}>
-        <div class="source-head">${b.preview}${b.identifier ? `<span class="mono muted">${esc(b.identifier)}</span>` : ""}</div>
-        ${b.description ? `<p>${esc(b.description)}</p>` : ""}
-        ${b.html ? `<div class="canvas">${b.html}</div>` : `<p class="muted">No body in this file.</p>`}</section>`,
-    )
-    .join("")}`;
+  return `${tabs}${viewer(env, links.file, title, links.render)}`;
 }
 
 export async function sourcePage(env: Env, user: User | null, admin: boolean, id: string, params: URLSearchParams): Promise<Response> {
@@ -338,7 +337,7 @@ export async function sourcePage(env: Env, user: User | null, admin: boolean, id
     `${p.name} source`,
     user,
     admin,
-    `${packHeader(p, "source", note)}${sourceView(await packJson(env, sha), view, { blocks: base, json, file: `/packs/${sha}.json` })}`,
+    `${packHeader(p, "source", note)}${sourceView(env, await packJson(env, sha), view, { blocks: base, json, file: `/packs/${sha}.json` }, `${p.name} in Blockwork's editor`)}`,
   );
 }
 
