@@ -123,9 +123,12 @@ function slot(v: Json, ctx: Ctx, opts: { bool?: boolean; tag?: string } = {}): s
   return `<span class="slot">${tag}${esc(String(text ?? "")).replace(/\n/g, "↵") || "&nbsp;"}</span>`;
 }
 
+/** A reporter dropped into a slot: a boxed chip, hexagonal for true/false, as ValueChip draws it. */
 function reporterShell(bool: boolean, inner: string): string {
-  return `<span class="blk ${bool ? "boolean" : "reporter"}"><span class="blk-row">${inner}</span></span>`;
+  return bool ? `<span class="chip bool"><span class="chip-in">${inner}</span></span>` : `<span class="chip">${inner}</span>`;
 }
+
+const ref = (name: Json) => `<span class="chip ref">${esc(name)}</span>`;
 
 function defPieces(def: Obj | undefined, args: Json[], ctx: Ctx, asParams: boolean): string {
   if (!def || !Array.isArray(def.pieces)) return `<span>custom block</span>`;
@@ -133,10 +136,10 @@ function defPieces(def: Obj | undefined, args: Json[], ctx: Ctx, asParams: boole
   return def.pieces
     .filter(isObj)
     .map((p) => {
-      if (p.kind === "Label") return `<span>${esc(p.text)}</span>`;
+      if (p.kind === "Label") return `<span class="strong">${esc(p.text)}</span>`;
       if (p.kind !== "Input") return "";
       const bool = p.value_type === "Bool";
-      if (asParams) return reporterShell(bool, `<span>${esc(p.name)}</span>`);
+      if (asParams) return ref(p.name);
       return slot(args[n++] ?? null, ctx, { bool });
     })
     .join("");
@@ -150,8 +153,7 @@ function defIcon(def: Obj | undefined, size = 16): string {
 
 /** A reporter: an oval, or a hexagon for a true/false one, laid out as the editor lays it out. */
 function reporter(v: Obj, ctx: Ctx): string {
-  if (v.kind === "Var") return reporterShell(false, `<span>${esc(v.name)}</span>`);
-  if (v.kind === "Param") return reporterShell(false, `<span>${esc(v.name)}</span>`);
+  if (v.kind === "Var" || v.kind === "Param") return ref(v.name);
   if (v.kind === "Call") {
     const def = ctx.defs.get(String(v.block_id));
     return reporterShell(def?.shape === "ReturnsBool", `${defIcon(def, 14)}${defPieces(def, Array.isArray(v.args) ? v.args : [], ctx, false)}`);
@@ -159,11 +161,11 @@ function reporter(v: Obj, ctx: Ctx): string {
   const [op] = variantOf(v.op);
   const spec = OPERATORS[op];
   const args = Array.isArray(v.args) ? v.args : [];
-  if (!spec) return reporterShell(false, `<span>${esc(words(op))}</span>${args.map((a) => slot(a, ctx)).join("")}`);
+  if (!spec) return reporterShell(false, `<span class="strong">${esc(words(op))}</span>${args.map((a) => slot(a, ctx)).join("")}`);
   const infix: string[] = Array.isArray(spec.infix) ? spec.infix : spec.infix ? [spec.infix] : [];
   const enumArg = spec.enumArg;
   const parts: string[] = [];
-  if (spec.prefix) parts.push(`<span>${esc(spec.prefix)}</span>`);
+  if (spec.prefix) parts.push(`<span class="strong">${esc(spec.prefix)}</span>`);
   args.forEach((a, i) => {
     if (i > 0) {
       const gap = infix.length ? infix[Math.min(i - 1, infix.length - 1)] : "";
@@ -250,9 +252,20 @@ function statement(raw: Obj, ctx: Ctx): string {
   let html = `<div class="blk wrap"><div class="blk-row">${head}</div>`;
   mouths.forEach((body, k) => {
     const sep = k < mouths.length - 1 ? separators[k] ?? "" : "";
-    html += `<div class="blk-mouth filled">${stack(body, ctx)}</div><div class="blk-row foot">${sep ? `<span>${esc(sep)}</span>` : ""}</div>`;
+    html += `<div class="blk-mouth filled">${stack(body, ctx)}</div><div class="blk-row foot${k < mouths.length - 1 ? " mid" : ""}">${sep ? `<span>${esc(sep)}</span>` : ""}</div>`;
   });
   return `${html}${NOTCH}${shape === "ending" ? "" : TAB()}</div>`;
+}
+
+/** A custom block as the palette shows it: a call with each input's default. */
+function preview(def: Obj, ctx: Ctx): string {
+  const inputs = (Array.isArray(def.pieces) ? def.pieces : []).filter((p) => isObj(p) && p.kind === "Input") as Obj[];
+  const args = inputs.map((p) => (isObj(p.default_value) ? p.default_value : null));
+  if (def.shape === "ReturnsValue" || def.shape === "ReturnsBool") {
+    const cls = def.shape === "ReturnsBool" ? "boolean" : "reporter";
+    return `<div class="src"><div class="blk ${cls}"><div class="blk-row">${defIcon(def)}${defPieces(def, args, ctx, false)}</div></div></div>`;
+  }
+  return `<div class="src">${statement({ id: "", kind: { CallBlock: { block_id: def.id, args } } }, ctx)}</div>`;
 }
 
 function stack(list: Obj[], ctx: Ctx): string {
@@ -269,6 +282,8 @@ export interface BlockSource {
   inputs: { name: string; type: string; default: string }[];
   /** How the block itself is drawn (pages.ts blockHtml). */
   view: BlockView;
+  /** The block as the editor's palette draws it. */
+  preview: string;
   /** The body drawn as blocks, or "" when the pack has none for it. */
   html: string;
 }
@@ -305,6 +320,7 @@ export function packSource(pack: unknown): BlockSource[] {
         .filter((p) => p.kind === "Input")
         .map((p) => ({ name: String(p.name ?? ""), type: String(p.value_type ?? "Any"), default: literal(p.default_value) })),
       view: blockView(d),
+      preview: preview(d, ctx),
       html: body ? `<div class="src">${stack(body, ctx)}</div>` : "",
     };
   });

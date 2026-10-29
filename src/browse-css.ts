@@ -76,32 +76,44 @@ img.avatar.large { width: 64px; height: 64px; }
 .source-block > p { max-width: 70ch; }
 .canvas { overflow-x: auto; padding: 18px; border-radius: var(--radius-lg); border: 1px solid var(--glass-border);
   background-color: var(--bg2); background-image: radial-gradient(circle, var(--glass-border) 1px, transparent 1px); background-size: 20px 20px; }
-/* Bodies use the same .blk shapes as every other block on the site (pages.ts);
-   these rules stack them, fill C blocks' mouths and shrink reporters in slots. */
+/* Bodies, drawn to the editor's measurements (blockstitch InstructionBlock,
+   BlockSurface and ValueChip): 50px rows plus an 8px tab, a 20px spine,
+   34px middle bars and 26px feet, 27px boxed slots, plain 12px labels. */
 .src { display: inline-block; min-width: max-content; color: var(--blk-text); }
+.src .blk { margin: 0; max-width: none; font-size: 12px; font-weight: 400; line-height: 1.2; }
+.src .blk-row { flex-wrap: nowrap; gap: 7px; min-height: 50px; padding: 0 14px; }
+.src .blk.wrap > .blk-row.foot { min-height: 26px; padding: 0 14px 0 28px; }
+.src .blk.wrap > .blk-row.foot.mid { min-height: 34px; border-radius: 0 5px 5px 0; }
+.src .blk.wrap > .blk-row.foot.mid { border-left-width: 1.3px; }
+.src .blk.reporter > .blk-row { min-height: 36px; padding: 0 14px; border-radius: 999px; }
+.src .blk.boolean > .blk-row { min-height: 34px; }
+.source-head .src { min-width: 0; }
 .src-stack { display: flex; flex-direction: column; align-items: flex-start; }
-.src-stack > .blk { margin: 0; }
 .src-stack > .blk + .blk { margin-top: -8px; }
-.src .blk { max-width: none; }
-.src .blk-row { flex-wrap: nowrap; }
+.src .ico { color: var(--blk-text); }
 .src .ico.accent { color: var(--accent); }
+.src .blk.hat .blk-row > span:not([class]) { font-size: 11.5px; font-weight: 600; }
+.src .strong { font-weight: 600; }
 .blk.hat { padding-bottom: 8px; }
-.blk.hat > .blk-row { border-top-left-radius: 12px; border-top-right-radius: 12px; }
-.blk-mouth.filled { width: auto; height: auto; min-height: 24px; margin: -1.3px 0; padding: 0 0 0 20px; background: none; border: 0; }
+/* The mouth is open to the canvas; the spine joins the head to the bar below. */
+.blk-mouth.filled { width: auto; height: auto; min-height: 26px; margin: -1.3px 0; padding: 0 0 0 20px; background: none; border: 0; }
 .blk-mouth.filled::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 20px; box-sizing: border-box;
   background: var(--blk); border: 1.3px solid var(--blk-line); border-width: 0 1.3px; }
-.blk-mouth.filled > .src-stack { position: relative; z-index: 1; padding: 1.3px 0; }
-.blk.wrap > .blk-row.foot:not(:last-of-type) { border-radius: 0 5px 5px 0; }
-.src .blk.reporter, .src .blk.boolean { vertical-align: middle; }
-.src .blk.reporter > .blk-row { min-height: 26px; padding: 2px 10px; gap: 5px 6px; }
-.src .blk.boolean { --h: 13px; }
-.src .blk.boolean > .blk-row { min-height: 25px; padding-top: 2px; padding-bottom: 2px; gap: 5px 6px; }
-.src .blk-row > .blk { margin: 0; }
-.slot-tag { margin-right: 7px; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: var(--blk-dim); }
-.slot.dd { gap: 4px; font-weight: 400; }
-.slot.dd svg, .slot.btn svg { flex: none; color: var(--blk-dim); }
+.blk-mouth.filled > .src-stack { position: relative; z-index: 1; padding: 1.3px 0 0; margin-left: -1.3px; }
+/* Slots and the reporters dropped into them. */
+.src .slot { min-height: 27px; min-width: 27px; padding: 0 8px; font-weight: 400; white-space: pre; max-width: 360px; overflow: hidden; text-overflow: ellipsis; }
+.slot-tag { margin-right: 7px; font-size: 10px; font-weight: 600; letter-spacing: 0.04em; }
+.slot.dd { gap: 6px; }
+.slot.dd svg, .slot.btn svg { flex: none; }
 .slot.btn { gap: 5px; }
-.src .slot { white-space: pre; max-width: 360px; overflow: hidden; text-overflow: ellipsis; }
+.chip { display: inline-flex; align-items: center; gap: 5px; min-height: 27px; padding: 2px 5px; border: 1px solid var(--blk-line); border-radius: 5px; background: var(--blk-field); white-space: nowrap; }
+.chip > .strong:first-child { padding-left: 2px; }
+.chip > span:not([class]):last-child { padding-right: 2px; }
+.chip.ref { padding: 0 8px; color: var(--accent); font-weight: 600; }
+.chip.bool { --h: 10px; padding: 1px; border: 0; border-radius: 0; background: var(--blk-line);
+  clip-path: polygon(var(--h) 0, calc(100% - var(--h)) 0, 100% 50%, calc(100% - var(--h)) 100%, var(--h) 100%, 0 50%); }
+.chip.bool > .chip-in { display: inline-flex; align-items: center; gap: 5px; min-height: 27px; padding: 2px calc(var(--h) + 2px); background: var(--blk-field);
+  clip-path: polygon(calc(var(--h) - 0.5px) 0, calc(100% - var(--h) + 0.5px) 0, 100% 50%, calc(100% - var(--h) + 0.5px) 100%, calc(var(--h) - 0.5px) 100%, 0 50%); }
 
 pre.code { max-height: 640px; counter-reset: line; padding-left: 0; }
 pre.code .ln { display: block; padding-left: 56px; position: relative; }

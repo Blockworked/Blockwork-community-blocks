@@ -310,7 +310,7 @@ export function sourceView(text: string | null, view: "blocks" | "json", links: 
   return `${tabs}${toc}${blocks
     .map(
       (b) => `<section class="source-block" id="block-${esc(b.id)}"${b.color ? ` style="--def: ${b.color}"` : ""}>
-        <div class="source-head">${blockHtml(b.view)}${b.identifier ? `<span class="mono muted">${esc(b.identifier)}</span>` : ""}</div>
+        <div class="source-head">${b.preview}${b.identifier ? `<span class="mono muted">${esc(b.identifier)}</span>` : ""}</div>
         ${b.description ? `<p>${esc(b.description)}</p>` : ""}
         ${b.html ? `<div class="canvas">${b.html}</div>` : `<p class="muted">No body in this file.</p>`}</section>`,
     )
