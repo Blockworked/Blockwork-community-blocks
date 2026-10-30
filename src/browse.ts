@@ -6,7 +6,7 @@ import type { Env } from "./index.ts";
 import { capabilityList, esc, message, page, verifiedBadge } from "./pages.ts";
 import { blockView, CAPABILITIES, OFFICIAL_OWNER } from "./packs.ts";
 import { highlightJson, packSource } from "./source.ts";
-import { blockPicture, blockPictures, viewer } from "./renders.ts";
+import { backgroundRenders, blockPicture, blockPictures, viewer } from "./renders.ts";
 import { commentsSection } from "./comments.ts";
 
 export interface VersionRow {
@@ -222,7 +222,7 @@ export async function home(env: Env, user: User | null, admin: boolean, params: 
      <p>Custom blocks shared by the Blockwork community. To add a pack, click Browse under My Blocks in the editor.
      Every pack is reviewed before it's listed, and Blockwork tells you what its blocks can do before you add them.</p>
      <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a></p></section>
-     ${filterForm(f)}${summary}<div class="pack-list">${list}</div>`,
+     ${filterForm(f)}${summary}<div class="pack-list">${list}</div>${await backgroundRenders(env, admin)}`,
   );
 }
 
@@ -295,7 +295,7 @@ export async function packPage(env: Env, user: User | null, admin: boolean, id: 
      <h2>${plural(blocks.length, "block")}</h2><ul class="block-list">${blockList}</ul>
      <p class="see-how"><a href="/packs/${encodeURIComponent(p.pack_id)}/source">See how they work</a></p>
      <h2>Versions</h2><ul class="versions">${versionList}</ul>
-     ${await commentsSection(env, user, admin, p, error, draft)}`,
+     ${await commentsSection(env, user, admin, p, error, draft)}${await backgroundRenders(env, admin)}`,
   );
 }
 

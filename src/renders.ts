@@ -2,7 +2,7 @@
 // itself: a pack's source is shown in the pack viewer (blockworked.com's web
 // build of the editor, qt-demo/PackView.qml there, in an iframe), and the
 // lists show pictures that same viewer drew, which an admin's browser saves
-// when it opens the version for review (or from /admin/renders).
+// when it opens the version for review, or any page while some are missing.
 
 import type { User } from "./auth.ts";
 import type { Env } from "./index.ts";
@@ -146,13 +146,29 @@ export async function renderFile(env: Env, admin: boolean, sha: string, id: stri
   return new Response(object.body, { headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=31536000, immutable" } });
 }
 
-/** GET /admin/renders: draws every version still without pictures, one after another, in this page. */
-export async function rendersPage(env: Env, user: User, admin: boolean): Promise<Response> {
+async function unrendered(env: Env) {
   const { results } = await env.DB.prepare(
     `SELECT id, name, version, sha256 FROM versions WHERE renders = '' AND status IN ('approved', 'pending') ORDER BY id DESC LIMIT 200`,
   ).all<{ id: number; name: string; version: string; sha256: string }>();
+  return results;
+}
+
+const jobsFor = (versions: { id: number }[]) =>
+  JSON.stringify(versions.map((v) => ({ pack: `/admin/versions/${v.id}/file`, render: `/admin/versions/${v.id}/renders` })));
+
+/** For an admin's pages: an offscreen viewer that draws any version still without pictures, or "". */
+export async function backgroundRenders(env: Env, admin: boolean): Promise<string> {
+  if (!admin) return "";
+  const missing = await unrendered(env);
+  if (!missing.length) return "";
+  return `<div class="viewer offscreen" aria-hidden="true"><iframe class="pack-viewer" src="${esc(viewerUrl(env))}" tabindex="-1"
+    title="Pack viewer" data-jobs="${esc(jobsFor(missing))}" referrerpolicy="origin"></iframe></div><script src="/browse.js" defer></script>`;
+}
+
+/** GET /admin/renders: draws every version still without pictures, one after another, in this page. */
+export async function rendersPage(env: Env, user: User, admin: boolean): Promise<Response> {
+  const results = await unrendered(env);
   if (!results.length) return message(user, admin, "Block pictures", "Every version has its pictures.");
-  const jobs = results.map((v) => ({ pack: `/admin/versions/${v.id}/file`, render: `/admin/versions/${v.id}/renders` }));
   return page(
     "Block pictures",
     user,
@@ -160,7 +176,7 @@ export async function rendersPage(env: Env, user: User, admin: boolean): Promise
     `<h1>Block pictures</h1>
      <p>${results.length} version${results.length === 1 ? "" : "s"} without pictures of ${results.length === 1 ? "its" : "their"} blocks:
      ${results.map((v) => esc(`${v.name} ${v.version}`)).join(", ")}. Keep this page open while Blockwork's editor draws them.</p>
-     <div class="viewer"><iframe class="pack-viewer" src="${esc(viewerUrl(env))}" title="Pack viewer" data-jobs="${esc(JSON.stringify(jobs))}" referrerpolicy="origin"></iframe></div>
+     <div class="viewer"><iframe class="pack-viewer" src="${esc(viewerUrl(env))}" title="Pack viewer" data-jobs="${esc(jobsFor(results))}" referrerpolicy="origin"></iframe></div>
      <p class="render-status" data-render-status></p><script src="/browse.js" defer></script>`,
   );
 }

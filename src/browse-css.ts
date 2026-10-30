@@ -79,6 +79,8 @@ img.avatar.large { width: 64px; height: 64px; }
 /* Source: the pack's blocks on the editor's own canvas (an embedded,
    read-only copy of it from blockworked.com), and the pack file. */
 .viewer { position: relative; height: min(72vh, 720px); min-height: 360px; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--glass-border); background: var(--bg2); }
+/* In the viewport (browsers stop drawing frames outside it) but unseen. */
+.viewer.offscreen { position: fixed; left: 0; bottom: 0; width: 900px; height: 600px; opacity: 0; pointer-events: none; z-index: -1; border: 0; }
 .viewer iframe { display: block; width: 100%; height: 100%; border: 0; }
 .viewer-note { font-size: 13px; color: var(--muted); }
 .render-status { font-size: 13px; color: var(--muted); }
