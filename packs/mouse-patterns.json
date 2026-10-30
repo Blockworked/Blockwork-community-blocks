@@ -4,7 +4,7 @@
   "name": "Mouse patterns",
   "description": "Click grids, drag through a path of points and click relative to a window.",
   "author": "Blockworked",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "blocks": {
     "block_defs": [
       {
@@ -275,7 +275,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: x",
+                                "x",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -315,11 +315,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: x"
+                                              "name": "x"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: x"
+                                              "name": "x"
                                             }
                                           ],
                                           "saved": {
@@ -361,7 +361,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: y",
+                                "y",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -401,11 +401,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: y"
+                                              "name": "y"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: y"
+                                              "name": "y"
                                             }
                                           ],
                                           "saved": {
@@ -447,7 +447,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: rows",
+                                "rows",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -487,11 +487,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: rows"
+                                              "name": "rows"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: rows"
+                                              "name": "rows"
                                             }
                                           ],
                                           "saved": {
@@ -533,7 +533,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: columns",
+                                "columns",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -573,11 +573,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: columns"
+                                              "name": "columns"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: columns"
+                                              "name": "columns"
                                             }
                                           ],
                                           "saved": {
@@ -619,7 +619,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: dx",
+                                "dx",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -659,11 +659,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: dx"
+                                              "name": "dx"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: dx"
+                                              "name": "dx"
                                             }
                                           ],
                                           "saved": {
@@ -705,7 +705,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: dy",
+                                "dy",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -745,11 +745,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: dy"
+                                              "name": "dy"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: dy"
+                                              "name": "dy"
                                             }
                                           ],
                                           "saved": {
@@ -791,7 +791,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: ms",
+                                "ms",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -831,11 +831,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: ms"
+                                              "name": "ms"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: ms"
+                                              "name": "ms"
                                             }
                                           ],
                                           "saved": {
@@ -891,7 +891,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: rows"
+                                              "name": "rows"
                                             },
                                             {
                                               "kind": "Number",
@@ -909,7 +909,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: rows"
+                                              "name": "rows"
                                             },
                                             {
                                               "kind": "Op",
@@ -917,7 +917,7 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: rows"
+                                                  "name": "rows"
                                                 }
                                               ],
                                               "saved": {
@@ -975,7 +975,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: columns"
+                                              "name": "columns"
                                             },
                                             {
                                               "kind": "Number",
@@ -993,7 +993,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: columns"
+                                              "name": "columns"
                                             },
                                             {
                                               "kind": "Op",
@@ -1001,7 +1001,7 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: columns"
+                                                  "name": "columns"
                                                 }
                                               ],
                                               "saved": {
@@ -1055,7 +1055,7 @@
                                       "args": [
                                         {
                                           "kind": "Var",
-                                          "name": "Blockworked mouse-patterns: ms"
+                                          "name": "ms"
                                         },
                                         {
                                           "kind": "Number",
@@ -1101,7 +1101,7 @@
                                       "args": [
                                         {
                                           "kind": "Var",
-                                          "name": "Blockworked mouse-patterns: rows"
+                                          "name": "rows"
                                         },
                                         {
                                           "kind": "Number",
@@ -1119,7 +1119,7 @@
                                       "args": [
                                         {
                                           "kind": "Var",
-                                          "name": "Blockworked mouse-patterns: columns"
+                                          "name": "columns"
                                         },
                                         {
                                           "kind": "Number",
@@ -1155,7 +1155,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: row",
+                                "row",
                                 {
                                   "kind": "Number",
                                   "value": 0
@@ -1169,13 +1169,13 @@
                               "Repeat": {
                                 "count": {
                                   "kind": "Var",
-                                  "name": "Blockworked mouse-patterns: rows"
+                                  "name": "rows"
                                 },
                                 "body": [
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked mouse-patterns: column",
+                                        "column",
                                         {
                                           "kind": "Number",
                                           "value": 0
@@ -1189,7 +1189,7 @@
                                       "Repeat": {
                                         "count": {
                                           "kind": "Var",
-                                          "name": "Blockworked mouse-patterns: columns"
+                                          "name": "columns"
                                         },
                                         "body": [
                                           {
@@ -1202,7 +1202,7 @@
                                                     "args": [
                                                       {
                                                         "kind": "Var",
-                                                        "name": "Blockworked mouse-patterns: x"
+                                                        "name": "x"
                                                       },
                                                       {
                                                         "kind": "Op",
@@ -1210,11 +1210,11 @@
                                                         "args": [
                                                           {
                                                             "kind": "Var",
-                                                            "name": "Blockworked mouse-patterns: column"
+                                                            "name": "column"
                                                           },
                                                           {
                                                             "kind": "Var",
-                                                            "name": "Blockworked mouse-patterns: dx"
+                                                            "name": "dx"
                                                           }
                                                         ],
                                                         "saved": {
@@ -1234,7 +1234,7 @@
                                                     "args": [
                                                       {
                                                         "kind": "Var",
-                                                        "name": "Blockworked mouse-patterns: y"
+                                                        "name": "y"
                                                       },
                                                       {
                                                         "kind": "Op",
@@ -1242,11 +1242,11 @@
                                                         "args": [
                                                           {
                                                             "kind": "Var",
-                                                            "name": "Blockworked mouse-patterns: row"
+                                                            "name": "row"
                                                           },
                                                           {
                                                             "kind": "Var",
-                                                            "name": "Blockworked mouse-patterns: dy"
+                                                            "name": "dy"
                                                           }
                                                         ],
                                                         "saved": {
@@ -1281,7 +1281,7 @@
                                             "kind": {
                                               "Wait": {
                                                 "kind": "Var",
-                                                "name": "Blockworked mouse-patterns: ms"
+                                                "name": "ms"
                                               }
                                             },
                                             "id": "b551b98223b354f5a1f52af4fcef84a7"
@@ -1289,7 +1289,7 @@
                                           {
                                             "kind": {
                                               "ChangeVariable": [
-                                                "Blockworked mouse-patterns: column",
+                                                "column",
                                                 {
                                                   "kind": "Number",
                                                   "value": 1
@@ -1306,7 +1306,7 @@
                                   {
                                     "kind": {
                                       "ChangeVariable": [
-                                        "Blockworked mouse-patterns: row",
+                                        "row",
                                         {
                                           "kind": "Number",
                                           "value": 1
@@ -1374,7 +1374,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: ms",
+                                "ms",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -1414,11 +1414,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: ms"
+                                              "name": "ms"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: ms"
+                                              "name": "ms"
                                             }
                                           ],
                                           "saved": {
@@ -1470,7 +1470,7 @@
                                       "args": [
                                         {
                                           "kind": "Var",
-                                          "name": "Blockworked mouse-patterns: ms"
+                                          "name": "ms"
                                         },
                                         {
                                           "kind": "Number",
@@ -1506,7 +1506,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: path",
+                                "path",
                                 {
                                   "kind": "Op",
                                   "op": "Trim",
@@ -1582,14 +1582,14 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: point count",
+                                "point count",
                                 {
                                   "kind": "Op",
                                   "op": "SplitCount",
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked mouse-patterns: path"
+                                      "name": "path"
                                     },
                                     {
                                       "kind": "Text",
@@ -1618,7 +1618,7 @@
                                       "args": [
                                         {
                                           "kind": "Var",
-                                          "name": "Blockworked mouse-patterns: point count"
+                                          "name": "point count"
                                         },
                                         {
                                           "kind": "Number",
@@ -1654,7 +1654,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: point number",
+                                "point number",
                                 {
                                   "kind": "Number",
                                   "value": 1
@@ -1668,24 +1668,24 @@
                               "Repeat": {
                                 "count": {
                                   "kind": "Var",
-                                  "name": "Blockworked mouse-patterns: point count"
+                                  "name": "point count"
                                 },
                                 "body": [
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked mouse-patterns: point",
+                                        "point",
                                         {
                                           "kind": "Op",
                                           "op": "SplitPart",
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: point number"
+                                              "name": "point number"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: path"
+                                              "name": "path"
                                             },
                                             {
                                               "kind": "Text",
@@ -1718,7 +1718,7 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked mouse-patterns: point"
+                                                      "name": "point"
                                                     },
                                                     {
                                                       "kind": "Text",
@@ -1764,7 +1764,7 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked mouse-patterns: point x",
+                                        "point x",
                                         {
                                           "kind": "Op",
                                           "op": "Add",
@@ -1779,7 +1779,7 @@
                                                 },
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: point"
+                                                  "name": "point"
                                                 },
                                                 {
                                                   "kind": "Text",
@@ -1808,7 +1808,7 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked mouse-patterns: point y",
+                                        "point y",
                                         {
                                           "kind": "Op",
                                           "op": "Add",
@@ -1823,7 +1823,7 @@
                                                 },
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: point"
+                                                  "name": "point"
                                                 },
                                                 {
                                                   "kind": "Text",
@@ -1866,11 +1866,11 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked mouse-patterns: point x"
+                                                      "name": "point x"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked mouse-patterns: point x"
+                                                      "name": "point x"
                                                     }
                                                   ],
                                                   "saved": {
@@ -1926,11 +1926,11 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked mouse-patterns: point y"
+                                                      "name": "point y"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked mouse-patterns: point y"
+                                                      "name": "point y"
                                                     }
                                                   ],
                                                   "saved": {
@@ -1972,7 +1972,7 @@
                                   {
                                     "kind": {
                                       "ChangeVariable": [
-                                        "Blockworked mouse-patterns: point number",
+                                        "point number",
                                         {
                                           "kind": "Number",
                                           "value": 1
@@ -1989,7 +1989,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: point number",
+                                "point number",
                                 {
                                   "kind": "Number",
                                   "value": 1
@@ -2001,18 +2001,18 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: point",
+                                "point",
                                 {
                                   "kind": "Op",
                                   "op": "SplitPart",
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked mouse-patterns: point number"
+                                      "name": "point number"
                                     },
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked mouse-patterns: path"
+                                      "name": "path"
                                     },
                                     {
                                       "kind": "Text",
@@ -2042,7 +2042,7 @@
                                       },
                                       {
                                         "kind": "Var",
-                                        "name": "Blockworked mouse-patterns: point"
+                                        "name": "point"
                                       },
                                       {
                                         "kind": "Text",
@@ -2064,7 +2064,7 @@
                                       },
                                       {
                                         "kind": "Var",
-                                        "name": "Blockworked mouse-patterns: point"
+                                        "name": "point"
                                       },
                                       {
                                         "kind": "Text",
@@ -2101,7 +2101,7 @@
                                     "kind": {
                                       "Wait": {
                                         "kind": "Var",
-                                        "name": "Blockworked mouse-patterns: ms"
+                                        "name": "ms"
                                       }
                                     },
                                     "id": "b0d3dcab6db25151a5176c7e68eabcd4"
@@ -2109,7 +2109,7 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked mouse-patterns: point number",
+                                        "point number",
                                         {
                                           "kind": "Number",
                                           "value": 2
@@ -2127,7 +2127,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: point count"
+                                              "name": "point count"
                                             },
                                             {
                                               "kind": "Number",
@@ -2143,18 +2143,18 @@
                                           {
                                             "kind": {
                                               "SetVariable": [
-                                                "Blockworked mouse-patterns: point",
+                                                "point",
                                                 {
                                                   "kind": "Op",
                                                   "op": "SplitPart",
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked mouse-patterns: point number"
+                                                      "name": "point number"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked mouse-patterns: path"
+                                                      "name": "path"
                                                     },
                                                     {
                                                       "kind": "Text",
@@ -2184,7 +2184,7 @@
                                                       },
                                                       {
                                                         "kind": "Var",
-                                                        "name": "Blockworked mouse-patterns: point"
+                                                        "name": "point"
                                                       },
                                                       {
                                                         "kind": "Text",
@@ -2206,7 +2206,7 @@
                                                       },
                                                       {
                                                         "kind": "Var",
-                                                        "name": "Blockworked mouse-patterns: point"
+                                                        "name": "point"
                                                       },
                                                       {
                                                         "kind": "Text",
@@ -2228,7 +2228,7 @@
                                             "kind": {
                                               "Wait": {
                                                 "kind": "Var",
-                                                "name": "Blockworked mouse-patterns: ms"
+                                                "name": "ms"
                                               }
                                             },
                                             "id": "0ec0064c3b8d525db287f1b3765040c7"
@@ -2236,7 +2236,7 @@
                                           {
                                             "kind": {
                                               "ChangeVariable": [
-                                                "Blockworked mouse-patterns: point number",
+                                                "point number",
                                                 {
                                                   "kind": "Number",
                                                   "value": 1
@@ -2347,7 +2347,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: x",
+                                "x",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -2387,11 +2387,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: x"
+                                              "name": "x"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: x"
+                                              "name": "x"
                                             }
                                           ],
                                           "saved": {
@@ -2433,7 +2433,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: y",
+                                "y",
                                 {
                                   "kind": "Op",
                                   "op": "Add",
@@ -2473,11 +2473,11 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: y"
+                                              "name": "y"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: y"
+                                              "name": "y"
                                             }
                                           ],
                                           "saved": {
@@ -2519,14 +2519,14 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: x",
+                                "x",
                                 {
                                   "kind": "Op",
                                   "op": "Round",
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked mouse-patterns: x"
+                                      "name": "x"
                                     }
                                   ],
                                   "saved": {
@@ -2541,14 +2541,14 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: y",
+                                "y",
                                 {
                                   "kind": "Op",
                                   "op": "Round",
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked mouse-patterns: y"
+                                      "name": "y"
                                     }
                                   ],
                                   "saved": {
@@ -2563,7 +2563,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: window width",
+                                "window width",
                                 {
                                   "kind": "Op",
                                   "op": "WindowInfo",
@@ -2589,7 +2589,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: window height",
+                                "window height",
                                 {
                                   "kind": "Op",
                                   "op": "WindowInfo",
@@ -2633,7 +2633,7 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: x"
+                                                  "name": "x"
                                                 },
                                                 {
                                                   "kind": "Number",
@@ -2651,11 +2651,11 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: x"
+                                                  "name": "x"
                                                 },
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: window width"
+                                                  "name": "window width"
                                                 }
                                               ],
                                               "saved": {
@@ -2679,7 +2679,7 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: y"
+                                                  "name": "y"
                                                 },
                                                 {
                                                   "kind": "Number",
@@ -2697,11 +2697,11 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: y"
+                                                  "name": "y"
                                                 },
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked mouse-patterns: window height"
+                                                  "name": "window height"
                                                 }
                                               ],
                                               "saved": {
@@ -2767,7 +2767,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: window x",
+                                "window x",
                                 {
                                   "kind": "Op",
                                   "op": "WindowInfo",
@@ -2793,7 +2793,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked mouse-patterns: window y",
+                                "window y",
                                 {
                                   "kind": "Op",
                                   "op": "WindowInfo",
@@ -2833,7 +2833,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: x"
+                                              "name": "x"
                                             },
                                             {
                                               "kind": "Op",
@@ -2865,7 +2865,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked mouse-patterns: y"
+                                              "name": "y"
                                             },
                                             {
                                               "kind": "Op",
@@ -2928,11 +2928,11 @@
                                     "args": [
                                       {
                                         "kind": "Var",
-                                        "name": "Blockworked mouse-patterns: window x"
+                                        "name": "window x"
                                       },
                                       {
                                         "kind": "Var",
-                                        "name": "Blockworked mouse-patterns: x"
+                                        "name": "x"
                                       }
                                     ],
                                     "saved": {
@@ -2946,11 +2946,11 @@
                                     "args": [
                                       {
                                         "kind": "Var",
-                                        "name": "Blockworked mouse-patterns: window y"
+                                        "name": "window y"
                                       },
                                       {
                                         "kind": "Var",
-                                        "name": "Blockworked mouse-patterns: y"
+                                        "name": "y"
                                       }
                                     ],
                                     "saved": {
@@ -3006,133 +3006,133 @@
     ],
     "variables": [
       {
-        "name": "Blockworked mouse-patterns: column",
+        "name": "column",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: columns",
+        "name": "columns",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: dx",
+        "name": "dx",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: dy",
+        "name": "dy",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: ms",
+        "name": "ms",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: path",
+        "name": "path",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: point",
+        "name": "point",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: point count",
+        "name": "point count",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: point number",
+        "name": "point number",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: point x",
+        "name": "point x",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: point y",
+        "name": "point y",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: row",
+        "name": "row",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: rows",
+        "name": "rows",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: window height",
+        "name": "window height",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: window width",
+        "name": "window width",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: window x",
+        "name": "window x",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: window y",
+        "name": "window y",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: x",
+        "name": "x",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked mouse-patterns: y",
+        "name": "y",
         "value": {
           "kind": "Number",
           "value": 0

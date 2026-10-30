@@ -4,7 +4,7 @@
   "name": "Clipboard tools",
   "description": "Remove duplicate or blank clipboard lines and clean whitespace while preserving line breaks.",
   "author": "Blockworked",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "blocks": {
     "block_defs": [
       {
@@ -100,7 +100,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: output",
+                                "output",
                                 {
                                   "kind": "Text",
                                   "value": ""
@@ -112,7 +112,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: kept",
+                                "kept",
                                 {
                                   "kind": "Number",
                                   "value": 0
@@ -124,7 +124,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: seen",
+                                "seen",
                                 {
                                   "kind": "Text",
                                   "value": "\n"
@@ -136,7 +136,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: source",
+                                "source",
                                 {
                                   "kind": "Op",
                                   "op": "TextReplace",
@@ -189,7 +189,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: line number",
+                                "line number",
                                 {
                                   "kind": "Number",
                                   "value": 1
@@ -207,7 +207,7 @@
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked clipboard-tools: source"
+                                      "name": "source"
                                     },
                                     {
                                       "kind": "Text",
@@ -223,18 +223,18 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked clipboard-tools: line",
+                                        "line",
                                         {
                                           "kind": "Op",
                                           "op": "SplitPart",
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked clipboard-tools: line number"
+                                              "name": "line number"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked clipboard-tools: source"
+                                              "name": "source"
                                             },
                                             {
                                               "kind": "Text",
@@ -263,7 +263,7 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked clipboard-tools: seen"
+                                                  "name": "seen"
                                                 },
                                                 {
                                                   "kind": "Text",
@@ -279,7 +279,7 @@
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: line"
+                                                      "name": "line"
                                                     },
                                                     {
                                                       "kind": "Text",
@@ -313,7 +313,7 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: kept"
+                                                      "name": "kept"
                                                     },
                                                     {
                                                       "kind": "Number",
@@ -329,14 +329,14 @@
                                                   {
                                                     "kind": {
                                                       "SetVariable": [
-                                                        "Blockworked clipboard-tools: output",
+                                                        "output",
                                                         {
                                                           "kind": "Op",
                                                           "op": "Join",
                                                           "args": [
                                                             {
                                                               "kind": "Var",
-                                                              "name": "Blockworked clipboard-tools: output"
+                                                              "name": "output"
                                                             },
                                                             {
                                                               "kind": "Text",
@@ -360,18 +360,18 @@
                                           {
                                             "kind": {
                                               "SetVariable": [
-                                                "Blockworked clipboard-tools: output",
+                                                "output",
                                                 {
                                                   "kind": "Op",
                                                   "op": "Join",
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: output"
+                                                      "name": "output"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: line"
+                                                      "name": "line"
                                                     }
                                                   ],
                                                   "saved": {
@@ -386,7 +386,7 @@
                                           {
                                             "kind": {
                                               "ChangeVariable": [
-                                                "Blockworked clipboard-tools: kept",
+                                                "kept",
                                                 {
                                                   "kind": "Number",
                                                   "value": 1
@@ -398,18 +398,18 @@
                                           {
                                             "kind": {
                                               "SetVariable": [
-                                                "Blockworked clipboard-tools: seen",
+                                                "seen",
                                                 {
                                                   "kind": "Op",
                                                   "op": "Join",
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: seen"
+                                                      "name": "seen"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: line"
+                                                      "name": "line"
                                                     },
                                                     {
                                                       "kind": "Text",
@@ -433,7 +433,7 @@
                                   {
                                     "kind": {
                                       "ChangeVariable": [
-                                        "Blockworked clipboard-tools: line number",
+                                        "line number",
                                         {
                                           "kind": "Number",
                                           "value": 1
@@ -451,7 +451,7 @@
                             "kind": {
                               "SetClipboard": {
                                 "kind": "Var",
-                                "name": "Blockworked clipboard-tools: output"
+                                "name": "output"
                               }
                             },
                             "id": "7c7377f519185583ad420e09f993c97c"
@@ -510,7 +510,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: output",
+                                "output",
                                 {
                                   "kind": "Text",
                                   "value": ""
@@ -522,7 +522,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: kept",
+                                "kept",
                                 {
                                   "kind": "Number",
                                   "value": 0
@@ -534,7 +534,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: seen",
+                                "seen",
                                 {
                                   "kind": "Text",
                                   "value": "\n"
@@ -546,7 +546,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: source",
+                                "source",
                                 {
                                   "kind": "Op",
                                   "op": "TextReplace",
@@ -599,7 +599,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: line number",
+                                "line number",
                                 {
                                   "kind": "Number",
                                   "value": 1
@@ -617,7 +617,7 @@
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked clipboard-tools: source"
+                                      "name": "source"
                                     },
                                     {
                                       "kind": "Text",
@@ -633,18 +633,18 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked clipboard-tools: line",
+                                        "line",
                                         {
                                           "kind": "Op",
                                           "op": "SplitPart",
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked clipboard-tools: line number"
+                                              "name": "line number"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked clipboard-tools: source"
+                                              "name": "source"
                                             },
                                             {
                                               "kind": "Text",
@@ -677,7 +677,7 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: line"
+                                                      "name": "line"
                                                     }
                                                   ],
                                                   "saved": {
@@ -711,7 +711,7 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: kept"
+                                                      "name": "kept"
                                                     },
                                                     {
                                                       "kind": "Number",
@@ -727,14 +727,14 @@
                                                   {
                                                     "kind": {
                                                       "SetVariable": [
-                                                        "Blockworked clipboard-tools: output",
+                                                        "output",
                                                         {
                                                           "kind": "Op",
                                                           "op": "Join",
                                                           "args": [
                                                             {
                                                               "kind": "Var",
-                                                              "name": "Blockworked clipboard-tools: output"
+                                                              "name": "output"
                                                             },
                                                             {
                                                               "kind": "Text",
@@ -758,18 +758,18 @@
                                           {
                                             "kind": {
                                               "SetVariable": [
-                                                "Blockworked clipboard-tools: output",
+                                                "output",
                                                 {
                                                   "kind": "Op",
                                                   "op": "Join",
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: output"
+                                                      "name": "output"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: line"
+                                                      "name": "line"
                                                     }
                                                   ],
                                                   "saved": {
@@ -784,7 +784,7 @@
                                           {
                                             "kind": {
                                               "ChangeVariable": [
-                                                "Blockworked clipboard-tools: kept",
+                                                "kept",
                                                 {
                                                   "kind": "Number",
                                                   "value": 1
@@ -801,7 +801,7 @@
                                   {
                                     "kind": {
                                       "ChangeVariable": [
-                                        "Blockworked clipboard-tools: line number",
+                                        "line number",
                                         {
                                           "kind": "Number",
                                           "value": 1
@@ -819,7 +819,7 @@
                             "kind": {
                               "SetClipboard": {
                                 "kind": "Var",
-                                "name": "Blockworked clipboard-tools: output"
+                                "name": "output"
                               }
                             },
                             "id": "a82b2a85dcbb50cbb7303142e12fb425"
@@ -878,7 +878,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: output",
+                                "output",
                                 {
                                   "kind": "Text",
                                   "value": ""
@@ -890,7 +890,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: kept",
+                                "kept",
                                 {
                                   "kind": "Number",
                                   "value": 0
@@ -902,7 +902,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: seen",
+                                "seen",
                                 {
                                   "kind": "Text",
                                   "value": "\n"
@@ -914,7 +914,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: source",
+                                "source",
                                 {
                                   "kind": "Op",
                                   "op": "TextReplace",
@@ -967,7 +967,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked clipboard-tools: line number",
+                                "line number",
                                 {
                                   "kind": "Number",
                                   "value": 1
@@ -985,7 +985,7 @@
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked clipboard-tools: source"
+                                      "name": "source"
                                     },
                                     {
                                       "kind": "Text",
@@ -1001,18 +1001,18 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked clipboard-tools: line",
+                                        "line",
                                         {
                                           "kind": "Op",
                                           "op": "SplitPart",
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked clipboard-tools: line number"
+                                              "name": "line number"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked clipboard-tools: source"
+                                              "name": "source"
                                             },
                                             {
                                               "kind": "Text",
@@ -1031,7 +1031,7 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked clipboard-tools: line",
+                                        "line",
                                         {
                                           "kind": "Op",
                                           "op": "RegexReplace",
@@ -1046,7 +1046,7 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked clipboard-tools: line"
+                                                  "name": "line"
                                                 }
                                               ],
                                               "saved": {
@@ -1085,7 +1085,7 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: line"
+                                                      "name": "line"
                                                     }
                                                   ],
                                                   "saved": {
@@ -1119,7 +1119,7 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: kept"
+                                                      "name": "kept"
                                                     },
                                                     {
                                                       "kind": "Number",
@@ -1135,14 +1135,14 @@
                                                   {
                                                     "kind": {
                                                       "SetVariable": [
-                                                        "Blockworked clipboard-tools: output",
+                                                        "output",
                                                         {
                                                           "kind": "Op",
                                                           "op": "Join",
                                                           "args": [
                                                             {
                                                               "kind": "Var",
-                                                              "name": "Blockworked clipboard-tools: output"
+                                                              "name": "output"
                                                             },
                                                             {
                                                               "kind": "Text",
@@ -1166,18 +1166,18 @@
                                           {
                                             "kind": {
                                               "SetVariable": [
-                                                "Blockworked clipboard-tools: output",
+                                                "output",
                                                 {
                                                   "kind": "Op",
                                                   "op": "Join",
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: output"
+                                                      "name": "output"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked clipboard-tools: line"
+                                                      "name": "line"
                                                     }
                                                   ],
                                                   "saved": {
@@ -1192,7 +1192,7 @@
                                           {
                                             "kind": {
                                               "ChangeVariable": [
-                                                "Blockworked clipboard-tools: kept",
+                                                "kept",
                                                 {
                                                   "kind": "Number",
                                                   "value": 1
@@ -1209,7 +1209,7 @@
                                   {
                                     "kind": {
                                       "ChangeVariable": [
-                                        "Blockworked clipboard-tools: line number",
+                                        "line number",
                                         {
                                           "kind": "Number",
                                           "value": 1
@@ -1227,7 +1227,7 @@
                             "kind": {
                               "SetClipboard": {
                                 "kind": "Var",
-                                "name": "Blockworked clipboard-tools: output"
+                                "name": "output"
                               }
                             },
                             "id": "9fdbb6e196fe5b088f9d8977ac9979eb"
@@ -1263,42 +1263,42 @@
     ],
     "variables": [
       {
-        "name": "Blockworked clipboard-tools: kept",
+        "name": "kept",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked clipboard-tools: line",
+        "name": "line",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked clipboard-tools: line number",
+        "name": "line number",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked clipboard-tools: output",
+        "name": "output",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked clipboard-tools: seen",
+        "name": "seen",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked clipboard-tools: source",
+        "name": "source",
         "value": {
           "kind": "Number",
           "value": 0

@@ -57,6 +57,10 @@ block to explain its inputs and behavior. Older packs without these fields still
 Run `python3 scripts/build-block-index.py` after editing starter packs to
 refresh their checksums.
 
+A pack's variables are private to it in Blockwork, so use plain names
+(`line`, not `Author pack: line`); they can't clash with the user's own.
+Starter packs before 1.1.0 carried a `Blockworked <pack>: ` prefix.
+
 Inputs can include an optional `default_value` literal. Blockwork uses it in
 the sidebar and for new calls; updating a pack preserves existing call values.
 For example, an active-window input can start empty and a monitor input at 1:

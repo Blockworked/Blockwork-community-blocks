@@ -179,7 +179,7 @@ fn run(pack_id: &str, identifier: &str, args: Vec<Value>) -> HashMap<String, Eva
         .content
         .block_defs
         .iter()
-        .find(|d| d.identifier == format!("Blockworked_{identifier}"))
+        .find(|d| d.identifier == format!("Blockworked:{identifier}"))
         .unwrap()
         .clone();
     let body = if format!("{:?}", def.shape) == "ReturnsValue" {
@@ -217,10 +217,15 @@ fn run(pack_id: &str, identifier: &str, args: Vec<Value>) -> HashMap<String, Eva
         })],
     );
     merge_into(&mut mac, &pack, "");
+    // Pack variables run under a private key; tests read them by their own name.
+    let prefix = mac.settings.block_packs[0].variable_key("");
     let vars = Arc::new(Mutex::new(HashMap::new()));
     mac.run(Arc::new(Mutex::new(Recorder)), None, 1000000., vars.clone());
     let result = vars.lock().unwrap().clone();
     result
+        .into_iter()
+        .map(|(k, v)| (k.strip_prefix(&prefix).map(str::to_string).unwrap_or(k), v))
+        .collect()
 }
 fn strings(args: &[&str]) -> Vec<Value> {
     args.iter().map(|s| Value::text(*s)).collect()

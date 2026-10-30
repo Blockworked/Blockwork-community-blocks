@@ -80,8 +80,10 @@ class Pack:
         self.color, self.icon = color, icon
         self.defs, self.strands, self.vars = [], [], set()
 
+    # Blockwork keeps a pack's variables private to the pack, so plain names
+    # can't collide with the user's own.
     def name_for(self, name):
-        return f'Blockworked {self.id}: {name}'
+        return name
 
     def v(self, name):
         self.vars.add(name)
@@ -149,9 +151,8 @@ class Pack:
         content = {**template, 'name': self.name, 'description': self.description,
                    'block_defs': self.defs, 'strands': strands, 'lists': [], 'dicts': [],
                    'variables': [{'name': self.name_for(n), 'value': {'kind': 'Number', 'value': 0}} for n in sorted(self.vars)]}
-        version = '1.0.1' if any(p['kind'] == 'Input' for d in self.defs for p in d['pieces']) else '1.0.0'
-        if self.id == 'mouse-patterns':
-            version = '1.0.2'
+        # 1.1.0 dropped the "Blockworked <pack>: " variable prefix.
+        version = '1.1.0'
         data = {'blockwork_block_pack': 1, 'id': self.id, 'name': self.name, 'description': self.description,
                 'author': 'Blockworked', 'version': version, 'blocks': content}
         (ROOT / f'packs/{self.id}.json').write_text(json.dumps(data, indent=2) + '\n')

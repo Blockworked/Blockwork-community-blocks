@@ -4,7 +4,7 @@
   "name": "Text extraction",
   "description": "Extract text between literal markers, collect matching lines and look up key=value entries.",
   "author": "Blockworked",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "blocks": {
     "block_defs": [
       {
@@ -274,7 +274,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: start position",
+                                "start position",
                                 {
                                   "kind": "Op",
                                   "op": "IndexOf",
@@ -306,7 +306,7 @@
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked text-extraction: start position"
+                                      "name": "start position"
                                     },
                                     {
                                       "kind": "Number",
@@ -336,7 +336,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: tail",
+                                "tail",
                                 {
                                   "kind": "Op",
                                   "op": "Substring",
@@ -347,7 +347,7 @@
                                       "args": [
                                         {
                                           "kind": "Var",
-                                          "name": "Blockworked text-extraction: start position"
+                                          "name": "start position"
                                         },
                                         {
                                           "kind": "Op",
@@ -400,7 +400,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: end position",
+                                "end position",
                                 {
                                   "kind": "Op",
                                   "op": "IndexOf",
@@ -411,7 +411,7 @@
                                     },
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked text-extraction: tail"
+                                      "name": "tail"
                                     }
                                   ],
                                   "saved": {
@@ -432,7 +432,7 @@
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked text-extraction: end position"
+                                      "name": "end position"
                                     },
                                     {
                                       "kind": "Number",
@@ -475,7 +475,7 @@
                                     "args": [
                                       {
                                         "kind": "Var",
-                                        "name": "Blockworked text-extraction: end position"
+                                        "name": "end position"
                                       },
                                       {
                                         "kind": "Number",
@@ -489,7 +489,7 @@
                                   },
                                   {
                                     "kind": "Var",
-                                    "name": "Blockworked text-extraction: tail"
+                                    "name": "tail"
                                   }
                                 ],
                                 "saved": {
@@ -554,7 +554,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: output",
+                                "output",
                                 {
                                   "kind": "Text",
                                   "value": ""
@@ -566,7 +566,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: kept",
+                                "kept",
                                 {
                                   "kind": "Number",
                                   "value": 0
@@ -578,7 +578,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: source",
+                                "source",
                                 {
                                   "kind": "Op",
                                   "op": "TextReplace",
@@ -626,7 +626,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: line number",
+                                "line number",
                                 {
                                   "kind": "Number",
                                   "value": 1
@@ -644,7 +644,7 @@
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked text-extraction: source"
+                                      "name": "source"
                                     },
                                     {
                                       "kind": "Text",
@@ -660,18 +660,18 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked text-extraction: line",
+                                        "line",
                                         {
                                           "kind": "Op",
                                           "op": "SplitPart",
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked text-extraction: line number"
+                                              "name": "line number"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked text-extraction: source"
+                                              "name": "source"
                                             },
                                             {
                                               "kind": "Text",
@@ -696,7 +696,7 @@
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked text-extraction: line"
+                                              "name": "line"
                                             },
                                             {
                                               "kind": "Text",
@@ -722,7 +722,7 @@
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked text-extraction: kept"
+                                                      "name": "kept"
                                                     },
                                                     {
                                                       "kind": "Number",
@@ -738,14 +738,14 @@
                                                   {
                                                     "kind": {
                                                       "SetVariable": [
-                                                        "Blockworked text-extraction: output",
+                                                        "output",
                                                         {
                                                           "kind": "Op",
                                                           "op": "Join",
                                                           "args": [
                                                             {
                                                               "kind": "Var",
-                                                              "name": "Blockworked text-extraction: output"
+                                                              "name": "output"
                                                             },
                                                             {
                                                               "kind": "Text",
@@ -769,18 +769,18 @@
                                           {
                                             "kind": {
                                               "SetVariable": [
-                                                "Blockworked text-extraction: output",
+                                                "output",
                                                 {
                                                   "kind": "Op",
                                                   "op": "Join",
                                                   "args": [
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked text-extraction: output"
+                                                      "name": "output"
                                                     },
                                                     {
                                                       "kind": "Var",
-                                                      "name": "Blockworked text-extraction: line"
+                                                      "name": "line"
                                                     }
                                                   ],
                                                   "saved": {
@@ -795,7 +795,7 @@
                                           {
                                             "kind": {
                                               "ChangeVariable": [
-                                                "Blockworked text-extraction: kept",
+                                                "kept",
                                                 {
                                                   "kind": "Number",
                                                   "value": 1
@@ -812,7 +812,7 @@
                                   {
                                     "kind": {
                                       "ChangeVariable": [
-                                        "Blockworked text-extraction: line number",
+                                        "line number",
                                         {
                                           "kind": "Number",
                                           "value": 1
@@ -830,7 +830,7 @@
                             "kind": {
                               "Return": {
                                 "kind": "Var",
-                                "name": "Blockworked text-extraction: output"
+                                "name": "output"
                               }
                             },
                             "id": "8f436f10424d5378b4d92796d4aacfd9"
@@ -945,7 +945,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: source",
+                                "source",
                                 {
                                   "kind": "Op",
                                   "op": "TextReplace",
@@ -993,7 +993,7 @@
                           {
                             "kind": {
                               "SetVariable": [
-                                "Blockworked text-extraction: line number",
+                                "line number",
                                 {
                                   "kind": "Number",
                                   "value": 1
@@ -1011,7 +1011,7 @@
                                   "args": [
                                     {
                                       "kind": "Var",
-                                      "name": "Blockworked text-extraction: source"
+                                      "name": "source"
                                     },
                                     {
                                       "kind": "Text",
@@ -1027,18 +1027,18 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked text-extraction: line",
+                                        "line",
                                         {
                                           "kind": "Op",
                                           "op": "SplitPart",
                                           "args": [
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked text-extraction: line number"
+                                              "name": "line number"
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked text-extraction: source"
+                                              "name": "source"
                                             },
                                             {
                                               "kind": "Text",
@@ -1057,7 +1057,7 @@
                                   {
                                     "kind": {
                                       "SetVariable": [
-                                        "Blockworked text-extraction: equals position",
+                                        "equals position",
                                         {
                                           "kind": "Op",
                                           "op": "IndexOf",
@@ -1068,7 +1068,7 @@
                                             },
                                             {
                                               "kind": "Var",
-                                              "name": "Blockworked text-extraction: line"
+                                              "name": "line"
                                             }
                                           ],
                                           "saved": {
@@ -1093,7 +1093,7 @@
                                               "args": [
                                                 {
                                                   "kind": "Var",
-                                                  "name": "Blockworked text-extraction: equals position"
+                                                  "name": "equals position"
                                                 },
                                                 {
                                                   "kind": "Number",
@@ -1119,7 +1119,7 @@
                                                       "args": [
                                                         {
                                                           "kind": "Var",
-                                                          "name": "Blockworked text-extraction: line"
+                                                          "name": "line"
                                                         }
                                                       ],
                                                       "saved": {
@@ -1157,7 +1157,7 @@
                                           {
                                             "kind": {
                                               "SetVariable": [
-                                                "Blockworked text-extraction: key",
+                                                "key",
                                                 {
                                                   "kind": "Op",
                                                   "op": "Trim",
@@ -1176,7 +1176,7 @@
                                                           "args": [
                                                             {
                                                               "kind": "Var",
-                                                              "name": "Blockworked text-extraction: equals position"
+                                                              "name": "equals position"
                                                             },
                                                             {
                                                               "kind": "Number",
@@ -1190,7 +1190,7 @@
                                                         },
                                                         {
                                                           "kind": "Var",
-                                                          "name": "Blockworked text-extraction: line"
+                                                          "name": "line"
                                                         }
                                                       ],
                                                       "saved": {
@@ -1225,7 +1225,7 @@
                                                         },
                                                         {
                                                           "kind": "Var",
-                                                          "name": "Blockworked text-extraction: key"
+                                                          "name": "key"
                                                         }
                                                       ],
                                                       "saved": {
@@ -1284,7 +1284,7 @@
                                                                 "args": [
                                                                   {
                                                                     "kind": "Var",
-                                                                    "name": "Blockworked text-extraction: equals position"
+                                                                    "name": "equals position"
                                                                   },
                                                                   {
                                                                     "kind": "Number",
@@ -1302,7 +1302,7 @@
                                                                 "args": [
                                                                   {
                                                                     "kind": "Var",
-                                                                    "name": "Blockworked text-extraction: line"
+                                                                    "name": "line"
                                                                   }
                                                                 ],
                                                                 "saved": {
@@ -1312,7 +1312,7 @@
                                                               },
                                                               {
                                                                 "kind": "Var",
-                                                                "name": "Blockworked text-extraction: line"
+                                                                "name": "line"
                                                               }
                                                             ],
                                                             "saved": {
@@ -1342,7 +1342,7 @@
                                   {
                                     "kind": {
                                       "ChangeVariable": [
-                                        "Blockworked text-extraction: line number",
+                                        "line number",
                                         {
                                           "kind": "Number",
                                           "value": 1
@@ -1396,70 +1396,70 @@
     ],
     "variables": [
       {
-        "name": "Blockworked text-extraction: end position",
+        "name": "end position",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: equals position",
+        "name": "equals position",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: kept",
+        "name": "kept",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: key",
+        "name": "key",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: line",
+        "name": "line",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: line number",
+        "name": "line number",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: output",
+        "name": "output",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: source",
+        "name": "source",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: start position",
+        "name": "start position",
         "value": {
           "kind": "Number",
           "value": 0
         }
       },
       {
-        "name": "Blockworked text-extraction: tail",
+        "name": "tail",
         "value": {
           "kind": "Number",
           "value": 0
