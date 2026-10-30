@@ -7,6 +7,8 @@ export const BROWSE_CSS = `
 .pill { display: inline-block; padding: 1px 7px; border-radius: 999px; background: rgba(var(--accent-rgb), 0.16); color: var(--accent); font-size: 11px; font-weight: 600; vertical-align: 1px; }
 .n { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--bg3); color: var(--muted); font-size: 12px; font-weight: 600; text-align: center; vertical-align: 2px; }
 a.author { color: inherit; font-weight: 600; }
+/* A row of facts about a pack, spaced apart rather than joined with separators. */
+.meta { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 18px; row-gap: 2px; }
 .crumbs { margin: 0 0 10px; font-size: 13px; }
 .crumbs a::before { content: "← "; }
 
@@ -36,7 +38,7 @@ input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; m
 .pack-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .pack-title h1 { margin-bottom: 4px; }
 .pack-title .actions { margin: 6px 0 0; display: flex; gap: 8px; }
-.tabs { display: flex; gap: 2px; margin: 18px 0 22px; border-bottom: 1px solid var(--glass-border); overflow-x: auto; }
+.tabs { display: flex; gap: 2px; margin: 18px 0 22px; border-bottom: 1px solid var(--glass-border); overflow-x: auto; overflow-y: hidden; }
 .tabs a { padding: 8px 12px; color: var(--muted); font-size: 14px; font-weight: 600; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
 .tabs a:hover { color: var(--fg); text-decoration: none; }
 .tabs a[aria-current] { color: var(--fg); border-bottom-color: var(--accent); }
@@ -60,7 +62,7 @@ dl.inputs code { font-size: 12px; color: var(--fg); }
 ul.versions { list-style: none; padding: 0; margin: 0; font-size: 14px; }
 ul.versions li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 6px 0; }
 ul.versions .v { font-weight: 600; }
-ul.versions .links { margin-left: auto; font-size: 13px; }
+ul.versions .links { margin-left: auto; font-size: 13px; display: flex; gap: 12px; }
 
 /* Author pages. */
 .profile { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }

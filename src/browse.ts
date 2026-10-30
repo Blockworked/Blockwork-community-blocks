@@ -173,7 +173,7 @@ export function listedCard(p: ListedPack): string {
   return `<article class="card pack">
     <div class="pack-head"><h3><a href="${href}">${esc(p.name)}</a> <span class="version">${esc(p.version)}</span></h3>
       ${p.comments ? `<a class="count" href="${href}#comments" title="${plural(p.comments, "comment")}">${COMMENT_ICON}${p.comments}</a>` : ""}</div>
-    <p class="muted by">by ${authorLink(p.author, p.author_public_id, p.owner_id === OFFICIAL_OWNER)} · ${plural(count, "block")} · updated ${date(p.submitted_at)}</p>
+    <p class="muted by meta"><span>by ${authorLink(p.author, p.author_public_id, p.owner_id === OFFICIAL_OWNER)}</span><span>${plural(count, "block")}</span><span>updated ${date(p.submitted_at)}</span></p>
     <p>${esc(p.description)}</p>${blockPictures(p)}${capabilityList(JSON.parse(p.capabilities))}</article>`;
 }
 
@@ -209,7 +209,7 @@ export async function home(env: Env, user: User | null, admin: boolean, params: 
   const shown = filterPacks(all, f);
   const filtered = !!(f.q || f.uses || f.official);
   const summary = filtered
-    ? `<p class="results muted">${plural(shown.length, "pack")} of ${all.length} · <a href="/">Clear filters</a></p>`
+    ? `<p class="results muted meta"><span>${plural(shown.length, "pack")} of ${all.length}</span><a href="/">Clear filters</a></p>`
     : `<p class="results muted">${plural(all.length, "pack")}</p>`;
   const list = shown.length
     ? shown.map(listedCard).join("")
@@ -249,7 +249,7 @@ function parse(text: string | null): unknown {
 function inputsTable(inputs: { name: string; type: string; default: string }[]): string {
   if (!inputs.length) return "";
   return `<dl class="inputs">${inputs
-    .map((i) => `<div><dt>${esc(i.name)}</dt><dd>${esc(i.type === "Bool" ? "true or false" : "any value")}${i.default ? ` · starts as <code>${esc(i.default)}</code>` : ""}</dd></div>`)
+    .map((i) => `<div><dt>${esc(i.name)}</dt><dd>${esc(i.type === "Bool" ? "true or false" : "any value")}${i.default ? `, starts as <code>${esc(i.default)}</code>` : ""}</dd></div>`)
     .join("")}</dl>`;
 }
 
@@ -260,7 +260,7 @@ function packHeader(p: ListedPack, current: "overview" | "source", versionNote =
   return `<p class="crumbs"><a href="/">All packs</a></p>
     <div class="pack-title"><h1>${esc(p.name)} <span class="version">${esc(p.version)}</span></h1>
       <p class="actions"><a class="button" href="/packs/${p.sha256}.json" download="${esc(p.pack_id)}.blockpack">Download</a></p></div>
-    <p class="muted by">by ${authorLink(p.author, p.author_public_id, p.owner_id === OFFICIAL_OWNER)} · updated ${date(p.submitted_at)} · first shared ${date(p.pack_created_at)}${versionNote}</p>
+    <p class="muted by meta"><span>by ${authorLink(p.author, p.author_public_id, p.owner_id === OFFICIAL_OWNER)}</span><span>updated ${date(p.submitted_at)}</span><span>first shared ${date(p.pack_created_at)}</span>${versionNote}</p>
     <nav class="tabs" aria-label="Pack">${tab("overview", base, "Overview")}${tab("source", `${base}/source`, "Source")}${tab("comments", `${base}#comments`, `Comments <span class="n">${p.comments}</span>`)}</nav>`;
 }
 
@@ -279,7 +279,7 @@ export async function packPage(env: Env, user: User | null, admin: boolean, id: 
     .map(
       (v, i) => `<li><span class="v">${esc(v.version || v.sha256.slice(0, 8))}</span>${i === 0 ? ` <span class="pill">current</span>` : ""}
         <span class="muted">${date(v.reviewed_at ?? v.submitted_at)}</span>
-        <span class="links"><a href="/packs/${encodeURIComponent(p.pack_id)}/source?v=${v.sha256}">source</a> · <a href="/packs/${v.sha256}.json" download="${esc(p.pack_id)}-${esc(v.version || v.sha256.slice(0, 8))}.blockpack">file</a></span></li>`,
+        <span class="links"><a href="/packs/${encodeURIComponent(p.pack_id)}/source?v=${v.sha256}">source</a> <a href="/packs/${v.sha256}.json" download="${esc(p.pack_id)}-${esc(v.version || v.sha256.slice(0, 8))}.blockpack">file</a></span></li>`,
     )
     .join("");
   return page(
@@ -326,7 +326,7 @@ export async function sourcePage(env: Env, user: User | null, admin: boolean, id
       .first<{ version: string }>();
     if (!old) return message(user, admin, "Not found", "That version isn't in the library.", 404);
     sha = asked;
-    note = ` · showing version ${esc(old.version || asked.slice(0, 8))} (<a href="/packs/${encodeURIComponent(p.pack_id)}/source">see current</a>)`;
+    note = `<span>showing version ${esc(old.version || asked.slice(0, 8))} (<a href="/packs/${encodeURIComponent(p.pack_id)}/source">see current</a>)</span>`;
   }
   const view = params.get("view") === "json" ? "json" : "blocks";
   const base = `/packs/${encodeURIComponent(p.pack_id)}/source${sha === p.sha256 ? "" : `?v=${sha}`}`;

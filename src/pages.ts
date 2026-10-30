@@ -137,7 +137,7 @@ export function page(title: string, user: User | null, admin: boolean, body: str
        <form class="inline" method="post" action="/auth/logout"><button class="ghost">Sign out</button></form>`
     : `<a href="/login">Sign in</a>`;
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(title)} · Blockwork community blocks</title><link rel="icon" type="image/png" href="/favicon.png">
+<title>${esc(title)} | Blockwork community blocks</title><link rel="icon" type="image/png" href="/favicon.png">
 <meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)"><meta name="theme-color" content="#f2f2f5" media="(prefers-color-scheme: light)">
 <script src="/site.js"></script><style>${STYLE}</style></head>
 <body>${siteHeader()}

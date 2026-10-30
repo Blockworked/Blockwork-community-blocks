@@ -251,8 +251,8 @@ async function myPacks(env: Env, user: User, admin: boolean): Promise<Response> 
     .map((v) =>
       packCard(
         v,
-        `<p class="status"><strong>${esc(label[v.status])}</strong>${v.reason ? ` - ${esc(v.reason)}` : ""}
-         <span class="muted">· submitted ${esc(new Date(v.submitted_at).toISOString().slice(0, 10))}</span></p>`,
+        `<p class="status meta"><span><strong>${esc(label[v.status])}</strong>${v.reason ? `: ${esc(v.reason)}` : ""}</span>
+         <span class="muted">submitted ${esc(new Date(v.submitted_at).toISOString().slice(0, 10))}</span></p>`,
       ),
     )
     .join("");
@@ -303,13 +303,13 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number, para
     v.status === "pending"
       ? `<form method="post"><p><input type="text" name="reason" placeholder="Reason (shown to the submitter if rejected)" maxlength="300"></p>
          <p><button class="primary" name="action" value="approve">Approve</button> <button name="action" value="reject">Reject</button></p></form>`
-      : `<p><strong>${esc(v.status)}</strong>${v.reason ? ` - ${esc(v.reason)}` : ""}</p>`;
+      : `<p><strong>${esc(v.status)}</strong>${v.reason ? `: ${esc(v.reason)}` : ""}</p>`;
   return page(
     `Review ${v.name}`,
     user,
     admin,
     `<h1>${esc(v.name)} <span class="version">${esc(v.version)}</span></h1>
-     <p class="muted">id ${esc(v.pack_id)} · by ${esc(v.author)} (${esc(v.submitted_by)}) · sha256 <span class="mono">${esc(v.sha256)}</span></p>
+     <p class="muted meta"><span>id ${esc(v.pack_id)}</span><span>by ${esc(v.author)} (${esc(v.submitted_by)})</span><span>sha256 <span class="mono">${esc(v.sha256)}</span></span></p>
      <p>${previous ? `Updates the listed version ${esc(previous.version || previous.sha256.slice(0, 12))}.` : "A new pack."}</p>
      <p>${esc(v.description)}</p>${blockPictures(v)}
      <h2>What it can do</h2>${capabilityList(JSON.parse(v.capabilities))}
