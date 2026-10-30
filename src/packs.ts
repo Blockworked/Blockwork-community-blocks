@@ -185,7 +185,7 @@ export function capabilities(blocks: unknown): string[] {
 }
 
 /** Parses an upload, or says why it can't be accepted. */
-export function readPack(bytes: Uint8Array): PackMeta | string {
+export function readPack(bytes: Uint8Array, username?: string): PackMeta | string {
   if (bytes.byteLength > MAX_PACK_BYTES) return "That file is over 2 MB.";
   let value: any;
   try {
@@ -213,6 +213,16 @@ export function readPack(bytes: Uint8Array): PackMeta | string {
   if (!Array.isArray(defs) || defs.length === 0) return "The pack has no blocks.";
   if (defs.length > 200) return "The pack has over 200 blocks.";
   if (defs.some((d: any) => typeof d?.id !== "string" || !Array.isArray(d?.pieces))) return "The pack's blocks are broken.";
+  if (defs.some((d: any) => d.identifier != null && typeof d.identifier !== "string")) return "The pack's blocks are broken.";
+  // A file the library already stamped can come back, but only with this uploader's own name in front.
+  const own = username === undefined ? null : `${idPart(username) || "Community"}${ID_SEPARATOR}`;
+  const colon = defs.find((d: any) => {
+    const id: string = d.identifier ?? "";
+    return (own && id.startsWith(own) ? id.slice(own.length) : id).includes(ID_SEPARATOR);
+  });
+  if (colon) {
+    return `Block ID "${colon.identifier}" has a "${ID_SEPARATOR}" in it. The library puts your name in front of each ID for you, so leave it out and share the pack again.`;
+  }
   for (const def of defs) {
     for (const piece of def.pieces) {
       if (piece?.kind !== "Input" || piece.default_value == null) continue;
@@ -225,6 +235,36 @@ export function readPack(bytes: Uint8Array): PackMeta | string {
     }
   }
   return { id, name, description, version, blocks: defs.map(blockName), views: defs.map(blockView), capabilities: capabilities(value.blocks) };
+}
+
+/** Separates the uploader's name from a block's own ID, so an uploaded ID can't contain it. */
+export const ID_SEPARATOR = ":";
+
+/** Letters and digits only, like blockwork-core's details ids. */
+export function idPart(text: string): string {
+  return [...text].filter((c) => /[\p{Alphabetic}\p{N}]/u.test(c)).join("");
+}
+
+/** A block's Details ID once shared: "<uploader>:<their ID>", the ID falling back to the block's words. */
+export function blockIdentifier(username: string, def: any): string {
+  const user = idPart(username) || "Community";
+  let name = typeof def?.identifier === "string" && def.identifier.trim() ? def.identifier : blockName(def);
+  // A re-uploaded file already has "<user>:", and older Blockwork exports put "<author>_" in front themselves.
+  if (name.startsWith(`${user}${ID_SEPARATOR}`) || name.startsWith(`${user}_`)) name = name.slice(user.length + 1);
+  return `${user}${ID_SEPARATOR}${idPart(name) || "Block"}`;
+}
+
+/** The file as the library stores it: the uploader as author, and their name in front of every block ID. Takes a pack readPack accepted. */
+export function stampPack(bytes: Uint8Array, username: string): Uint8Array | string {
+  const value = JSON.parse(new TextDecoder().decode(bytes));
+  value.author = username;
+  for (const def of value.blocks.block_defs) def.identifier = blockIdentifier(username, def);
+  // Compact when indenting would push it past what Blockwork downloads.
+  for (const indent of [2, 0]) {
+    const out = new TextEncoder().encode(JSON.stringify(value, null, indent) + "\n");
+    if (out.byteLength <= MAX_PACK_BYTES) return out;
+  }
+  return "That file is over 2 MB.";
 }
 
 export async function sha256Hex(bytes: Uint8Array): Promise<string> {

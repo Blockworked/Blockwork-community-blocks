@@ -45,10 +45,14 @@ loads the same packs into the Worker.
    Keep the same id for later versions so they replace the old blocks.
 
 Each entry in `blocks.block_defs` can include `identifier` (for example,
-`Blockworked_ClickGrid`) and `description` for Blockwork's Details screen. These can
+`ClickGrid`) and `description` for Blockwork's Details screen. These can
 also be set in the app's Make/Edit Block dialog. Keep the internal `id`
-stable across versions so installed calls continue to match; `identifier`
-uses `AUTHOR_BLOCKNAME` for the Details screen. Set `description` on each
+stable across versions so installed calls continue to match. An uploaded
+`identifier` can't contain `:`; the site stores each one as
+`<uploader>:<identifier>` (letters and digits of the account name, then the
+ID), so `JohnDoe:OpenYouTubeStudio`, and sets the file's `author` to the
+account name. The starter packs predate this and keep `Blockworked_ClickGrid`,
+which Blockwork shows as `Blockworked:ClickGrid`. Set `description` on each
 block to explain its inputs and behavior. Older packs without these fields still load.
 Run `python3 scripts/build-block-index.py` after editing starter packs to
 refresh their checksums.

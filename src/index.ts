@@ -6,7 +6,7 @@ import { capabilityList, esc, loginPage, message, page, verifiedBadge } from "./
 import { authorPage, home, packPage, published, sourcePage, sourceView, withBlockViews, type VersionRow } from "./browse.ts";
 import { deleteComment, postComment } from "./comments.ts";
 import { blockPictures, BROWSE_JS, renderFile, rendersPage, saveRenders, viewerUrl } from "./renders.ts";
-import { OFFICIAL_OWNER, readPack, sha256Hex } from "./packs.ts";
+import { idPart, OFFICIAL_OWNER, readPack, sha256Hex, stampPack } from "./packs.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 import { setMainSite, SITE_JS } from "./site-nav.ts";
 
@@ -184,6 +184,8 @@ function submitForm(user: User, admin: boolean, error = ""): Response {
      ${error ? `<p class="risky">${esc(error)}</p>` : ""}
      <ol><li>In Blockwork, right-click a custom block in the My Blocks palette and pick "Share blocks as a pack...".</li>
      <li>Upload the file here. To update a pack you've shared, upload the new version with the same id.</li></ol>
+     <p>Your name goes in front of each block's ID for you, so a block with the ID OpenYouTubeStudio is shared as
+     ${esc(idPart(user.name) || "Community")}:OpenYouTubeStudio. IDs can't contain a colon.</p>
      <p>Every pack is reviewed before it's listed. Once it is, anyone can see and download it, along with your account name.
      Packs shouldn't run commands, go online, write files or read secrets unless that's plainly their purpose.</p>
      <form method="post" enctype="multipart/form-data">
@@ -207,9 +209,12 @@ async function submit(req: Request, env: Env, user: User, admin: boolean): Promi
 
   const file = (await req.formData()).get("pack");
   if (!file || typeof file === "string") return submitForm(user, admin, "Pick a pack file to upload.");
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  const meta = readPack(bytes);
+  const upload = new Uint8Array(await file.arrayBuffer());
+  const meta = readPack(upload, user.name);
   if (typeof meta === "string") return submitForm(user, admin, meta);
+  // Stored and hashed with the uploader's name in front of each block ID.
+  const bytes = stampPack(upload, user.name);
+  if (typeof bytes === "string") return submitForm(user, admin, bytes);
   const sha = await sha256Hex(bytes);
 
   if (await env.DB.prepare("SELECT 1 FROM versions WHERE sha256 = ?").bind(sha).first()) {

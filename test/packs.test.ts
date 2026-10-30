@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { capabilities, readPack, slug } from "../src/packs.ts";
+import { blockIdentifier, capabilities, readPack, slug, stampPack } from "../src/packs.ts";
 
 const enc = (v: unknown) => new TextEncoder().encode(JSON.stringify(v));
 const pack = (extra: object = {}) => ({
@@ -172,4 +172,32 @@ test("block views keep what drawing a block needs", () => {
   assert.equal(b.color, "#4C97FF");
   assert.equal(b.icon, "");
   assert.equal(b.pieces[0].value, "hi");
+});
+
+test("block IDs can't contain a colon", () => {
+  const defs = [{ id: "a", identifier: "Alice:Open", pieces: [{ kind: "Label", text: "open" }] }];
+  assert.match(readPack(enc(pack({ blocks: { block_defs: defs, strands: [] } }))) as string, /"Alice:Open" has a ":"/);
+  defs[0].identifier = "Open";
+  assert.equal(typeof readPack(enc(pack({ blocks: { block_defs: defs, strands: [] } }))), "object");
+});
+
+test("uploads get the uploader's name in front of every block ID", () => {
+  const defs = [
+    { id: "a", identifier: "OpenYouTubeStudio", pieces: [{ kind: "Label", text: "open studio" }] },
+    { id: "b", identifier: "", pieces: [{ kind: "Label", text: "say" }, { kind: "Input", name: "text" }] },
+    { id: "c", identifier: "JohnDoe_Old", pieces: [{ kind: "Label", text: "old" }] },
+  ];
+  const upload = enc(pack({ author: "Someone else", blocks: { block_defs: defs, strands: [] } }));
+  const stamped = stampPack(upload, "John Doe");
+  assert.ok(stamped instanceof Uint8Array);
+  const value = JSON.parse(new TextDecoder().decode(stamped));
+  assert.equal(value.author, "John Doe");
+  assert.deepEqual(value.blocks.block_defs.map((d: any) => d.identifier), ["JohnDoe:OpenYouTubeStudio", "JohnDoe:saytext", "JohnDoe:Old"]);
+  // The stored file is still a pack the library accepts.
+  assert.equal(typeof readPack(stamped as Uint8Array, "John Doe"), "object");
+  assert.equal(typeof readPack(stamped as Uint8Array, "Jane"), "string");
+  assert.equal(typeof readPack(stamped as Uint8Array), "string");
+  // Stamping a stamped file changes nothing.
+  assert.deepEqual(stampPack(stamped as Uint8Array, "John Doe"), stamped);
+  assert.equal(blockIdentifier("", { identifier: "X" }), "Community:X");
 });
