@@ -219,9 +219,8 @@ export async function home(env: Env, user: User | null, admin: boolean, params: 
     user,
     admin,
     `<section class="hero"><h1>${esc(env.LIBRARY_NAME)}</h1>
-     <p>Custom blocks shared by the Blockwork community. To add a pack, click Browse under My Blocks in the editor.
-     Every pack is reviewed before it's listed, and Blockwork tells you what its blocks can do before you add them.</p>
-     <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a></p></section>
+     <p>Ready-made blocks from other Blockwork users, reviewed before they're listed.</p>
+     <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a><span>Install packs in Blockwork from <kbd>My Blocks › Browse</kbd></span></p></section>
      ${filterForm(f)}${summary}<div class="pack-list">${list}</div>${await backgroundRenders(env, admin)}`,
   );
 }

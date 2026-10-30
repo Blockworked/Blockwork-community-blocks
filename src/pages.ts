@@ -72,12 +72,12 @@ code, pre { font-family: var(--mono); }
 .subbar nav a:hover { background: var(--hover); color: var(--fg); text-decoration: none; }
 .who { display: inline-flex; align-items: center; gap: 6px; padding: 0 6px 0 10px; font-size: 13px; font-weight: 600; }
 ${SITE_NAV_CSS}
-/* Home page intro: the app canvas's dot grid behind the title. */
-.hero { margin: -40px 0 28px; padding: 56px 0 44px; border-bottom: 1px solid var(--glass-border);
-  background-image: radial-gradient(circle, var(--glass-border) 1.2px, transparent 1.2px); background-size: 22px 22px; }
+/* Home page intro. */
+.hero { margin: -40px 0 28px; padding: 56px 0 40px; border-bottom: 1px solid var(--glass-border); }
 .hero h1 { font-size: clamp(34px, 6vw, 52px); letter-spacing: -0.045em; }
 .hero p { max-width: 60ch; font-size: 17px; line-height: 1.65; color: color-mix(in srgb, var(--fg) 78%, var(--muted)); }
-.hero .actions { margin-top: 24px; }
+.hero .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; margin-top: 24px; font-size: 14px; color: var(--muted); }
+.hero kbd { font: inherit; font-weight: 600; color: var(--fg); }
 
 /* Panels: the app's settings sections, as blockworked.com draws them. */
 .card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 18px 20px; margin: 14px 0; }
