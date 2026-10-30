@@ -18,7 +18,7 @@ export function randomToken(): string {
   return btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-async function hash(text: string): Promise<string> {
+export async function hash(text: string): Promise<string> {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
@@ -59,7 +59,7 @@ export async function currentUser(req: Request, env: Env): Promise<User | null> 
   const token = cookie(req, "session");
   if (!token) return null;
   return env.DB.prepare(
-    "SELECT u.id, u.name, u.avatar, u.banned FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ?",
+    "SELECT u.id, u.name, u.avatar, u.banned FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ? AND s.kind = 'web'",
   )
     .bind(await hash(token), Date.now())
     .first<User>()

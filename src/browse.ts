@@ -54,7 +54,7 @@ export async function published(env: Env): Promise<ListedPack[]> {
   return withBlockViews(env, results);
 }
 
-async function listedPack(env: Env, id: string): Promise<ListedPack | null> {
+export async function listedPack(env: Env, id: string): Promise<ListedPack | null> {
   const p = await env.DB.prepare(`${LISTED} AND p.id = ?`).bind(id).first<ListedPack>();
   return p && (await withBlockViews(env, [p]))[0];
 }

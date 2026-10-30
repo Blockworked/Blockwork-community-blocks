@@ -154,6 +154,21 @@ GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 ```
 
+## The app's API
+
+Blockwork signs in through the browser: it listens on `127.0.0.1`, opens
+`/app/login?port&state&challenge&label`, and the page sends a one-time code
+back to that port once the person confirms. The app swaps the code and its
+PKCE verifier at `POST /api/v1/app/token` for a token that lasts a year.
+Everything under `/api/v1/` takes that token as `Authorization: Bearer`,
+never the site's cookie:
+
+- `GET /api/v1/packs/:id`: a pack's versions and comments
+- `POST /api/v1/packs/:id/comments`, `DELETE /api/v1/comments/:id`
+- `GET /api/v1/me`: the account and its packs, every upload with its review status
+- `POST /api/v1/packs`: upload a `.blockpack` (a new pack or an update), reviewed like the form's
+- `POST /api/v1/app/logout`
+
 ## Deploying
 
 1. `npx wrangler d1 create blockwork-library` and put the id in

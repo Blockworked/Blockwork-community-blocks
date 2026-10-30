@@ -104,7 +104,7 @@ button.primary, .button.primary { background: var(--accent); border-color: var(-
 button.primary:hover, .button.primary:hover { background: var(--accent-light); }
 button.ghost { background: transparent; border-color: transparent; color: var(--muted); }
 button.ghost:hover { background: var(--hover); color: var(--fg); }
-.button.large { min-height: 44px; padding: 0 20px; font-size: 15px; border-radius: 8px; }
+button.large, .button.large { min-height: 44px; padding: 0 20px; font-size: 15px; border-radius: 8px; }
 .signin { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-top: 20px; }
 .signin .button { min-width: 240px; }
 form.inline { display: inline; }

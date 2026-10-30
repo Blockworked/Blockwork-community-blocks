@@ -6,7 +6,8 @@ import { capabilityList, esc, loginPage, message, page, verifiedBadge } from "./
 import { authorPage, home, packPage, published, sourcePage, sourceView, withBlockViews, type VersionRow } from "./browse.ts";
 import { deleteComment, postComment } from "./comments.ts";
 import { blockPictures, BROWSE_JS, redraw, renderFile, rendersPage, saveRenders, viewerUrl } from "./renders.ts";
-import { idPart, OFFICIAL_OWNER, readPack, sha256Hex, stampPack } from "./packs.ts";
+import { idPart, OFFICIAL_OWNER } from "./packs.ts";
+import { acceptUpload, api, appLoginConfirm, appLoginPage } from "./api.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 import { setMainSite, SITE_JS } from "./site-nav.ts";
 
@@ -25,15 +26,14 @@ export interface Env {
   GOOGLE_CLIENT_SECRET: string;
 }
 
-const MAX_PENDING = 5;
-const MAX_PER_DAY = 20;
-
-function securityHeaders(env: Env): Record<string, string> {
+function securityHeaders(env: Env, loopbackForm = false): Record<string, string> {
   // The pack viewer is Blockwork's editor on blockworked.com (renders.ts).
   const viewer = new URL(viewerUrl(env)).origin;
+  // The app sign-in page's form answers Blockwork on this computer.
+  const formAction = loopbackForm ? "'self' http://127.0.0.1:*" : "'self'";
   return {
     "Content-Security-Policy":
-      `default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' https:; connect-src 'self'; frame-src ${viewer}; form-action 'self'; frame-ancestors 'none'; base-uri 'none'`,
+      `default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' https:; connect-src 'self'; frame-src ${viewer}; form-action ${formAction}; frame-ancestors 'none'; base-uri 'none'`,
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "same-origin",
   };
@@ -50,7 +50,9 @@ export default {
       res = message(null, false, "Something went wrong", "Try again in a moment.", 500);
     }
     const headers = new Headers(res.headers);
-    for (const [k, v] of Object.entries(securityHeaders(env))) headers.set(k, v);
+    const loopbackForm = headers.has("X-Loopback-Form");
+    headers.delete("X-Loopback-Form");
+    for (const [k, v] of Object.entries(securityHeaders(env, loopbackForm))) headers.set(k, v);
     return new Response(res.body, { status: res.status, headers });
   },
 };
@@ -59,6 +61,8 @@ async function route(req: Request, env: Env): Promise<Response> {
   const url = new URL(req.url);
   const path = url.pathname;
   const method = req.method;
+  // The app's API takes bearer tokens, never the cookie, so it can't be forged from another site.
+  if (path.startsWith("/api/")) return api(req, env, path);
   // Forms only come from this site.
   if (method === "POST" && req.headers.get("Origin") !== new URL(env.SITE_URL).origin) {
     return new Response("Cross-site request refused", { status: 403 });
@@ -105,6 +109,10 @@ async function route(req: Request, env: Env): Promise<Response> {
     if (!user) return message(user, admin, "Not found", "That comment doesn't exist.", 404);
     return deleteComment(env, user, admin, Number(m[1]));
   }
+  if (path === "/app/login") {
+    if (method === "GET") return appLoginPage(user, url);
+    if (method === "POST") return appLoginConfirm(req, env, user);
+  }
   if (method === "GET" && path === "/login") return loginPage(user, url.searchParams.get("next") ?? "");
   if ((m = path.match(/^\/auth\/(\w+)\/(login|callback)$/)) && m[1] in PROVIDERS && method === "GET") {
     const provider = m[1] as Provider;
@@ -147,6 +155,11 @@ async function indexJson(env: Env): Promise<Response> {
     blocks: JSON.parse(v.blocks),
     // Blockwork shows a verified badge for these.
     official: v.owner_id === OFFICIAL_OWNER,
+    // For the app's filters and sort orders.
+    capabilities: JSON.parse(v.capabilities),
+    updated: v.submitted_at,
+    created: v.pack_created_at,
+    comments: v.comments,
   }));
   const body = JSON.stringify({ blockwork_block_index: 1, name: env.LIBRARY_NAME, packs }, null, 2) + "\n";
   return new Response(body, {
@@ -200,49 +213,10 @@ function submitForm(user: User, admin: boolean, error = ""): Response {
 
 async function submit(req: Request, env: Env, user: User, admin: boolean): Promise<Response> {
   if (user.banned) return submitForm(user, admin, "This account can't submit packs.");
-  const now = Date.now();
-  const counts = await env.DB.prepare(
-    `SELECT SUM(status = 'pending') AS pending, SUM(submitted_at > ?) AS today FROM versions WHERE submitted_by = ?`,
-  )
-    .bind(now - 86400_000, user.id)
-    .first<{ pending: number | null; today: number | null }>();
-  if ((counts?.pending ?? 0) >= MAX_PENDING) return submitForm(user, admin, `You have ${MAX_PENDING} packs waiting for review. Try again once they're reviewed.`);
-  if ((counts?.today ?? 0) >= MAX_PER_DAY) return submitForm(user, admin, "That's a lot of uploads for one day. Try again tomorrow.");
-
   const file = (await req.formData()).get("pack");
   if (!file || typeof file === "string") return submitForm(user, admin, "Pick a pack file to upload.");
-  const upload = new Uint8Array(await file.arrayBuffer());
-  const meta = readPack(upload, user.name);
-  if (typeof meta === "string") return submitForm(user, admin, meta);
-  // Stored and hashed with the uploader's name in front of each block ID.
-  const bytes = stampPack(upload, user.name);
-  if (typeof bytes === "string") return submitForm(user, admin, bytes);
-  const sha = await sha256Hex(bytes);
-
-  if (await env.DB.prepare("SELECT 1 FROM versions WHERE sha256 = ?").bind(sha).first()) {
-    return submitForm(user, admin, "This exact file was already submitted.");
-  }
-  const pack = await env.DB.prepare("SELECT owner_id, listed FROM packs WHERE id = ?").bind(meta.id).first<{ owner_id: string; listed: number }>();
-  if (pack && pack.owner_id !== user.id) {
-    return submitForm(user, admin, `Another account already shares a pack with the id "${meta.id}". Give yours a different id.`);
-  }
-  if (pack && !pack.listed) return submitForm(user, admin, "This pack was taken down, so it can't be updated.");
-
-  await env.PACKS.put(`packs/${sha}.json`, bytes, { httpMetadata: { contentType: "application/json" } });
-  const statements = [
-    // A newer upload replaces one still waiting.
-    env.DB.prepare(
-      "UPDATE versions SET status = 'rejected', reason = 'Replaced by a newer upload', reviewed_at = ? WHERE pack_id = ? AND status = 'pending'",
-    ).bind(now, meta.id),
-    env.DB.prepare(
-      `INSERT INTO versions (pack_id, sha256, name, description, version, blocks, block_views, capabilities, status, submitted_by, submitted_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`,
-    ).bind(meta.id, sha, meta.name, meta.description, meta.version, JSON.stringify(meta.blocks), JSON.stringify(meta.views), JSON.stringify(meta.capabilities), user.id, now),
-  ];
-  if (!pack) {
-    statements.unshift(env.DB.prepare("INSERT INTO packs (id, owner_id, created_at) VALUES (?, ?, ?)").bind(meta.id, user.id, now));
-  }
-  await env.DB.batch(statements);
+  const result = await acceptUpload(env, user, new Uint8Array(await file.arrayBuffer()));
+  if ("error" in result) return submitForm(user, admin, result.error);
   return new Response(null, { status: 303, headers: { Location: "/me" } });
 }
 

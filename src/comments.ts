@@ -11,7 +11,7 @@ export const MAX_COMMENT = 2000;
 const BURST = 5;
 const BURST_MS = 10 * 60_000;
 
-interface CommentRow {
+export interface CommentRow {
   id: number;
   user_id: string;
   body: string;
@@ -41,17 +41,23 @@ export function commentHtml(body: string): string {
   return out + esc(body.slice(last));
 }
 
-function canDelete(user: User | null, admin: boolean, ownerId: string, c: { user_id: string }): boolean {
+export function canDelete(user: User | null, admin: boolean, ownerId: string, c: { user_id: string }): boolean {
   return !!user && (admin || user.id === c.user_id || user.id === ownerId);
 }
 
-export async function commentsSection(env: Env, user: User | null, admin: boolean, p: ListedPack, error = "", draft = ""): Promise<string> {
+/** A pack's comments, oldest first, leaving out deleted ones and banned accounts'. */
+export async function listComments(env: Env, packId: string): Promise<CommentRow[]> {
   const { results } = await env.DB.prepare(
     `SELECT c.id, c.user_id, c.body, c.created_at, u.name, u.avatar, u.public_id FROM comments c JOIN users u ON u.id = c.user_id
      WHERE c.pack_id = ? AND c.deleted_at IS NULL AND u.banned = 0 ORDER BY c.created_at LIMIT 500`,
   )
-    .bind(p.pack_id)
+    .bind(packId)
     .all<CommentRow>();
+  return results;
+}
+
+export async function commentsSection(env: Env, user: User | null, admin: boolean, p: ListedPack, error = "", draft = ""): Promise<string> {
+  const results = await listComments(env, p.pack_id);
   const action = `/packs/${encodeURIComponent(p.pack_id)}/comments`;
   const items = results
     .map((c) => {
@@ -84,31 +90,53 @@ export async function commentsSection(env: Env, user: User | null, admin: boolea
     ${items ? `<ol class="comment-list">${items}</ol>` : `<p class="muted">No comments yet.</p>`}${form}</section>`;
 }
 
-export async function postComment(req: Request, env: Env, user: User, admin: boolean, packId: string, render: (error: string, draft: string) => Promise<Response>): Promise<Response> {
+/** Posts a comment for the site's form and the app alike. */
+export async function addComment(
+  env: Env,
+  user: User,
+  admin: boolean,
+  packId: string,
+  raw: string,
+): Promise<{ id: number } | { error: string; status: number }> {
   const pack = await env.DB.prepare("SELECT 1 FROM packs p JOIN users u ON u.id = p.owner_id WHERE p.id = ? AND p.listed = 1 AND u.banned = 0")
     .bind(packId)
     .first();
-  if (!pack) return message(user, admin, "Not found", "That pack isn't in the library.", 404);
-  const raw = String((await req.formData()).get("body") ?? "");
-  if (user.banned) return render("This account can't comment.", raw);
+  if (!pack) return { error: "That pack isn't in the library.", status: 404 };
+  if (user.banned) return { error: "This account can't comment.", status: 403 };
   const checked = checkComment(raw);
-  if ("error" in checked) return render(checked.error, raw);
+  if ("error" in checked) return { error: checked.error, status: 400 };
   const now = Date.now();
   const recent = await env.DB.prepare("SELECT COUNT(*) AS n FROM comments WHERE user_id = ? AND created_at > ?")
     .bind(user.id, now - BURST_MS)
     .first<{ n: number }>();
-  if (!admin && (recent?.n ?? 0) >= BURST) return render("That's a lot of comments in a few minutes. Try again shortly.", raw);
+  if (!admin && (recent?.n ?? 0) >= BURST) return { error: "That's a lot of comments in a few minutes. Try again shortly.", status: 429 };
   const row = await env.DB.prepare("INSERT INTO comments (pack_id, user_id, body, created_at) VALUES (?, ?, ?, ?) RETURNING id")
     .bind(packId, user.id, checked.body, now)
     .first<{ id: number }>();
-  return new Response(null, { status: 303, headers: { Location: `/packs/${encodeURIComponent(packId)}#comment-${row?.id ?? ""}` } });
+  return { id: row?.id ?? 0 };
 }
 
-export async function deleteComment(env: Env, user: User, admin: boolean, id: number): Promise<Response> {
+export async function postComment(req: Request, env: Env, user: User, admin: boolean, packId: string, render: (error: string, draft: string) => Promise<Response>): Promise<Response> {
+  const raw = String((await req.formData()).get("body") ?? "");
+  const result = await addComment(env, user, admin, packId, raw);
+  if ("error" in result) {
+    return result.status === 404 ? message(user, admin, "Not found", result.error, 404) : render(result.error, raw);
+  }
+  return new Response(null, { status: 303, headers: { Location: `/packs/${encodeURIComponent(packId)}#comment-${result.id}` } });
+}
+
+/** Deletes a comment its writer, the pack's owner or an admin asked to. Returns the pack's id, or null. */
+export async function removeComment(env: Env, user: User, admin: boolean, id: number): Promise<string | null> {
   const c = await env.DB.prepare("SELECT c.user_id, c.pack_id, p.owner_id FROM comments c JOIN packs p ON p.id = c.pack_id WHERE c.id = ? AND c.deleted_at IS NULL")
     .bind(id)
     .first<{ user_id: string; pack_id: string; owner_id: string }>();
-  if (!c || !canDelete(user, admin, c.owner_id, c)) return message(user, admin, "Not found", "That comment doesn't exist.", 404);
+  if (!c || !canDelete(user, admin, c.owner_id, c)) return null;
   await env.DB.prepare("UPDATE comments SET deleted_at = ? WHERE id = ?").bind(Date.now(), id).run();
-  return new Response(null, { status: 303, headers: { Location: `/packs/${encodeURIComponent(c.pack_id)}#comments` } });
+  return c.pack_id;
+}
+
+export async function deleteComment(env: Env, user: User, admin: boolean, id: number): Promise<Response> {
+  const packId = await removeComment(env, user, admin, id);
+  if (!packId) return message(user, admin, "Not found", "That comment doesn't exist.", 404);
+  return new Response(null, { status: 303, headers: { Location: `/packs/${encodeURIComponent(packId)}#comments` } });
 }
