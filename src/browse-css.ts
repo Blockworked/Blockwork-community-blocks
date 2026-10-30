@@ -10,7 +10,10 @@ a.author { color: inherit; font-weight: 600; }
 /* A row of facts about a pack, spaced apart rather than joined with separators. */
 .meta { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 18px; row-gap: 2px; }
 .crumbs { margin: 0 0 10px; font-size: 13px; }
-.crumbs a::before { content: "← "; }
+.crumbs a { display: inline-flex; align-items: center; gap: 5px; }
+.crumbs a svg { transition: transform 0.15s; }
+.crumbs a:hover svg { transform: translateX(-2px); }
+kbd .chevron { vertical-align: -1px; margin: 0 3px; }
 
 /* Search and filters. */
 .filters { display: flex; flex-direction: column; gap: 10px; margin: 0 0 8px; }

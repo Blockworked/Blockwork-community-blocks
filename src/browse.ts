@@ -165,6 +165,10 @@ export function authorLink(name: string, publicId: string | null | undefined, of
   return publicId ? `<a class="author" href="/authors/${encodeURIComponent(publicId)}">${label}</a>` : label;
 }
 
+// Lucide's arrow-left and chevron-right, drawn like the site nav's icons.
+const LUCIDE = `xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"`;
+const BACK = `<svg ${LUCIDE} width="15" height="15"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>`;
+const CHEVRON = `<svg ${LUCIDE} width="13" height="13" class="chevron"><path d="m9 18 6-6-6-6"/></svg>`;
 const COMMENT_ICON = `<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>`;
 
 export function listedCard(p: ListedPack): string {
@@ -219,7 +223,7 @@ export async function home(env: Env, user: User | null, admin: boolean, params: 
     user,
     admin,
     `<section class="hero"><h1>${esc(env.LIBRARY_NAME)}</h1>
-     <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a><span>Install packs in Blockwork from <kbd>My Blocks › Browse</kbd></span></p></section>
+     <p class="actions"><a class="button primary large" href="/submit">Submit a pack</a><span>Install packs in Blockwork from <kbd>My Blocks${CHEVRON}Browse</kbd></span></p></section>
      ${filterForm(f)}${summary}<div class="pack-list">${list}</div>${await backgroundRenders(env, admin)}`,
   );
 }
@@ -257,7 +261,7 @@ function packHeader(p: ListedPack, current: "overview" | "source", versionNote =
   const base = `/packs/${encodeURIComponent(p.pack_id)}`;
   const tab = (key: string, href: string, label: string) =>
     `<a href="${href}"${key === current ? ` aria-current="page"` : ""}>${label}</a>`;
-  return `<p class="crumbs"><a href="/">All packs</a></p>
+  return `<p class="crumbs"><a href="/">${BACK}All packs</a></p>
     <div class="pack-title"><h1>${esc(p.name)} <span class="version">${esc(p.version)}</span></h1>
       <p class="actions"><a class="button" href="/packs/${p.sha256}.json" download="${esc(p.pack_id)}.blockpack">Download</a></p></div>
     <p class="muted by meta"><span>by ${authorLink(p.author, p.author_public_id, p.owner_id === OFFICIAL_OWNER)}</span><span>updated ${date(p.submitted_at)}</span><span>first shared ${date(p.pack_created_at)}</span>${versionNote}</p>
@@ -351,7 +355,7 @@ export async function authorPage(env: Env, user: User | null, admin: boolean, pu
     author.name,
     user,
     admin,
-    `<p class="crumbs"><a href="/">All packs</a></p>
+    `<p class="crumbs"><a href="/">${BACK}All packs</a></p>
      <div class="profile">${avatar}<div><h1>${esc(author.name)}${official ? verifiedBadge() : ""}</h1>
      <p class="muted">${official ? "The Blockworked team's official packs." : `Sharing blocks since ${date(author.created_at)}.`} ${plural(results.length, "pack")}.</p></div></div>
      <div class="pack-list">${results.map(listedCard).join("") || `<p class="muted">No packs listed yet.</p>`}</div>`,
