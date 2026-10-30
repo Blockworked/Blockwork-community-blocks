@@ -5,7 +5,7 @@ import { callback, currentUser, isAdmin, login, logout, PROVIDERS, type Provider
 import { capabilityList, esc, loginPage, message, page, verifiedBadge } from "./pages.ts";
 import { authorPage, home, packPage, published, sourcePage, sourceView, withBlockViews, type VersionRow } from "./browse.ts";
 import { deleteComment, postComment } from "./comments.ts";
-import { blockPictures, BROWSE_JS, renderFile, rendersPage, saveRenders, viewerUrl } from "./renders.ts";
+import { blockPictures, BROWSE_JS, redraw, renderFile, rendersPage, saveRenders, viewerUrl } from "./renders.ts";
 import { idPart, OFFICIAL_OWNER, readPack, sha256Hex, stampPack } from "./packs.ts";
 import { FAVICON_PNG, LOGO_PNG } from "./logo.ts";
 import { setMainSite, SITE_JS } from "./site-nav.ts";
@@ -122,6 +122,8 @@ async function route(req: Request, env: Env): Promise<Response> {
     if (!admin || !user) return message(user, admin, "Not found", "There's nothing here.", 404);
     if (method === "GET" && path === "/admin") return reviewQueue(env, user, admin);
     if (method === "GET" && path === "/admin/renders") return rendersPage(env, user, admin);
+    if (method === "POST" && path === "/admin/renders/redraw") return redraw(env);
+    if (method === "POST" && (m = path.match(/^\/admin\/versions\/(\d+)\/redraw$/))) return redraw(env, Number(m[1]));
     if (method === "POST" && (m = path.match(/^\/admin\/versions\/(\d+)\/renders$/))) return saveRenders(req, env, Number(m[1]));
     if ((m = path.match(/^\/admin\/versions\/(\d+)$/))) {
       return method === "POST" ? reviewDecision(req, env, Number(m[1])) : reviewPage(env, user, admin, Number(m[1]), url.searchParams);
@@ -321,6 +323,7 @@ async function reviewPage(env: Env, user: User, admin: boolean, id: number, para
      <h2>Decision</h2>${decide}
      <h2 id="file">File</h2>${source}
      <h2>Moderation</h2>
+     <form class="inline" method="post" action="/admin/versions/${v.id}/redraw"><button>Redraw block pictures</button></form>
      <form class="inline" method="post" action="/admin/packs/${encodeURIComponent(v.pack_id)}">
        <button name="action" value="${v.listed ? "unlist" : "list"}">${v.listed ? "Take the pack down" : "List the pack again"}</button></form>
      <form class="inline" method="post" action="/admin/users/${encodeURIComponent(v.submitted_by)}">

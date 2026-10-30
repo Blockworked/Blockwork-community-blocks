@@ -6,7 +6,7 @@
 
 import type { User } from "./auth.ts";
 import type { Env } from "./index.ts";
-import { esc, message, page } from "./pages.ts";
+import { esc, page } from "./pages.ts";
 import { packSource } from "./source.ts";
 
 export interface Rendered {
@@ -168,7 +168,10 @@ export async function backgroundRenders(env: Env, admin: boolean): Promise<strin
 /** GET /admin/renders: draws every version still without pictures, one after another, in this page. */
 export async function rendersPage(env: Env, user: User, admin: boolean): Promise<Response> {
   const results = await unrendered(env);
-  if (!results.length) return message(user, admin, "Block pictures", "Every version has its pictures.");
+  const redraw = `<form method="post" action="/admin/renders/redraw"><p><button>Redraw every picture</button></p></form>`;
+  if (!results.length) {
+    return page("Block pictures", user, admin, `<h1>Block pictures</h1><p>Every version has its pictures.</p>${redraw}`);
+  }
   return page(
     "Block pictures",
     user,
@@ -179,6 +182,17 @@ export async function rendersPage(env: Env, user: User, admin: boolean): Promise
      <div class="viewer"><iframe class="pack-viewer" src="${esc(viewerUrl(env))}" title="Pack viewer" data-jobs="${esc(jobsFor(results))}" referrerpolicy="origin"></iframe></div>
      <p class="render-status" data-render-status></p><script src="/browse.js" defer></script>`,
   );
+}
+
+/** POST /admin/renders/redraw (all) or /admin/versions/<id>/redraw (one): forgets pictures so they're drawn again. */
+export async function redraw(env: Env, versionId?: number): Promise<Response> {
+  if (versionId === undefined) {
+    await env.DB.prepare("UPDATE versions SET renders = ''").run();
+    return new Response(null, { status: 303, headers: { Location: "/admin/renders" } });
+  }
+  const v = await env.DB.prepare("SELECT sha256 FROM versions WHERE id = ?").bind(versionId).first<{ sha256: string }>();
+  if (v) await env.DB.prepare("UPDATE versions SET renders = '' WHERE sha256 = ?").bind(v.sha256).run();
+  return new Response(null, { status: 303, headers: { Location: `/admin/versions/${versionId}#file` } });
 }
 
 /** Served as /browse.js: hands packs to the viewer iframes and saves what they render. */
